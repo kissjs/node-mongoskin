@@ -1,0 +1,14 @@
+{ "name" :            "mongoskin"
+, "description" :     "The future layer above node-mongodb-native"
+, "version" :         "0.1.0"
+, "author" :          "Jason Green<guileen@gmail.com>"
+, "repository" :    { "type" :  "git"
+                    , "url" :   "git://github.com/guileen/node-mongoskin.git"}
+, "bugs" :          { "mail" :  "guileen@gmail.com"
+                    , "web" :   "http://github.com/guileen/node-mongoskin/issues"}
+, "main" :            "index"
+, "keywords":       [ "mongodb" ]
+, "engines" :       { "node" : "*" }
+, "dependencies" :  { "mongodb" : "*" }
+}
+
