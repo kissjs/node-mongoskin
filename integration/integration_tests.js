@@ -25,6 +25,9 @@ var db = mongo.db('localhost/test_mongoskin');
 assert.equal(db.blog.first, bindToBlog.first);
 assert.ok(db.users);
 
+console.log('======== test SkinDb bson ========');
+assert.ok(db.db.bson_serializer.ObjectID.createFromHexString('a7b79d4dca9d730000000000'));
+
 console.log('======== test SkinDb.bind ========');
 db.bind('blog2', bindToBlog);
 db.bind('user2');
@@ -88,6 +91,11 @@ console.log('======== test SkinCollection.find ========');
 collection = db.collection('test_find');
 collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
     assert.ok(replies, err && err.stack);
+    console.log(replies[0]._id.toString());
+    collection.findById(replies[0]._id.toString(), function(err, item){
+        assert.equal(item.a, 1);
+    });
+
     collection.findItems(function(err, items){
         assert.ok(items, err && err.stack);
         console.log('found '+ items.length + ' items');
@@ -103,12 +111,10 @@ collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
     collection.find().toArray(function(err, items){
         console.log('======== test find cursor toArray========');
         assert.ok(items, err && err.stack);
-        console.dir(items);
     });
     collection.find().each(function(err, item){
         console.log('======== test find cursor each========');
         assert.ok(!err, err && err.stack);
-        console.dir(item);
     });
 });
 
