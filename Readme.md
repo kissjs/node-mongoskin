@@ -8,15 +8,42 @@ Introduction
 ========
 **Mongoskin** is the future layer above [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
-    var mongo = require('mongoskin');
-    mongo.db('localhost/test-database').collection('articls').insert({a:1}, function(err, replies){
-        console.dir(replies);
+    var mongo = require('mongoskin'),
+        db = mongo.db('localhost:27017/test?auto_reconnect');
+
+    db.collection('user').ensureIndex([['username', 1]], true, function(err, replies){});
+    db.collection('posts').hint = 'slug';
+    db.collection('posts').findOne({slug: 'whats-up'}, function(err, post){
+        // do something
     });
+    db.collection('posts').find().toArray(function(err, posts){
+        // do something
+    });
+
+    db.bind('posts', {
+       findTop10 : function(fn){
+         this.find({}, {limit:10, sort:[['views', -1]]}).toArray(fn);
+       },
+       removeTagWith : function(tag, fn){
+         this.remove({tags:tag},fn);
+       }
+    });
+
+    db.posts.findTop10(function(err, topPosts){
+      //do something
+    });
+
+    db.collection('posts').removeTagWith('delete', function(err, replies){
+      //do something
+    });
+
+    db.posts.mapReduce(...);
+    db.createCollection(...);
 
 Is mongoskin synchronized?
 ========
 
-Nop! It is [future](http://en.wikipedia.org/wiki/Future_%28programming%29)
+Nop! It is [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
 Goals
 ========
