@@ -16,13 +16,13 @@ Introduction
 Is mongoskin synchronized?
 ========
 
-Nop! It is [future](http://en.wikipedia.org/wiki/Future_(programming))
+Nop! It is [future](http://en.wikipedia.org/wiki/Future_%28programming%29)
 
 Goals
 ========
 
 Provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
-and make it [future](http://en.wikipedia.org/wiki/Future_(programming)).
+and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
 Documentation
 ========
