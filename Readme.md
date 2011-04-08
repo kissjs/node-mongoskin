@@ -8,6 +8,7 @@
     * [SkinServer](#skinserver)
     * [SkinDb](#skindb)
     * [SkinCollection](#skincollection)
+    * [SkinCursor](#skincursor)
 
 <a name='Introduction'></a>
 
@@ -103,15 +104,15 @@ e.g.
 
 ### bind(collectionName, extendObject1, extendObject2 ...)
 
-Bind SkinCollection to db properties. see [SkinDb.bind](#skindb-bind) for more information.
+Bind [SkinCollection](#skincollection) to db properties. see [SkinDb.bind](#skindb-bind) for more information.
 
 ### db(databaseUrl)
 
-Get or create instance of SkinDb.
+Get or create instance of [SkinDb](#skindb).
 
 ### cluster(serverUrl1, serverUrl2, ...)
 
-Create SkinServer of native ServerCluster. e.g.
+Create [SkinServer](#skinserver) of native [ServerCluster](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/connection.js#L221). e.g.
 
     var mongo = require('mongoskin');
     var cluster = mongo.cluster('192.168.0.1:27017', '192.168.0.2:27017', '192.168.0.3:27017')
@@ -119,7 +120,7 @@ Create SkinServer of native ServerCluster. e.g.
 
 ### pair(leftServerUrl, rightServerUrl)
 
-Create instance of native ServerPair
+Create [SkinServer](#skinserver) of native [ServerPair](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/connection.js#L190)
 
 [Back to index](#index)
 
@@ -134,7 +135,7 @@ Construct SkinServer from native Server instance.
 
 ### db(dbname, username=null, password=null)
 
-Construct SkinDb from SkinServer.
+Construct [SkinDb](#skindb) from SkinServer.
 
 [Back to index](#index)
 
@@ -149,11 +150,13 @@ Construct SkinDb.
 
 ### open(callback)
 
-Connect to database, retrieval native Db instance, callback is function(err, db).
+Connect to database, retrieval native
+[Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17)
+instance, callback is function(err, db).
 
 ### collection(collectionName)
 
-Retrieval SkinCollection instance of specified collection name.
+Retrieval [SkinCollection](#skincollection) instance of specified collection name.
 
 <a name='skindb-bind'>
 
@@ -163,9 +166,9 @@ Retrieval SkinCollection instance of specified collection name.
 
 ### bind(collectionName, extendObject1, extendObject2 ...)
 
-Bind SkinCollection to db properties as a shortcut to db.collection(name).
+Bind [SkinCollection](#skincollection) to db properties as a shortcut to db.collection(name).
 You can also bind additional methods to the SkinCollection, it is useful when
-you want to reuse a complex operation. This will also affect 
+you want to reuse a complex operation. This will also affect
 db.collection(name) method.
 
 e.g.
@@ -190,46 +193,59 @@ SkinCollection
 
 ### open(callback)
 
-Retrieval native Collection instance, callback is function(err, collection).
+Retrieval native
+[Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45)
+instance, callback is function(err, collection).
 
 ### id(hex)
 
-Equivalent to 
+Equivalent to
 
     db.bson_serilizer.ObjectID.createFromHexString(hex);
 
+See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548)
+
 ### findItems(..., callback)
 
-Equivalent to 
+Equivalent to
 
     collection.find(..., function(err, cursor){
         cursor.toArray(callback);
     });
 
+See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
+
 ### findEach(..., callback)
 
-Equivalent to 
+Equivalent to
 
     collection.find(..., function(err, cursor){
         cursor.each(callback);
     });
 
+See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
+
 ### findById(id, ..., callback)
 
-Equivalent to 
+Equivalent to
 
     collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
 
+See [Collection.findOne](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417)
+
 ### updateById(_id, ..., callback)
 
-Equivalent to 
+Equivalent to
 
     collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
 
+See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L198)
+
 ### find(...)
 
-If the last parameter is function, it is equivalent to native Collection.find 
-method, else it will return a future SkinCursor.
+If the last parameter is function, it is equivalent to native
+[Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
+method, else it will return a future [SkinCursor](#skincursor).
 
 e.g.
 
@@ -264,5 +280,15 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
     rename
     save
     update
+
+[Back to index](#index)
+
+<a name='skincursor'>
+
+SkinCursor
+---------
+
+See [Cursor](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/cursor.js#L1)
+of node-mongodb-native for more information.
 
 [Back to index](#index)
