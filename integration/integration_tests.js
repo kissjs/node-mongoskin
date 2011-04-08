@@ -4,13 +4,34 @@ var assert = require('assert'),
     mongo = require('../lib/mongoskin');
 
 console.log('======== test MongoSkin.db ========');
-['localhost/test', 'db://admin:admin@localhost:27017/test?auto_reconnect']
-.forEach(function(server) {
-  db = mongo.db(server);
+(function(){
+  var username = 'testuser',
+      password = 'password';
+
+  db = mongo.db('localhost/test');
   db.open(function(err, db) {
-      assert.ok(db, 'fail to open ' + server);
+      assert.ok(!err);
+      assert.ok(db, err && err.stack);
+      db.addUser(username, password, function(err, result){
+          var authdb = mongo.db(username + ':' + password +'@localhost/test');
+          authdb.open(function(err, db){
+              assert.ok(!err, err && err.stack);
+          });
+          var faildb = mongo.db(username + ':wrongpassword@localhost/test');
+          faildb.open(function(err, db){
+              assert.ok(err, 'should not auth');
+              assert.ok(!db, 'should not return db');
+          });
+      });
   });
-});
+})();
+
+(function(){
+  db = mongo.db('db://admin:admin@localhost:27017/test?auto_reconnect');
+  db.open(function(err, db){
+      assert.ok(err instanceof Error);
+  })
+})();
 
 var bindToBlog = {
   first: function(fn) {
@@ -87,14 +108,21 @@ db.collection('test_normal').ensureIndex([['a',1]], function(err, replies){
     assert.ok(replies, err && err.stack);
 });
 
+console.log('======== test SkinCollection.drop ========');
+db.collection('test_find').drop(function(err, replies){
+    assert.ok(!err);
+});
+
 console.log('======== test SkinCollection.find ========');
 collection = db.collection('test_find');
 collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
     assert.ok(replies, err && err.stack);
-    console.log(replies[0]._id.toString());
+    console.log('======== test SkinCollection.findById ========');
     collection.findById(replies[0]._id.toString(), function(err, item){
         assert.equal(item.a, 1);
     });
+});
+
 
     collection.findItems(function(err, items){
         assert.ok(items, err && err.stack);
@@ -116,7 +144,6 @@ collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
         console.log('======== test find cursor each========');
         assert.ok(!err, err && err.stack);
     });
-});
 
 /*
 console.log('======== test SkinDb.close ========');
