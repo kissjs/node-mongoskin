@@ -1,8 +1,15 @@
+<a name='index'>
 
-Install
-========
+* [Introduction](#introduction)
+* [Goals](#goals)
+* [Install](#install)
+* [Documentation](#documentation)
+    * [Module](#module)
+    * [SkinServer](#skinserver)
+    * [SkinDb](#skindb)
+    * [SkinCollection](#skincollection)
 
-Soon, not publish to npm yet.
+<a name='Introduction'></a>
 
 Introduction
 ========
@@ -40,10 +47,13 @@ Introduction
     db.posts.mapReduce(...);
     db.createCollection(...);
 
-Is mongoskin synchronized?
-========
+ **Is mongoskin synchronized?**
 
-Nop! It is [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
+Nop! It is asynchronized, it use [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
+
+[Back to index](#index)
+
+<a name='goals'>
 
 Goals
 ========
@@ -51,16 +61,29 @@ Goals
 Provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
 and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
+[Back to index](#index)
+
+<a name='install'></a>
+
+Install
+========
+
+Soon, not publish to npm yet.
+
+[Back to index](#index)
+
+<a name='documentation'>
+
 Documentation
 ========
-* [Module API](#module-api)
-* [SkinServer](#skinserver)
-* [SkinDb](#skindb)
-* [SkinCollection](#skincollection)
 
 for more information, see the source.
 
-Module API
+[Back to index](#index)
+
+<a name='module'>
+
+Module
 --------
 
 ### MongoSkin Url format
@@ -80,7 +103,7 @@ e.g.
 
 ### bind(collectionName, extendObject1, extendObject2 ...)
 
-Bind SkinCollection to db properties. see [SkinDb.bind](#bindcollectionname) for more information.
+Bind SkinCollection to db properties. see [SkinDb.bind](#skindb-bind) for more information.
 
 ### db(databaseUrl)
 
@@ -98,6 +121,9 @@ Create SkinServer of native ServerCluster. e.g.
 
 Create instance of native ServerPair
 
+[Back to index](#index)
+
+<a name='skinserver'>
 
 SkinServer
 --------
@@ -110,6 +136,9 @@ Construct SkinServer from native Server instance.
 
 Construct SkinDb from SkinServer.
 
+[Back to index](#index)
+
+<a name='skindb'>
 
 SkinDb
 --------
@@ -125,6 +154,8 @@ Connect to database, retrieval native Db instance, callback is function(err, db)
 ### collection(collectionName)
 
 Retrieval SkinCollection instance of specified collection name.
+
+<a name='skindb-bind'>
 
 ### bind(collectionName)
 
@@ -148,7 +179,11 @@ e.g.
 
 ### all the methods from Db.prototype
 
-See [node-mongodb-native](https://github.com/christkv/node-mongodb-native) for more information.
+See [Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17) of node-mongodb-native for more information.
+
+[Back to index](#index)
+
+<a name='skincollection'>
 
 SkinCollection
 --------
@@ -205,7 +240,7 @@ e.g.
 
 ### all the methods from Collection.prototype
 
-See [node-mongodb-native](https://github.com/christkv/node-mongodb-native) for more information.
+See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45) of node-mongodb-native for more information.
 
     checkCollectionName
     count
@@ -229,3 +264,5 @@ See [node-mongodb-native](https://github.com/christkv/node-mongodb-native) for m
     rename
     save
     update
+
+[Back to index](#index)
