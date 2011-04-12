@@ -154,7 +154,14 @@ console.log('======== deep future test ========');
   db2.collection('blog').find().toArray(function(err, items){
       assert.ok(!err, err && err.stack);
   })
-})()
+})();
+
+(function(){
+  var db2 = mongo.db('unknownhost/test-mongoskin01');
+  db2.collection('blog').find().toArray(function(err, items){
+      assert.ok(err);
+  })
+})();
 /*
 console.log('======== test SkinDb.close ========');
 db.close();
