@@ -56,24 +56,27 @@ assert.equal(db.blog2.first, bindToBlog.first);
 assert.ok(db.user2);
 
 console.log('======== test SkinDb.open ========');
-var db1, db2;
-db.open(function(err, db) {
-    assert.ok(db, err && err.stack);
-    db1 = db;
-    assert.equal(db1.state, 'connected');
-    if (db2) {
-      assert.equal(db1, db2, 'should alwayse be the same instance in db.open.');
-    }
-});
+(function(){
+  var db1, db2;
+  db.open(function(err, db) {
+      assert.ok(db, err && err.stack);
+      db1 = db;
+      assert.equal(db1.state, 'connected');
+      if (db2) {
+        assert.equal(db1, db2, 'should alwayse be the same instance in db.open.');
+      }
+  });
 
-db.open(function(err, db) {
-    assert.ok(db, err && err.stack);
-    db2 = db;
-    assert.equal(db2.state, 'connected');
-    if (db1) {
-      assert.equal(db1, db2, 'should alwayse be the same instance in db.open.');
-    }
-});
+  db.open(function(err, db) {
+      assert.ok(db, err && err.stack);
+      db2 = db;
+      assert.equal(db2.state, 'connected');
+      if (db1) {
+        assert.equal(db1, db2, 'should alwayse be the same instance in db.open.');
+      }
+  });
+
+})()
 
 console.log('======== test normal method of SkinDb ========');
 db.createCollection('test_createCollection', function(err, collection) {
@@ -145,6 +148,13 @@ collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
         assert.ok(!err, err && err.stack);
     });
 
+console.log('======== deep future test ========');
+(function(){
+  var db2 = mongo.db('localhost/test-mongoskin01');
+  db2.collection('blog').find().toArray(function(err, items){
+      assert.ok(!err, err && err.stack);
+  })
+})()
 /*
 console.log('======== test SkinDb.close ========');
 db.close();
