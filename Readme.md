@@ -1,58 +1,19 @@
 <a name='index'>
 
-* [Introduction](#introduction)
 * [Goals](#goals)
 * [Install](#install)
+* [Quick Start](#quickstart)
+    * [Connect easier](#quickstart-1)
+    * [Server options and BSON options](#quickstart-2)
+    * [Similar API with node-mongodb-native](#quickstart-3)
+    * [Cursor easier](#quickstart-4)
+    * [MVC helper](#quickstart-5)
 * [Documentation](#documentation)
     * [Module](#module)
     * [SkinServer](#skinserver)
     * [SkinDb](#skindb)
     * [SkinCollection](#skincollection)
     * [SkinCursor](#skincursor)
-
-<a name='Introduction'></a>
-
-Introduction
-========
-**Mongoskin** is the future layer above [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
-
-    var mongo = require('mongoskin'),
-        db = mongo.db('localhost:27017/test?auto_reconnect');
-
-    db.collection('user').ensureIndex([['username', 1]], true, function(err, replies){});
-    db.collection('posts').hint = 'slug';
-    db.collection('posts').findOne({slug: 'whats-up'}, function(err, post){
-        // do something
-    });
-    db.collection('posts').find().toArray(function(err, posts){
-        // do something
-    });
-
-    db.bind('posts', {
-       findTop10 : function(fn){
-         this.find({}, {limit:10, sort:[['views', -1]]}).toArray(fn);
-       },
-       removeTagWith : function(tag, fn){
-         this.remove({tags:tag},fn);
-       }
-    });
-
-    db.posts.findTop10(function(err, topPosts){
-      //do something
-    });
-
-    db.collection('posts').removeTagWith('delete', function(err, replies){
-      //do something
-    });
-
-    db.posts.mapReduce(...);
-    db.createCollection(...);
-
- **Is mongoskin synchronized?**
-
-Nop! It is asynchronized, it use [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
-
-[Back to index](#index)
 
 <a name='goals'>
 
@@ -69,9 +30,98 @@ and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 Install
 ========
 
-Soon, not publish to npm yet.
+    npm install mongoskin
 
 [Back to index](#index)
+
+
+<a name='quickstart'></a>
+
+Quick Start
+========
+
+ **Is mongoskin synchronized?**
+
+Nop! It is asynchronized, it use [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
+**Mongoskin** is the future layer above [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
+
+<a name='quickstart-1'></a>
+
+Connect easier
+--------
+You can connect to mongodb easier now.
+
+    var mongo = require('mongoskin');
+    mongo.db('localhost:27017/testdb').collection('blog').find().toArray(function(err, items){
+        console.dir(items);
+    })
+
+<a name='quickstart-2'></a>
+
+Server options and BSON options
+--------
+You can also set `auto_reconnect` options querystring.
+And native_parser options will automatically set from wheather native_parser avariable.
+
+    var mongo = require('mongoskin'),
+        db = mongo.db('localhost:27017/test?auto_reconnect');
+
+<a name='quickstart-3'></a>
+
+Similar API with node-mongodb-native
+--------
+You can do everything that node-mongodb-native can do.
+
+    db.createCollection(...);
+    db.collection('user').ensureIndex([['username', 1]], true, function(err, replies){});
+    db.collection('posts').hint = 'slug';
+    db.collection('posts').findOne({slug: 'whats-up'}, function(err, post){
+        // do something
+    });
+
+<a name='quickstart-4'></a>
+
+Cursor easier
+--------
+
+    db.collection('posts').find().toArray(function(err, posts){
+        // do something
+    });
+
+<a name='quickstart-5'></a>
+
+MVC helper
+--------
+
+You can bind **additional methods** for collection after bind.
+It is very useful if you want to use MVC patterns.
+You can also invoke collection by properties after bind.
+
+    db.bind('posts', {
+       findTop10 : function(fn){
+         this.find({}, {limit:10, sort:[['views', -1]]}).toArray(fn);
+       },
+       removeTagWith : function(tag, fn){
+         this.remove({tags:tag},fn);
+       }
+    });
+
+    db.bind('comments');
+
+    db.collection('posts').removeTagWith('delete', function(err, replies){
+      //do something
+    });
+
+    db.posts.findTop10(function(err, topPosts){
+      //do something
+    });
+
+    db.comments.find().toArray(function(err, comments){
+      //do something
+    });
+
+[Back to index](#index)
+
 
 <a name='documentation'>
 
@@ -81,6 +131,7 @@ Documentation
 for more information, see the source.
 
 [Back to index](#index)
+
 
 <a name='module'>
 
