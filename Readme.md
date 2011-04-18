@@ -229,7 +229,7 @@ e.g.
             this.findOne(fn);
         }
     });
-    db.book.firstBook:(function(err, book){});
+    db.book.firstBook(function(err, book){});
 
 ### all the methods from Db.prototype
 
