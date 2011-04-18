@@ -342,4 +342,19 @@ SkinCursor
 See [Cursor](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/cursor.js#L1)
 of node-mongodb-native for more information.
 
+All these methods will return the SkinCursor itself.
+
+    sort(keyOrList, [direction], [callback])
+    limit(limit, [callback])
+    skip(skip, [callback])
+    batchSize(skip, [callback])
+
+    toArray(callback)
+    each(callback)
+    count(callback)
+    nextObject(callback)
+    getMore(callback)
+    explain(callback)
+
+
 [Back to index](#index)
