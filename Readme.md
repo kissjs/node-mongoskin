@@ -20,7 +20,12 @@
 Goals
 ========
 
-Provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
+Mongoskin is an easy to use driver of mongodb for nodejs,
+it support mongodb cluster,
+database url connecting,
+and additional javascript method binding.
+
+It will provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
 and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
 [Back to index](#index)
@@ -93,9 +98,10 @@ Cursor easier
 MVC helper
 --------
 
-You can bind **additional methods** for collection after bind.
-It is very useful if you want to use MVC patterns.
-You can also invoke collection by properties after bind.
+You can bind **additional methods** for collection.
+It is very useful if you want to use MVC patterns with nodejs and mongodb.
+You can also invoke collection by properties after bind,
+it could simplfy your `require`.
 
     db.bind('posts', {
        findTop10 : function(fn){
