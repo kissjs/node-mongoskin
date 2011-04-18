@@ -118,7 +118,7 @@ db.collection('test_find').drop(function(err, replies){
 
 console.log('======== test SkinCollection.find ========');
 collection = db.collection('test_find');
-collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
+collection.insert([{a:1},{a:2},{a:3},{a:4}], function(err, replies){
     assert.ok(replies, err && err.stack);
     console.log('======== test SkinCollection.findById ========');
     collection.findById(replies[0]._id.toString(), function(err, item){
@@ -146,6 +146,11 @@ collection.insert([{a:1},{a:2},{a:3}], function(err, replies){
     collection.find().each(function(err, item){
         console.log('======== test find cursor each========');
         assert.ok(!err, err && err.stack);
+    });
+    collection.find().sort({a:-1}).limit(2).skip(1).toArray(function(err, items){
+        console.log('======== test cursor sort() limit() skip() ========');
+        assert.ok(!err, err && err.stack);
+        console.dir(items);
     });
 
 console.log('======== deep future test ========');
