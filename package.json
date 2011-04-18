@@ -1,7 +1,7 @@
 {
   "name": "mongoskin",
   "description": "The future layer above node-mongodb-native",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Jason Green <guileen@gmail.com>",
   "repository": {
     "type": "git",
