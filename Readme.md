@@ -1,6 +1,6 @@
 <a name='index'>
 
-* [Goals](#goals)
+* [Nodejs mongodb drivers comparation](#comparation)
 * [Install](#install)
 * [Quick Start](#quickstart)
     * [Connect easier](#quickstart-1)
@@ -15,18 +15,40 @@
     * [SkinCollection](#skincollection)
     * [SkinCursor](#skincursor)
 
-<a name='goals'>
+<a name='comparation'>
 
-Goals
+Nodejs mongodb drivers comparation
 ========
 
+node-mongodb-native
+--------
+
+Powerful, most of drivers include mongoskin build upon it,
+  but node-mongodb-native has awkward syntax, too many callback,
+  and we need a way to hold Collection instance as Model for MVC.
+
+mongoose
+--------
+
+It provide an ORM way to hold Collection instance as Model,
+  you should define schema first. But why mongodb need schema?
+  Some guys like me, want to write code from application layer but not database layer,
+  and we can use any fields without define it before.
+
+  Mongoose provide a DAL that you can do validation, and write your middlewares.
+  But some guys like me would like to validate manually, I think it is the tao of mongodb.
+
+  If you don't thinks so, [Mongoose-ORM](https://github.com/LearnBoost/mongoose) is probably your choice.
+
+mongoskin
+--------
+
 Mongoskin is an easy to use driver of mongodb for nodejs,
-it support mongodb cluster,
-database url connecting,
-and additional javascript method binding.
+  it is similar with mongo shell, powerful like node-mongodb-native,
+  and support additional javascript method binding, which make it can act as a Model(in document way).
 
 It will provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
-and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
+  and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
 [Back to index](#index)
 
