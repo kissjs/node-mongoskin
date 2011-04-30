@@ -39,6 +39,26 @@ var bindToBlog = {
   }
 };
 
+console.log('======== test MongoSkin.router ========');
+var testdb1 = mongo.db('localhost/test1');
+var testdb2 = mongo.db('localhost/test2');
+var router = mongo.router(function(name){
+    switch(name){
+    case 'user':
+    case 'message':
+      return testdb1;
+    default:
+      return testdb2;
+    }
+});
+assert.equal(router.collection('user'), testdb1.collection('user'), 'user should router to testdb1');
+assert.equal(router.collection('message'), testdb1.collection('message'), 'message should router to testdb1');
+assert.equal(router.collection('others'), testdb2.collection('others'), 'others should router to testdb2');
+router.bind('user');
+router.bind('others');
+assert.equal(router.user, testdb1.user, 'user property should router to testdb1');
+assert.equal(router.others, testdb2.others, 'user property should router to testdb1');
+
 console.log('======== test MongoSkin.bind ========');
 mongo.bind('blog', bindToBlog);
 mongo.bind('users');
