@@ -14,6 +14,14 @@
     * [SkinServer](#skinserver)
     * [SkinDb](#skindb)
     * [SkinCollection](#skincollection)
+      * [Additional methods](#additional-collection-op)
+      * [Collection operation](#inherit-collection-op)
+      * [Indexes](#inherit-indexes)
+      * [Querying](#inherit-query)
+      * [Aggregation](#inherit-aggregation)
+      * [Inserting](#inherit-inserting)
+      * [Updating](#inherit-updating)
+      * [Removing](#inherit-removing)
     * [SkinCursor](#skincursor)
 
 <a name='comparation'>
@@ -291,6 +299,7 @@ See [Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb
 SkinCollection
 --------
 
+<a name='additional-collection-op'>
 ### open(callback)
 
 Retrieval native
@@ -354,32 +363,127 @@ e.g.
     // future SkinCursor
     db.book.find().toArray(function(err, books){/* do something */});
 
-### all the methods from Collection.prototype
+### methods from Collection.prototype
 
 See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45) of node-mongodb-native for more information.
 
-    checkCollectionName
-    count
-    createIndex
-    distinct
-    drop
-    dropIndex
-    dropIndexes
-    ensureIndex
+<a name='inherit-collection-op'>
+
+### Collection operation
+
+    checkCollectionName(collectionName)
+    options(callback)
+    rename(collectionName, callback)
+    drop(callback)
+
+<a name='inherit-indexes'>
+
+### Indexes
+
+    createIndex (fieldOrSpec, unique, callback)
+    ensureIndex (fieldOrSpec, unique, callback)
+    indexInformation (callback)
+    dropIndex (indexName, callback)
+    dropIndexes (callback)
+
+<a name='inherit-query'>
+
+### Query
+    normalizeHintField(hint)
+
+    /**
+     * Various argument possibilities
+     * 1 callback
+     * 2 selector, callback,
+     * 2 callback, options  // really?!
+     * 3 selector, fields, callback
+     * 3 selector, options, callback
+     * 4,selector, fields, options, callback
+     * 5 selector, fields, skip, limit, callback
+     * 6 selector, fields, skip, limit, timeout, callback
+     *
+     * Available options:
+     * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize
+     */
     find
-    findAndModify
-    findOne
-    group
-    indexInformation
-    insert
-    insertAll
-    mapReduce
-    normalizeHintField
-    options
-    remove
-    rename
-    save
-    update
+
+    /**
+      Fetch and update a collection
+      query:        a filter for the query
+      sort:         if multiple docs match, choose the first one in the specified sort order as the object to manipulate
+      update:       an object describing the modifications to the documents selected by the query
+      options:
+        remove:   set to a true to remove the object before returning
+        new:      set to true if you want to return the modified object rather than the original. Ignored for remove.
+        upsert:       true/false (perform upsert operation)
+    **/
+    findAndModify(query, sort, update, options, callback) 
+    findOne(queryObject, options, callback)
+
+<a name='inherit-aggregation'>
+
+### Aggregation
+
+    mapReduce(map, reduce, options, callback)
+    e.g.  ```
+      var map = function(){
+          emit(test(this.timestamp.getYear()), 1);
+      }
+      
+      var reduce = function(k, v){
+          count = 0;
+          for(i = 0; i < v.length; i++) {
+              count += v[i];
+          }
+          return count;
+      }
+      collection.mapReduce(map, reduce, {scope:{test:new client.bson_serializer.Code(t.toString())}}, function(err, collection) {
+        collection.find(function(err, cursor) {
+              cursor.toArray(function(err, results) {
+              test.equal(2, results[0].value)
+              finished_test({test_map_reduce_functions_scope:'ok'});            
+          })
+        })
+          ```
+
+    group(keys, condition, initial, reduce, command, callback)
+    e.g.  `collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {`
+
+    count(query, callback)
+    distinct(key, query, callback)
+
+<a name='inherit-inserting'>
+
+### Inserting
+
+    insert(docs, options, callback)
+    insertAll(docs, options, callback)
+
+<a name='inherit-updating'>
+
+### Updating
+
+    save(doc, options, callback)
+    /**
+      Update a single document in this collection.
+        spec - a associcated array containing the fields that need to be present in
+          the document for the update to succeed
+
+        document - an associated array with the fields to be updated or in the case of
+          a upsert operation the fields to be inserted.
+
+      Options:
+        upsert - true/false (perform upsert operation)
+        multi - true/false (update all documents matching spec)
+        safe - true/false (perform check if the operation failed, required extra call to db)
+    **/
+    update(spec, document, options, callback)
+
+<a name='inherit-removing'>
+
+### Removing
+
+    remove(selector, options, callback)
 
 [Back to index](#index)
 
