@@ -299,6 +299,8 @@ See [Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb
 SkinCollection
 --------
 
+See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45) of node-mongodb-native for more information.
+
 <a name='additional-collection-op'>
 ### open(callback)
 
@@ -314,58 +316,6 @@ Equivalent to
 
 See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548)
 
-### findItems(..., callback)
-
-Equivalent to
-
-    collection.find(..., function(err, cursor){
-        cursor.toArray(callback);
-    });
-
-See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
-
-### findEach(..., callback)
-
-Equivalent to
-
-    collection.find(..., function(err, cursor){
-        cursor.each(callback);
-    });
-
-See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
-
-### findById(id, ..., callback)
-
-Equivalent to
-
-    collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
-
-See [Collection.findOne](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417)
-
-### updateById(_id, ..., callback)
-
-Equivalent to
-
-    collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
-
-See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L198)
-
-### find(...)
-
-If the last parameter is function, it is equivalent to native
-[Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
-method, else it will return a future [SkinCursor](#skincursor).
-
-e.g.
-
-    // callback
-    db.book.find({}, function(err, cursor){/* do something */});
-    // future SkinCursor
-    db.book.find().toArray(function(err, books){/* do something */});
-
-### methods from Collection.prototype
-
-See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45) of node-mongodb-native for more information.
 
 <a name='inherit-collection-op'>
 
@@ -389,7 +339,53 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
 <a name='inherit-query'>
 
 ### Query
-    normalizeHintField(hint)
+
+#### findItems(..., callback)
+
+Equivalent to
+
+    collection.find(..., function(err, cursor){
+        cursor.toArray(callback);
+    });
+
+See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
+
+#### findEach(..., callback)
+
+Equivalent to
+
+    collection.find(..., function(err, cursor){
+        cursor.each(callback);
+    });
+
+See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
+
+#### findById(id, ..., callback)
+
+Equivalent to
+
+    collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
+
+See [Collection.findOne](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417)
+
+#### find(...)
+
+If the last parameter is function, it is equivalent to native
+[Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
+method, else it will return a future [SkinCursor](#skincursor).
+
+e.g.
+
+    // callback
+    db.book.find({}, function(err, cursor){/* do something */});
+    // future SkinCursor
+    db.book.find().toArray(function(err, books){/* do something */});
+
+
+
+#### normalizeHintField(hint)
+
+#### find
 
     /**
      * Various argument possibilities
@@ -405,7 +401,8 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
      * Available options:
      * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize
      */
-    find
+
+#### findAndModify(query, sort, update, options, callback) 
 
     /**
       Fetch and update a collection
@@ -417,14 +414,15 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
         new:      set to true if you want to return the modified object rather than the original. Ignored for remove.
         upsert:       true/false (perform upsert operation)
     **/
-    findAndModify(query, sort, update, options, callback) 
-    findOne(queryObject, options, callback)
+
+#### findOne(queryObject, options, callback)
 
 <a name='inherit-aggregation'>
 
 ### Aggregation
 
-    mapReduce(map, reduce, options, callback)
+#### mapReduce(map, reduce, options, callback)
+
     e.g.  ```
       var map = function(){
           emit(test(this.timestamp.getYear()), 1);
@@ -446,7 +444,8 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
         })
           ```
 
-    group(keys, condition, initial, reduce, command, callback)
+#### group(keys, condition, initial, reduce, command, callback)
+
     e.g.  `collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {`
 
     count(query, callback)
@@ -456,14 +455,16 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
 
 ### Inserting
 
-    insert(docs, options, callback)
-    insertAll(docs, options, callback)
+#### insert(docs, options, callback)
+
+#### insertAll(docs, options, callback)
 
 <a name='inherit-updating'>
 
 ### Updating
 
-    save(doc, options, callback)
+#### save(doc, options, callback)
+
     /**
       Update a single document in this collection.
         spec - a associcated array containing the fields that need to be present in
@@ -477,13 +478,25 @@ See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib
         multi - true/false (update all documents matching spec)
         safe - true/false (perform check if the operation failed, required extra call to db)
     **/
-    update(spec, document, options, callback)
+
+#### update(spec, document, options, callback)
+
+#### updateById(_id, ..., callback)
+
+Equivalent to
+
+    collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
+
+See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L198)
+
 
 <a name='inherit-removing'>
 
 ### Removing
 
-    remove(selector, options, callback)
+#### remove(selector, options, callback)
+
+#### removeById(_id, options, callback)
 
 [Back to index](#index)
 
