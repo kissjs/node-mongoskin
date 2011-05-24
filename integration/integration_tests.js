@@ -143,6 +143,13 @@ collection.insert([{a:1},{a:2},{a:3},{a:4}], function(err, replies){
     console.log('======== test SkinCollection.findById ========');
     collection.findById(replies[0]._id.toString(), function(err, item){
         assert.equal(item.a, 1);
+        console.log('======== test SkinCollection.removeById ========');
+        collection.removeById(replies[0]._id.toString(), function(err, reply){
+            assert.ok(reply, err && err.stack);
+            collection.findById(replies[0]._id.toString(), function(err, item){
+                assert.ok(!item);
+            });
+        });
     });
 });
 
