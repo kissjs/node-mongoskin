@@ -5,7 +5,6 @@
 * [Quick Start](#quickstart)
     * [Connect easier](#quickstart-1)
     * [Server options and BSON options](#quickstart-2)
-    * [Router](#router)
     * [Similar API with node-mongodb-native](#quickstart-3)
     * [Cursor easier](#quickstart-4)
     * [MVC helper](#quickstart-5)
@@ -33,7 +32,7 @@ node-mongodb-native
 --------
 
 Powerful, most of drivers include mongoskin build upon it,
-  but node-mongodb-native has awkward syntax, too many callback,
+  but node-mongodb-native has awkward syntax, too many callbacks,
   and we need a way to hold Collection instance as Model for MVC.
 
 mongoose
@@ -78,7 +77,7 @@ Quick Start
 
  **Is mongoskin synchronized?**
 
-Nop! It is asynchronized, it use [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
+Nope! It is asynchronized, it use the [future pattern](http://en.wikipedia.org/wiki/Future_%28programming%29).
 **Mongoskin** is the future layer above [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
 <a name='quickstart-1'></a>
@@ -97,26 +96,10 @@ You can connect to mongodb easier now.
 Server options and BSON options
 --------
 You can also set `auto_reconnect` options querystring.
-And native_parser options will automatically set from wheather native_parser avariable.
+And native_parser options will automatically set if native_parser is avariable.
 
     var mongo = require('mongoskin'),
         db = mongo.db('localhost:27017/test?auto_reconnect');
-
-<a name='router'></a>
-
-    var db = mongo.router(function(coll_name){
-        switch(coll_name) {
-        case 'user':
-        case 'message':
-          return mongo.db('192.168.1.3/auth_db');
-        default:
-          return mongo.db('192.168.1.2/app_db');
-        }
-    });
-    db.bind('user', require('./shared-user-methods'));
-    var users = db.user; //auth_db.user
-    var messages = db.collection('message'); // auth_db.message
-    var products = db.collection('product'); //app_db.product
 
 <a name='quickstart-3'></a>
 
@@ -229,6 +212,22 @@ Create [SkinServer](#skinserver) of native [ServerPair](https://github.com/chris
 ### router(select)
 
 select is function(collectionName) returns a database instance, means router collectionName to that database.
+
+    var db = mongo.router(function(coll_name){
+        switch(coll_name) {
+        case 'user':
+        case 'message':
+          return mongo.db('192.168.1.3/auth_db');
+        default:
+          return mongo.db('192.168.1.2/app_db');
+        }
+    });
+    db.bind('user', require('./shared-user-methods'));
+    var users = db.user; //auth_db.user
+    var messages = db.collection('message'); // auth_db.message
+    var products = db.collection('product'); //app_db.product
+
+
 
 [Back to index](#index)
 
