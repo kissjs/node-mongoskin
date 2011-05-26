@@ -311,7 +311,7 @@ instance, callback is function(err, collection).
 
 Equivalent to
 
-    db.bson_serilizer.ObjectID.createFromHexString(hex);
+    db.bson_serializer.ObjectID.createFromHexString(hex);
 
 See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548)
 
