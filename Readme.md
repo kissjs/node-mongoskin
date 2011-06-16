@@ -447,8 +447,8 @@ e.g.
 
     e.g.  `collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {`
 
-    count(query, callback)
-    distinct(key, query, callback)
+#### count(query, callback)
+#### distinct(key, query, callback)
 
 <a name='inherit-inserting'>
 
