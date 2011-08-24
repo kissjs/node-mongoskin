@@ -34,6 +34,8 @@ node-mongodb-native
 Powerful, most of drivers include mongoskin build upon it,
   but node-mongodb-native has awkward syntax, too many callbacks,
   and we need a way to hold Collection instance as Model for MVC.
+  
+See [mongodb-native](https://github.com/christkv/node-mongodb-native/tree/master/docs)
 
 mongoose
 --------
@@ -334,10 +336,14 @@ See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-nati
     indexInformation (callback)
     dropIndex (indexName, callback)
     dropIndexes (callback)
+    
+See [mongodb-native indexes](https://github.com/christkv/node-mongodb-native/blob/master/docs/indexes.md)
 
 <a name='inherit-query'>
 
-### Query
+### Queries
+
+See [mongodb-native queries](https://github.com/christkv/node-mongodb-native/blob/master/docs/queries.md)
 
 #### findItems(..., callback)
 
@@ -486,7 +492,7 @@ Equivalent to
 
     collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
 
-See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L198)
+See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/docs/insert.md)
 
 
 <a name='inherit-removing'>
