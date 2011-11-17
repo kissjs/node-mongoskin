@@ -8,6 +8,16 @@ var mongoskin = require('../')
 
 
 module.exports = {
+    'test id()': function() {
+        var db = mongoskin.db('localhost/test');
+        db.bind('testcollection');
+        var id = '4ec4b2b9f44a927223000001';
+        id = db.testcollection.id(id);
+        id.should.be.instanceof(db.testcollection.ObjectID);
+        id = db.testcollection.id(id);
+        id.should.be.instanceof(db.testcollection.ObjectID);
+        db.close();
+    },
     'test findById string id': function() {
         var db = mongoskin.db('localhost/test');
         var ObjectID = db.db.bson_serializer.ObjectID;
