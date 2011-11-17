@@ -1,3 +1,7 @@
+0.2.1 / 2011-11-18
+==================
+ * add ObjectId support for XXXXById
+
 0.2.0 / 2011-11-06
 ==================
   * add SkinDB.gridfs
