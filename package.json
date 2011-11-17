@@ -21,7 +21,10 @@
   "dependencies": {
     "mongodb": "*"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "expresso": "0.9.2",
+    "should": "0.3.2"
+  },
   "directories": {
     "lib": "lib/mongoskin"
   }
