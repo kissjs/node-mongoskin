@@ -60,6 +60,8 @@ Mongoskin is an easy to use driver of mongodb for nodejs,
 It will provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
   and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
+If you need validation, you can use [node-iform](https://github.com/guileen/node-iform).
+
 [Back to index](#index)
 
 <a name='install'></a>
