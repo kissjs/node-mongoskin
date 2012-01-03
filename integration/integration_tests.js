@@ -67,7 +67,7 @@ assert.equal(db.blog.first, bindToBlog.first);
 assert.ok(db.users);
 
 console.log('======== test SkinDb bson ========');
-assert.ok(db.db.bson_serializer.ObjectID.createFromHexString('a7b79d4dca9d730000000000'));
+assert.ok(db.ObjectID.createFromHexString('a7b79d4dca9d730000000000'));
 
 console.log('======== test SkinDb.bind ========');
 db.bind('blog2', bindToBlog);
