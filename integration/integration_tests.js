@@ -60,9 +60,9 @@ assert.equal(router.user, testdb1.user, 'user property should router to testdb1'
 assert.equal(router.others, testdb2.others, 'user property should router to testdb1');
 
 console.log('======== test MongoSkin.bind ========');
-mongo.bind('blog', bindToBlog);
-mongo.bind('users');
 var db = mongo.db('localhost/test_mongoskin');
+db.bind('blog', bindToBlog);
+db.bind('users');
 assert.equal(db.blog.first, bindToBlog.first);
 assert.ok(db.users);
 
