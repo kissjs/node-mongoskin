@@ -25,22 +25,22 @@
 
 <a name='comparation'>
 
-Nodejs mongodb drivers comparation
+Nodejs Mongodb Driver Comparison
 ========
 
 node-mongodb-native
 --------
 
-Powerful, most of drivers include mongoskin build upon it,
-  but node-mongodb-native has awkward syntax, too many callbacks,
-  and we need a way to hold Collection instance as Model for MVC.
+One of the most powerful Mongo drivers is node-mongodb-native. Most other drivers build
+on top of it, including mongoskin. Unfortunately, it has an awkward interface with too many 
+callbacks. Also, mongoskin needs a way to hold a Collection instance as an MVC model.
   
 See [mongodb-native](https://github.com/christkv/node-mongodb-native/tree/master/docs)
 
 mongoose
 --------
 
-It provide an ORM way to hold Collection instance as Model,
+Mongoose provides an ORM way to hold Collection instance as Model,
   you should define schema first. But why mongodb need schema?
   Some guys like me, want to write code from application layer but not database layer,
   and we can use any fields without define it before.
