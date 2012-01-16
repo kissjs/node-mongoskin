@@ -1,7 +1,7 @@
 {
   "name": "mongoskin",
   "description": "The future layer above node-mongodb-native",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "author": "Jason Green <guileen@gmail.com>",
   "repository": {
     "type": "git",
@@ -16,10 +16,10 @@
     "mongodb"
   ],
   "engines": {
-    "node": "*"
+    "node": ">=0.4.0"
   },
   "dependencies": {
-    "mongodb": "*"
+    "mongodb": ">=0.9.7-3"
   },
   "devDependencies": {
     "expresso": "0.9.2",
