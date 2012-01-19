@@ -188,30 +188,21 @@ e.g.
     mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
     127.0.0.1?auto_reconnect=false
 
-
-### bind(collectionName)
-
-### bind(collectionName, SkinCollection)
-
-### bind(collectionName, extendObject1, extendObject2 ...)
-
-Bind [SkinCollection](#skincollection) to db properties. see [SkinDb.bind](#skindb-bind) for more information.
-
-### db(databaseUrl)
+### db(databaseUrl, db_options)
 
 Get or create instance of [SkinDb](#skindb).
 
-### cluster(serverUrl1, serverUrl2, ...)
+    var db = mongoskin.db('localhost:27017/testdb?auto_reconnect=true&poolSize=5');
 
-Create [SkinServer](#skinserver) of native [ServerCluster](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/connection.js#L221). e.g.
+for ReplSet server
 
-    var mongo = require('mongoskin');
-    var cluster = mongo.cluster('192.168.0.1:27017', '192.168.0.2:27017', '192.168.0.3:27017')
-    var db = cluster.db('dbname', 'admin', 'pass');
-
-### pair(leftServerUrl, rightServerUrl)
-
-Create [SkinServer](#skinserver) of native [ServerPair](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/connection.js#L190)
+    var db = mongoskin.db(['192.168.0.1:27017/?auto_reconnect=true',
+                '192.168.0.2:27017/?auto_reconnect=true',
+                '192.168.0.3:27017/?auto_reconnect=true'],
+                {
+                    database: 'testdb',
+                    retryMiliSeconds: 2000
+                })
 
 ### router(select)
 
