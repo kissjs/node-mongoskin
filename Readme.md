@@ -222,6 +222,43 @@ select is function(collectionName) returns a database instance, means router col
     var messages = db.collection('message'); // auth_db.message
     var products = db.collection('product'); //app_db.product
 
+### classes extends frome node-mongodb-native
+
+* BSONPure
+* BSONNative
+* BinaryParser
+* Binary
+* Code
+* DBRef
+* Double
+* MaxKey
+* MinKey
+* ObjectID
+* Symbol
+* Timestamp
+* Long
+* BaseCommand
+* DbCommand
+* DeleteCommand
+* GetMoreCommand
+* InsertCommand
+* KillCursorCommand
+* QueryCommand
+* UpdateCommand
+* MongoReply
+* Admin
+* Collection
+* Connection
+* Server
+* ReplSetServers
+* Cursor
+* Db
+* connect
+* Grid
+* Chunk
+* GridStore
+* native
+* pure
 
 
 [Back to index](#index)

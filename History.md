@@ -1,3 +1,21 @@
+0.3.2 / 2011-03-01
+==================
+ * exports all classes of node-mongodb-native
+
+0.3.1 / 2011-02-26
+==================
+ * bug fix #33
+
+0.3.0 / 2011-01-19
+==================
+ * add ReplSet support
+ * bug fix
+
+0.2.3 / 2011-01-03
+==================
+ * add db.toObjectID
+ * fix #25 for node-mongodb-native update
+
 0.2.2 / 2011-12-02
 ==================
  * add bind support for embeded collections, e.g. db.bind('system.js')
