@@ -5,7 +5,6 @@ var mongo = require('../index.js')
   , db = mongo.db('localhost/test')
   ;
 
-db.bind('system.js');
 db.bind('user');
 
 function log(err) {
