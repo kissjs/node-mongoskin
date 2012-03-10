@@ -1,8 +1,10 @@
-This project is a wrapper of node-mongodb-native
+## This project is a wrapper of node-mongodb-native
 
-node-mongodb-native document http://christkv.github.com/node-mongodb-native/
+* node-mongodb-native document http://christkv.github.com/node-mongodb-native/
 
 <a name='index'>
+
+# Mongoskin document
 
 * [Nodejs mongodb drivers comparation](#comparation)
 * [Install](#install)
