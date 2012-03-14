@@ -1,8 +1,7 @@
-var mongo = require('../index.js')
-  , redis = require('redis').createClient()
+var redis = require('redis').createClient()
   , shorten = require('shorten')(redis)
   , async = require('async')
-  , db = mongo.db('localhost/test')
+  , db = require('./config').db
   ;
 
 db.bind('user');

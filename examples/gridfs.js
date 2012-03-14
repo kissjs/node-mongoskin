@@ -1,6 +1,4 @@
-var mongoskin = require('../lib/mongoskin');
-
-var db = mongoskin.db('localhost/test');
+var db = require('./config').db;
 
 db.gridfs().open('test.txt', 'w', function(err, gs) {
     gs.write('blablabla', function(err, reply) {
