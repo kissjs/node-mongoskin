@@ -1,3 +1,7 @@
+0.3.3 / 2011-03-15
+==================
+ * Add rootCollection option to SkinGridStore.exist
+
 0.3.2 / 2011-03-01
 ==================
  * exports all classes of node-mongodb-native
