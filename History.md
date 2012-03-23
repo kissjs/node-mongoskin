@@ -1,3 +1,6 @@
+0.3.4 / 2011-03-24
+ * fix global leaks
+
 0.3.3 / 2011-03-15
 ==================
  * Add rootCollection option to SkinGridStore.exist
