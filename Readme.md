@@ -2,11 +2,6 @@
 
 * node-mongodb-native document http://christkv.github.com/node-mongodb-native/
 
-## How to generate unique Id?
-
-see [examples/generateId](https://github.com/guileen/node-mongoskin/blob/master/examples/generateId.js) by 
-[node-shorten](https://github.com/guileen/node-shorten)
-
 ## How to validate input?
 
 I wrote a middleware to validate post data, [node-iform](https://github.com/guileen/node-iform) 
