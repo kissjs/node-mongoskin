@@ -503,8 +503,6 @@ e.g.
 
 #### insert(docs, options, callback)
 
-#### insertAll(docs, options, callback)
-
 <a name='inherit-updating'>
 
 ### Updating
