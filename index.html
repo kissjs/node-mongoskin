@@ -1,0 +1,487 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Node-mongoskin by kissjs</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Node-mongoskin</h1>
+        <p>The future layer for node-mongodb-native.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/kissjs/node-mongoskin" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/kissjs/node-mongoskin/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/kissjs/node-mongoskin/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>Introduction</h1>
+
+<ul>
+<li>This project is a wrapper of node-mongodb-native</li>
+</ul><p>Read <a href="http://christkv.github.com/node-mongodb-native/">node-mongodb-native document</a> first.</p>
+
+<ul>
+<li>How to validate input?</li>
+</ul><p>I wrote a middleware to validate post data, <a href="https://github.com/guileen/node-iform">node-iform</a> 
+base on <a href="https://github.com/chriso/node-validator">node-validator</a></p>
+
+<ul>
+<li>
+<p>install</p>
+
+<p>npm install mongoskin</p>
+</li>
+</ul><h1>Quick Start</h1>
+
+<p>You can connect to mongodb easier now.</p>
+
+<pre><code>var mongo = require('mongoskin');
+mongo.db('localhost:27017/testdb').collection('blog').find().toArray(function(err, items){
+    console.dir(items);
+})
+</code></pre>
+
+<p>You can also set <code>auto_reconnect</code> options querystring.
+And native_parser options will automatically set if native_parser is avariable.</p>
+
+<pre><code>var mongo = require('mongoskin'),
+    db = mongo.db('localhost:27017/test?auto_reconnect');
+</code></pre>
+
+<p>You can do everything that node-mongodb-native can do.</p>
+
+<pre><code>db.createCollection(...);
+db.collection('user').ensureIndex([['username', 1]], true, function(err, replies){});
+db.collection('posts').hint = 'slug';
+db.collection('posts').findOne({slug: 'whats-up'}, function(err, post){
+    // do something
+});
+</code></pre>
+
+<p>Find return cursor</p>
+
+<pre><code>db.collection('posts').find().toArray(function(err, posts){
+    // do something
+});
+</code></pre>
+
+<p>You can bind <strong>additional methods</strong> for collection.
+It is very useful if you want to use MVC patterns with nodejs and mongodb.
+You can also invoke collection by properties after bind.</p>
+
+<pre><code>db.bind('posts', {
+   findTop10 : function(fn){
+     this.find({}, {limit:10, sort:[['views', -1]]}).toArray(fn);
+   },
+   removeTagWith : function(tag, fn){
+     this.remove({tags:tag},fn);
+   }
+});
+
+db.bind('comments');
+
+db.collection('posts').removeTagWith('delete', function(err, replies){
+  //do something
+});
+
+db.posts.findTop10(function(err, topPosts){
+  //do something
+});
+
+db.comments.find().toArray(function(err, comments){
+  //do something
+});
+</code></pre>
+
+<h1>API</h1>
+
+<h2>Module</h2>
+
+<h3>MongoSkin Url format</h3>
+
+<pre><code>[*://][username:password@]host[:port][/database][?auto_reconnect[=true|false]]`
+</code></pre>
+
+<p>e.g.</p>
+
+<pre><code>localhost/blog
+mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
+127.0.0.1?auto_reconnect=false
+</code></pre>
+
+<h3>db(databaseUrl, db_options)</h3>
+
+<p>Get or create instance of <a href="#skindb">SkinDb</a>.</p>
+
+<pre><code>var db = mongoskin.db('localhost:27017/testdb?auto_reconnect=true&amp;poolSize=5');
+</code></pre>
+
+<p>for ReplSet server</p>
+
+<pre><code>var db = mongoskin.db(['192.168.0.1:27017/?auto_reconnect=true',
+            '192.168.0.2:27017/?auto_reconnect=true',
+            '192.168.0.3:27017/?auto_reconnect=true'],
+            {
+                database: 'testdb',
+                retryMiliSeconds: 2000
+            })
+</code></pre>
+
+<h3>router(select)</h3>
+
+<p>select is function(collectionName) returns a database instance, means router collectionName to that database.</p>
+
+<pre><code>var db = mongo.router(function(coll_name){
+    switch(coll_name) {
+    case 'user':
+    case 'message':
+      return mongo.db('192.168.1.3/auth_db');
+    default:
+      return mongo.db('192.168.1.2/app_db');
+    }
+});
+db.bind('user', require('./shared-user-methods'));
+var users = db.user; //auth_db.user
+var messages = db.collection('message'); // auth_db.message
+var products = db.collection('product'); //app_db.product
+</code></pre>
+
+<h3>classes extends frome node-mongodb-native</h3>
+
+<p>you can access all mongodb class, <code>mongoskin.DBRef</code> equals <code>mongodb.DBRef</code>.</p>
+
+<h2>SkinServer</h2>
+
+<h3>SkinServer(server)</h3>
+
+<p>Construct SkinServer from native Server instance.</p>
+
+<h3>db(dbname, username=null, password=null)</h3>
+
+<p>Construct <a href="#skindb">SkinDb</a> from SkinServer.</p>
+
+<h2>SkinDb</h2>
+
+<h3>SkinDb(db, username=null, password=null)</h3>
+
+<p>Construct SkinDb.</p>
+
+<h3>open(callback)</h3>
+
+<p>Connect to database, retrieval native
+<a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17">Db</a>
+instance, callback is function(err, db).</p>
+
+<h3>collection(collectionName)</h3>
+
+<p>Retrieval <a href="#skincollection">SkinCollection</a> instance of specified collection name.</p>
+
+<p><a name="skindb-bind"></a></p>
+
+<h3>bind(collectionName)</h3>
+
+<h3>bind(collectionName, SkinCollection)</h3>
+
+<h3>bind(collectionName, extendObject1, extendObject2 ...)</h3>
+
+<p>Bind <a href="#skincollection">SkinCollection</a> to db properties as a shortcut to db.collection(name).
+You can also bind additional methods to the SkinCollection, it is useful when
+you want to reuse a complex operation. This will also affect
+db.collection(name) method.</p>
+
+<p>e.g.</p>
+
+<pre><code>db.bind('book', {
+    firstBook: function(fn){
+        this.findOne(fn);
+    }
+});
+db.book.firstBook(function(err, book){});
+</code></pre>
+
+<h3>all the methods from Db.prototype</h3>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17">Db</a> of node-mongodb-native for more information.</p>
+
+<h2>SkinCollection</h2>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45">Collection</a> of node-mongodb-native for more information.</p>
+
+<p><a name="additional-collection-op"></a></p>
+
+<h3>open(callback)</h3>
+
+<p>Retrieval native
+<a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45">Collection</a>
+instance, callback is function(err, collection).</p>
+
+<h3>id(hex)</h3>
+
+<p>Equivalent to</p>
+
+<pre><code>db.bson_serializer.ObjectID.createFromHexString(hex);
+</code></pre>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548">ObjectID.createFromHexString</a></p>
+
+<p><a name="inherit-collection-op"></a></p>
+
+<h3>Collection operation</h3>
+
+<pre><code>checkCollectionName(collectionName)
+options(callback)
+rename(collectionName, callback)
+drop(callback)
+</code></pre>
+
+<p><a name="inherit-indexes"></a></p>
+
+<h3>Indexes</h3>
+
+<pre><code>createIndex (fieldOrSpec, unique, callback)
+ensureIndex (fieldOrSpec, unique, callback)
+indexInformation (callback)
+dropIndex (indexName, callback)
+dropIndexes (callback)
+</code></pre>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/docs/indexes.md">mongodb-native indexes</a></p>
+
+<p><a name="inherit-query"></a></p>
+
+<h3>Queries</h3>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/docs/queries.md">mongodb-native queries</a></p>
+
+<h4>findItems(..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<pre><code>collection.find(..., function(err, cursor){
+    cursor.toArray(callback);
+});
+</code></pre>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348">Collection.find</a></p>
+
+<h4>findEach(..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<pre><code>collection.find(..., function(err, cursor){
+    cursor.each(callback);
+});
+</code></pre>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348">Collection.find</a></p>
+
+<h4>findById(id, ..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<pre><code>collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
+</code></pre>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417">Collection.findOne</a></p>
+
+<h4>find(...)</h4>
+
+<p>If the last parameter is function, it is equivalent to native
+<a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348">Collection.find</a>
+method, else it will return a future <a href="#skincursor">SkinCursor</a>.</p>
+
+<p>e.g.</p>
+
+<pre><code>// callback
+db.book.find({}, function(err, cursor){/* do something */});
+// future SkinCursor
+db.book.find().toArray(function(err, books){/* do something */});
+</code></pre>
+
+<h4>normalizeHintField(hint)</h4>
+
+<h4>find</h4>
+
+<pre><code>/**
+ * Various argument possibilities
+ * 1 callback
+ * 2 selector, callback,
+ * 2 callback, options  // really?!
+ * 3 selector, fields, callback
+ * 3 selector, options, callback
+ * 4,selector, fields, options, callback
+ * 5 selector, fields, skip, limit, callback
+ * 6 selector, fields, skip, limit, timeout, callback
+ *
+ * Available options:
+ * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize
+ */
+</code></pre>
+
+<h4>findAndModify(query, sort, update, options, callback)</h4>
+
+<pre><code>/**
+  Fetch and update a collection
+  query:        a filter for the query
+  sort:         if multiple docs match, choose the first one in the specified sort order as the object to manipulate
+  update:       an object describing the modifications to the documents selected by the query
+  options:
+    remove:   set to a true to remove the object before returning
+    new:      set to true if you want to return the modified object rather than the original. Ignored for remove.
+    upsert:       true/false (perform upsert operation)
+**/
+</code></pre>
+
+<h4>findOne(queryObject, options, callback)</h4>
+
+<p><a name="inherit-aggregation"></a></p>
+
+<h3>Aggregation</h3>
+
+<h4>mapReduce(map, reduce, options, callback)</h4>
+
+<pre><code>e.g.  ```
+  var map = function(){
+      emit(test(this.timestamp.getYear()), 1);
+  }
+
+  var reduce = function(k, v){
+      count = 0;
+      for(i = 0; i &lt; v.length; i++) {
+          count += v[i];
+      }
+      return count;
+  }
+  collection.mapReduce(map, reduce, {scope:{test:new client.bson_serializer.Code(t.toString())}}, function(err, collection) {
+    collection.find(function(err, cursor) {
+          cursor.toArray(function(err, results) {
+          test.equal(2, results[0].value)
+          finished_test({test_map_reduce_functions_scope:'ok'});            
+      })
+    })
+      ```
+</code></pre>
+
+<h4>group(keys, condition, initial, reduce, command, callback)</h4>
+
+<pre><code>e.g.  `collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {`
+</code></pre>
+
+<h4>count(query, callback)</h4>
+
+<h4>distinct(key, query, callback)</h4>
+
+<p><a name="inherit-inserting"></a></p>
+
+<h3>Inserting</h3>
+
+<h4>insert(docs, options, callback)</h4>
+
+<p><a name="inherit-updating"></a></p>
+
+<h3>Updating</h3>
+
+<h4>save(doc, options, callback)</h4>
+
+<pre><code>/**
+  Update a single document in this collection.
+    spec - a associcated array containing the fields that need to be present in
+      the document for the update to succeed
+
+    document - an associated array with the fields to be updated or in the case of
+      a upsert operation the fields to be inserted.
+
+  Options:
+    upsert - true/false (perform upsert operation)
+    multi - true/false (update all documents matching spec)
+    safe - true/false (perform check if the operation failed, required extra call to db)
+**/
+</code></pre>
+
+<h4>update(spec, document, options, callback)</h4>
+
+<h4>updateById(_id, ..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<pre><code>collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
+</code></pre>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/docs/insert.md">Collection.update</a></p>
+
+<p><a name="inherit-removing"></a></p>
+
+<h3>Removing</h3>
+
+<h4>remove(selector, options, callback)</h4>
+
+<h4>removeById(_id, options, callback)</h4>
+
+<p><a href="#index">Back to index</a></p>
+
+<p><a name="skincursor"></a></p>
+
+<h2>SkinCursor</h2>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/cursor.js#L1">Cursor</a>
+of node-mongodb-native for more information.</p>
+
+<p>All these methods will return the SkinCursor itself.</p>
+
+<pre><code>sort(keyOrList, [direction], [callback])
+limit(limit, [callback])
+skip(skip, [callback])
+batchSize(skip, [callback])
+
+toArray(callback)
+each(callback)
+count(callback)
+nextObject(callback)
+getMore(callback)
+explain(callback)
+</code></pre>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/kissjs">kissjs</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-31429524-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
