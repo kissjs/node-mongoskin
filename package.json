@@ -19,7 +19,7 @@
     "node": ">=0.4.0"
   },
   "dependencies": {
-    "mongodb": ">=0.9.9-7"
+    "mongodb": "< 1"
   },
   "devDependencies": {
     "myconsole": ">=0.1.2",
