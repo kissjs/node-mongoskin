@@ -1,11 +1,14 @@
-## This project is a wrapper of node-mongodb-native
+# mongoskin
 
-* node-mongodb-native document http://christkv.github.com/node-mongodb-native/
+[![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
 
-## How to validate input?
+This project is a wrapper of [node-mongodb-native](http://christkv.github.com/node-mongodb-native/).
+All api is same to mongodb-native, please see the [document](http://christkv.github.com/node-mongodb-native/) first.
 
-I wrote a middleware to validate post data, [node-iform](https://github.com/guileen/node-iform) 
-base on [node-validator](https://github.com/chriso/node-validator)
+## Test
+
+* test results: [test_results.md](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md)
+* jscoverage: [**70%**](http://fengmk2.github.com/coverage/mongoskin.html)
 
 <a name='index'>
 
@@ -569,6 +572,36 @@ All these methods will return the SkinCursor itself.
 
 [Back to index](#index)
 
+## How to validate input?
+
+I wrote a middleware to validate post data, [node-iform](https://github.com/guileen/node-iform) 
+base on [node-validator](https://github.com/chriso/node-validator)
+
+## Authors
+
+Below is the output from `git-summary`.
+
+ project: node-mongoskin
+ commits: 108
+ active : 52 days
+ files  : 29
+ authors: 
+    49  Lin Gui                 45.4%
+    34  guilin 桂林           31.5%
+     5  guilin                  4.6%
+     5  fengmk2                 4.6%
+     2  François de Metz       1.9%
+     2  Paul Gebheim            1.9%
+     2  Gui Lin                 1.9%
+     1  humanchimp              0.9%
+     1  Aneil Mallavarapu       0.9%
+     1  wmertens                0.9%
+     1  Harvey McQueen          0.9%
+     1  Joe Faber               0.9%
+     1  Matt Perpick            0.9%
+     1  Quang Van               0.9%
+     1  Rakshit Menpara         0.9%
+     1  Wout Mertens            0.9%
 
 ## License 
 
