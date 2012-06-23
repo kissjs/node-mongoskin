@@ -8,7 +8,7 @@ All api is same to mongodb-native, please see the [document](http://christkv.git
 ## Test
 
 * test results: [test_results.md](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md)
-* jscoverage: [**70%**](http://fengmk2.github.com/coverage/mongoskin.html)
+* jscoverage: [**89%**](http://fengmk2.github.com/coverage/mongoskin.html)
 
 ## Test pass [mongodb] versions
 

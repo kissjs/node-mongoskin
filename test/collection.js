@@ -1,5 +1,7 @@
 /*!
  * mongoskin - test/collection.js
+ * 
+ * Copyright(c) 2011 - 2012 kissjs.org
  * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
  * MIT Licensed
  */
@@ -11,6 +13,8 @@
  */
 
 var mongoskin = require('../');
+var SkinCollection = mongoskin.SkinCollection;
+var constant = require('../lib/mongoskin/constant');
 var should = require('should');
 
 describe('collection.js', function () {
@@ -35,6 +39,74 @@ describe('collection.js', function () {
       should.ok(result);
       db.close(done);
     });
+  });
+
+  describe('open()', function () {
+    var skinDb;
+    beforeEach(function () {
+      skinDb = {
+        open: function (callback) {
+          var that = this;
+          process.nextTick(function () {
+            callback(null, that.db);
+          });
+        },
+        db: {
+          name: 'mock db',
+          collection: function (name, callback) {
+            process.nextTick(function () {
+              callback(null, {
+                name: 'mock collection'
+              });
+            });
+          }
+        }
+      };
+    });
+
+    it('should return a collection', function (done) {
+      var collection = new SkinCollection(skinDb, 'foo');
+      collection.hint = 123;
+      collection.open(function (err, coll) {
+        should.not.exist(err);
+        coll.should.have.property('name', 'mock collection');
+        collection.state.should.equal(constant.STATE_OPEN);
+        done();
+      });
+    });
+
+    it('should return mock skinDb.open() error', function (done) {
+      skinDb.open = function (callback) {
+        process.nextTick(function () {
+          callback(new Error('mock skinDb.open() error'));
+        });
+      };
+      var collection = new SkinCollection(skinDb, 'foo');
+      collection.open(function (err, coll) {
+        should.exist(err);
+        err.should.have.property('message', 'mock skinDb.open() error');
+        should.not.exist(coll);
+        collection.state.should.equal(constant.STATE_CLOSE);
+        done();
+      });
+    });
+
+    it('should return mock db.collection() error', function (done) {
+      skinDb.db.collection = function (name, callback) {
+        process.nextTick(function () {
+          callback(new Error('mock db.collection() error'));
+        });
+      };
+      var collection = new SkinCollection(skinDb, 'foo');
+      collection.open(function (err, coll) {
+        should.exist(err);
+        should.not.exist(coll);
+        err.should.have.property('message', 'mock db.collection() error');
+        collection.state.should.equal(constant.STATE_CLOSE);
+        done();
+      });
+    });
+
   });
 
   describe('id()', function () {

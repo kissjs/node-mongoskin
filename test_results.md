@@ -1,5 +1,8 @@
 # TOC
+   - [admin.js](#adminjs)
+     - [open()](#adminjs-open)
    - [collection.js](#collectionjs)
+     - [open()](#collectionjs-open)
      - [id()](#collectionjs-id)
      - [find(), findItems(), findEach()](#collectionjs-find-finditems-findeach)
        - [mock find() error](#collectionjs-find-finditems-findeach-mock-find-error)
@@ -7,16 +10,113 @@
        - [findById()](#collectionjs-findbyid-updatebyid-removebyid-findbyid)
        - [updateById()](#collectionjs-findbyid-updatebyid-removebyid-updatebyid)
        - [removeById()](#collectionjs-findbyid-updatebyid-removebyid-removebyid)
+   - [cursor.js](#cursorjs)
+     - [new SkinCursor()](#cursorjs-new-skincursor)
+     - [open()](#cursorjs-open)
    - [db.js](#dbjs)
      - [bind()](#dbjs-bind)
      - [gridfs()](#dbjs-gridfs)
      - [open()](#dbjs-open)
      - [close()](#dbjs-close)
      - [ensureIndex()](#dbjs-ensureindex)
+   - [gridfs.js](#gridfsjs)
+   - [router.js](#routerjs)
+   - [server.js](#serverjs)
+   - [utils.js](#utilsjs)
 <a name="" />
  
+<a name="adminjs" />
+# admin.js
+<a name="adminjs-open" />
+## open()
+should return admin.
+
+```js
+var skinAdmin = new SkinAdmin(skinDb);
+skinAdmin.open(function (err, admin) {
+  should.not.exist(err);
+  should.exist(admin);
+  should.exist(skinAdmin.admin);
+  skinAdmin.open(function (err, admin) {
+    should.not.exist(err);
+    should.exist(admin);
+    should.exist(skinAdmin.admin);
+    done();
+  });
+});
+```
+
+should return mock open() error.
+
+```js
+skinDb.open = function (callback) {
+  process.nextTick(function () {
+    callback(new Error('mock open() error'));
+  });
+};
+var skinAdmin = new SkinAdmin(skinDb);
+skinAdmin.open(function (err, admin) {
+  should.exist(err);
+  err.should.have.property('message', 'mock open() error');
+  should.not.exist(admin);
+  should.not.exist(skinAdmin.admin);
+  done();
+});
+```
+
 <a name="collectionjs" />
 # collection.js
+<a name="collectionjs-open" />
+## open()
+should return a collection.
+
+```js
+var collection = new SkinCollection(skinDb, 'foo');
+collection.hint = 123;
+collection.open(function (err, coll) {
+  should.not.exist(err);
+  coll.should.have.property('name', 'mock collection');
+  collection.state.should.equal(constant.STATE_OPEN);
+  done();
+});
+```
+
+should return mock skinDb.open() error.
+
+```js
+skinDb.open = function (callback) {
+  process.nextTick(function () {
+    callback(new Error('mock skinDb.open() error'));
+  });
+};
+var collection = new SkinCollection(skinDb, 'foo');
+collection.open(function (err, coll) {
+  should.exist(err);
+  err.should.have.property('message', 'mock skinDb.open() error');
+  should.not.exist(coll);
+  collection.state.should.equal(constant.STATE_CLOSE);
+  done();
+});
+```
+
+should return mock db.collection() error.
+
+```js
+skinDb.db.collection = function (name, callback) {
+  process.nextTick(function () {
+    callback(new Error('mock db.collection() error'));
+  });
+};
+var collection = new SkinCollection(skinDb, 'foo');
+collection.open(function (err, coll) {
+  should.exist(err);
+  should.not.exist(coll);
+  err.should.have.property('message', 'mock db.collection() error');
+  collection.state.should.equal(constant.STATE_CLOSE);
+  done();
+});
+```
+
 <a name="collectionjs-id" />
 ## id()
 should convert string id to ObjectID success.
@@ -233,6 +333,80 @@ db.article.findById(id, function (err, article) {
       done();
     });
   });
+});
+```
+
+<a name="cursorjs" />
+# cursor.js
+<a name="cursorjs-new-skincursor" />
+## new SkinCursor()
+should state is open when cursor exists.
+
+```js
+var cursor = new SkinCursor({}, {});
+cursor.should.have.property('state', constant.STATE_OPEN);
+```
+
+should state is close when cursor not exists.
+
+```js
+var cursor = new SkinCursor(null, {});
+cursor.should.have.property('state', constant.STATE_CLOSE);
+```
+
+<a name="cursorjs-open" />
+## open()
+should success when state is close.
+
+```js
+var cursor = new SkinCursor(null, collection);
+cursor.open(function (err, mockCursor) {
+  should.not.exist(err);
+  mockCursor.should.have.property('name', 'mock cursor');
+  done();
+});
+```
+
+should success when state is openning.
+
+```js
+var cursor = new SkinCursor(null, collection);
+cursor.open(function (err, mockCursor) {
+  should.not.exist(err);
+  mockCursor.should.have.property('name', 'mock cursor');
+});
+cursor.open(function (err, mockCursor) {
+  should.not.exist(err);
+  mockCursor.should.have.property('name', 'mock cursor');
+  done();
+});
+```
+
+should success when state is open.
+
+```js
+var cursor = new SkinCursor({name: 'mock cursor 2'}, collection);
+cursor.open(function (err, mockCursor) {
+  should.not.exist(err);
+  mockCursor.should.have.property('name', 'mock cursor 2');
+  done();
+});
+```
+
+should return mock error.
+
+```js
+collection.open = function (callback) {
+  process.nextTick(function () {
+    callback(new Error('mock collection.open() error'));
+  });
+};
+var cursor = new SkinCursor(null, collection);
+cursor.open(function (err, mockCursor) {
+  should.exist(err);
+  err.should.have.property('message', 'mock collection.open() error');
+  should.not.exist(mockCursor);
+  done();
 });
 ```
 
