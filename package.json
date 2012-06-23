@@ -12,10 +12,10 @@
     "mongodb", "database", "nosql"
   ],
   "engines": {
-    "node": ">=0.4.0"
+    "node": ">= 0.4.0"
   },
   "dependencies": {
-    "mongodb": "1.0.x"
+    "mongodb": ">= 0.9.8"
   },
   "devDependencies": {
     "mocha": "*",

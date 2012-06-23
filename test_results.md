@@ -7,6 +7,12 @@
        - [findById()](#collectionjs-findbyid-updatebyid-removebyid-findbyid)
        - [updateById()](#collectionjs-findbyid-updatebyid-removebyid-updatebyid)
        - [removeById()](#collectionjs-findbyid-updatebyid-removebyid-removebyid)
+   - [db.js](#dbjs)
+     - [bind()](#dbjs-bind)
+     - [gridfs()](#dbjs-gridfs)
+     - [open()](#dbjs-open)
+     - [close()](#dbjs-close)
+     - [ensureIndex()](#dbjs-ensureindex)
 <a name="" />
  
 <a name="collectionjs" />
@@ -227,6 +233,211 @@ db.article.findById(id, function (err, article) {
       done();
     });
   });
+});
+```
+
+<a name="dbjs" />
+# db.js
+<a name="dbjs-bind" />
+## bind()
+should throw error when collection name wrong.
+
+```js
+var wrongNames = ['', null, 123, '    ', '\n   \t   ', undefined, 0, 1, new Date(), {}, []];
+wrongNames.forEach(function (name) {
+  (function () {
+    db.bind(name);
+  }).should.throw('Must provide collection name to bind.');
+});
+```
+
+should throw error when options is not object.
+
+```js
+(function () {
+  db.bind('foo', function () {});
+}).should.throw('the args[1] should be object, but is `function () {}`');
+```
+
+should add helper methods to collection.
+
+```js
+db.bind('testCollection', {
+  totalCount: function (calllback) {
+    this.count(calllback);
+  }
+});
+db.should.have.property('testCollection').with.have.property('totalCount').with.be.a('function');
+db.testCollection.totalCount(function (err, total) {
+  should.not.exist(err);
+  total.should.equal(0);
+  done();
+});
+```
+
+<a name="dbjs-gridfs" />
+## gridfs()
+should start gridfs store.
+
+```js
+db.gridfs();
+db.should.have.property('skinGridStore');
+```
+
+<a name="dbjs-open" />
+## open()
+should open a database connection.
+
+```js
+var db1 = mongoskin.db('localhost/mongoskin_test');
+db1.state.should.equal(0);
+db1.open(function (err) {
+  should.not.exist(err);
+  db1.state.should.equal(2);
+});
+db1.state.should.equal(1);
+db1.open(function (err) {
+  should.not.exist(err);
+  db1.state.should.equal(2);
+  done();
+});
+```
+
+should open a database connection with user auth fail.
+
+```js
+var db2 = mongoskin.db('test:test@localhost/mongoskin_test');
+db2.open(function (err, db) {
+  should.exist(err);
+  err.should.have.property('message', 'auth fails');
+  err.should.have.property('name', 'MongoError');
+  should.not.exist(db);
+});
+db2.open(function (err, db) {
+  should.exist(err);
+  err.should.have.property('message', 'auth fails');
+  err.should.have.property('name', 'MongoError');
+  should.not.exist(db);
+  done();
+});
+```
+
+should open 100 times ok.
+
+```js
+var db3 = mongoskin.db('localhost/mongoskin_test');
+var counter = 0;
+for (var i = 0; i < 100; i++) {
+  db3.open(function (err, db) {
+    should.not.exist(err);
+    should.exist(db);
+    counter++;
+    if (counter === 100) {
+      done();
+    }
+  });
+}
+```
+
+<a name="dbjs-close" />
+## close()
+should close a database connection.
+
+```js
+var dbClose = mongoskin.db('localhost/mongoskin_test');
+dbClose.state.should.equal(0);
+dbClose.close(function (err) {
+  dbClose.state.should.equal(0);
+  should.not.exist(err);
+});
+dbClose.open(function (err) {
+  dbClose.state.should.equal(2);
+  should.not.exist(err);
+});
+dbClose.state.should.equal(1);
+dbClose.close(function (err) {
+  dbClose.state.should.equal(0);
+  should.not.exist(err);
+  done();
+});
+```
+
+should close 100 times ok.
+
+```js
+var db3 = mongoskin.db('localhost/mongoskin_test');
+var counter = 0;
+db.open();
+for (var i = 0; i < 100; i++) {
+  db3.close(function (err) {
+    should.not.exist(err);
+    counter++;
+    if (counter === 100) {
+      done();
+    }
+  });
+}
+```
+
+<a name="dbjs-ensureindex" />
+## ensureIndex()
+should index infos is empty.
+
+```js
+var barDb = mongoskin.db('localhost/mongoskin_test');
+barDb.indexInformation('not-exists', function (err, result) {
+  should.not.exist(err);
+  should.exist(result);
+  result.should.eql({});
+  done();
+});
+```
+
+should get index infos error.
+
+```js
+var barDb = mongoskin.db('test:test@localhost/mongoskin_test');
+barDb.indexInformation('not-exists', function (err, result) {
+  should.exist(err);
+  should.not.exist(result);
+  done();
+});
+```
+
+should create title:1 index success.
+
+```js
+db.ensureIndex('foo', {title: 1}, function (err, result) {
+  should.not.exist(err);
+  should.exist(result);
+  result.should.equal('title_1');
+  done();
+});
+```
+
+should create title:-1 index success.
+
+```js
+db.ensureIndex('foo', {title: -1}, function (err, result) {
+  should.not.exist(err);
+  should.exist(result);
+  result.should.equal('title_-1');
+  done();
+});
+```
+
+should get all index infos.
+
+```js
+db.indexInformation('foo', function (err, result) {
+  should.not.exist(err);
+  should.exist(result);
+  result.should.eql({
+    _id_: [ [ '_id', 1 ] ],
+    title_1: [ [ 'title', 1 ] ],
+    'title_-1': [ [ 'title', -1 ] ] 
+  });
+  done();
 });
 ```
 

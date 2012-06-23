@@ -10,6 +10,16 @@ All api is same to mongodb-native, please see the [document](http://christkv.git
 * test results: [test_results.md](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md)
 * jscoverage: [**70%**](http://fengmk2.github.com/coverage/mongoskin.html)
 
+## Test pass [mongodb] versions
+
+* >= 0.9.8
+* 1.0.x
+* 1.1.x
+
+```bash
+$ make test-version
+```
+
 <a name='index'>
 
 # Mongoskin document
@@ -634,14 +644,14 @@ base on [node-validator](https://github.com/chriso/node-validator)
 Below is the output from `git-summary`.
 
  project: node-mongoskin
- commits: 109
+ commits: 110
  active : 53 days
- files  : 30
+ files  : 31
  authors: 
-    49  Lin Gui                 45.0%
-    34  guilin 桂林           31.2%
-     6  fengmk2                 5.5%
-     5  guilin                  4.6%
+    49  Lin Gui                 44.5%
+    34  guilin 桂林           30.9%
+     7  fengmk2                 6.4%
+     5  guilin                  4.5%
      2  François de Metz       1.8%
      2  Paul Gebheim            1.8%
      2  Gui Lin                 1.8%
