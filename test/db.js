@@ -19,6 +19,10 @@ describe('db.js', function () {
 
   var db = mongoskin.db('localhost/mongoskin_test');
 
+  after(function () {
+    db.close();
+  });
+
   describe('bind()', function () {
 
     after(function () {
@@ -73,13 +77,12 @@ describe('db.js', function () {
       db1.open(function (err) {
         should.not.exist(err);
         db1.state.should.equal(2);
-      });
-      db1.state.should.equal(1);
-      db1.open(function (err) {
+      }).open(function (err) {
         should.not.exist(err);
         db1.state.should.equal(2);
         done();
       });
+      db1.state.should.equal(1);
     });
 
     it('should open a database connection with user auth fail', function (done) {
@@ -123,17 +126,15 @@ describe('db.js', function () {
       dbClose.close(function (err) {
         dbClose.state.should.equal(0);
         should.not.exist(err);
-      });
-      dbClose.open(function (err) {
+      }).open(function (err) {
         dbClose.state.should.equal(2);
         should.not.exist(err);
-      });
-      dbClose.state.should.equal(1);
-      dbClose.close(function (err) {
+      }).close(function (err) {
         dbClose.state.should.equal(0);
         should.not.exist(err);
         done();
       });
+      dbClose.state.should.equal(1);
     });
 
     it('should close 100 times ok', function (done) {

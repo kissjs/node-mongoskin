@@ -2,8 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
 
-This project is a wrapper of [node-mongodb-native](http://christkv.github.com/node-mongodb-native/).
-All api is same to mongodb-native, please see the [document](http://christkv.github.com/node-mongodb-native/) first.
+This project is a wrapper of [node-mongodb-native](https://github.com/mongodb/node-mongodb-native).
+The api is same to node-mongodb-native, please see the [document](http://mongodb.github.com/node-mongodb-native/) first.
 
 ## Test
 
@@ -644,13 +644,13 @@ base on [node-validator](https://github.com/chriso/node-validator)
 Below is the output from `git-summary`.
 
  project: node-mongoskin
- commits: 110
- active : 53 days
- files  : 31
+ commits: 112
+ active : 54 days
+ files  : 39
  authors: 
-    49  Lin Gui                 44.5%
-    34  guilin 桂林           30.9%
-     7  fengmk2                 6.4%
+    49  Lin Gui                 43.8%
+    34  guilin 桂林           30.4%
+     9  fengmk2                 8.0%
      5  guilin                  4.5%
      2  François de Metz       1.8%
      2  Paul Gebheim            1.8%

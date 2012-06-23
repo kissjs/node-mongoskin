@@ -13,6 +13,7 @@
    - [cursor.js](#cursorjs)
      - [new SkinCursor()](#cursorjs-new-skincursor)
      - [open()](#cursorjs-open)
+     - [sort(), limit(), skip(), toArray(), count(), explain()](#cursorjs-sort-limit-skip-toarray-count-explain)
    - [db.js](#dbjs)
      - [bind()](#dbjs-bind)
      - [gridfs()](#dbjs-gridfs)
@@ -410,6 +411,64 @@ cursor.open(function (err, mockCursor) {
 });
 ```
 
+<a name="cursorjs-sort-limit-skip-toarray-count-explain" />
+## sort(), limit(), skip(), toArray(), count(), explain()
+should cursor.skip(10).limit(10).toArray() return 10 rows.
+
+```js
+db.testCursor.find().skip(10).limit(10).toArray(function (err, rows) {
+  should.not.exist(err);
+  should.exist(rows);
+  rows.should.be.instanceof(Array).with.length(10);
+  rows[0].name.should.equal('name 10');
+  rows[9].name.should.equal('name 19');
+  done();
+});
+```
+
+should cursor.sort({index: -1}).skip(20).limit(10).toArray() return 10 rows.
+
+```js
+db.testCursor.find().sort({index: -1}).skip(20).limit(10).toArray(function (err, rows) {
+  should.not.exist(err);
+  should.exist(rows);
+  rows.should.be.instanceof(Array).with.length(10);
+  rows[0].name.should.equal('name 79');
+  rows[9].name.should.equal('name 70');
+  done();
+});
+```
+
+should cursor.count() return 100.
+
+```js
+db.testCursor.find().count(function (err, count) {
+  should.not.exist(err);
+  count.should.equal(100);
+  done();
+});
+```
+
+should cursor.explain() return 100.
+
+```js
+db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
+  should.not.exist(err);
+  result.should.eql({ cursor: 'BasicCursor',
+  nscanned: 100,
+  nscannedObjects: 100,
+  n: 49,
+  millis: 0,
+  nYields: 0,
+  nChunkSkips: 0,
+  isMultiKey: false,
+  indexOnly: false,
+  indexBounds: {},
+  allPlans: [ { cursor: 'BasicCursor', indexBounds: {} } ] });
+  done();
+});
+```
+
 <a name="dbjs" />
 # db.js
 <a name="dbjs-bind" />
@@ -468,13 +527,12 @@ db1.state.should.equal(0);
 db1.open(function (err) {
   should.not.exist(err);
   db1.state.should.equal(2);
-});
-db1.state.should.equal(1);
-db1.open(function (err) {
+}).open(function (err) {
   should.not.exist(err);
   db1.state.should.equal(2);
   done();
 });
+db1.state.should.equal(1);
 ```
 
 should open a database connection with user auth fail.
@@ -523,17 +581,15 @@ dbClose.state.should.equal(0);
 dbClose.close(function (err) {
   dbClose.state.should.equal(0);
   should.not.exist(err);
-});
-dbClose.open(function (err) {
+}).open(function (err) {
   dbClose.state.should.equal(2);
   should.not.exist(err);
-});
-dbClose.state.should.equal(1);
-dbClose.close(function (err) {
+}).close(function (err) {
   dbClose.state.should.equal(0);
   should.not.exist(err);
   done();
 });
+dbClose.state.should.equal(1);
 ```
 
 should close 100 times ok.
