@@ -83,7 +83,9 @@ If you need validation, you can use [node-iform](https://github.com/guileen/node
 Install
 ========
 
-    npm install mongoskin
+```bash
+$ npm install mongoskin
+```
 
 [Back to index](#index)
 
@@ -104,10 +106,12 @@ Connect easier
 --------
 You can connect to mongodb easier now.
 
-    var mongo = require('mongoskin');
-    mongo.db('localhost:27017/testdb').collection('blog').find().toArray(function(err, items){
-        console.dir(items);
-    })
+```js
+var mongo = require('mongoskin');
+mongo.db('localhost:27017/testdb').collection('blog').find().toArray(function (err, items) {
+  console.dir(items);
+})
+```
 
 <a name='quickstart-2'></a>
 
@@ -116,8 +120,10 @@ Server options and BSON options
 You can also set `auto_reconnect` options querystring.
 And native_parser options will automatically set if native_parser is avariable.
 
-    var mongo = require('mongoskin'),
-        db = mongo.db('localhost:27017/test?auto_reconnect');
+```js
+var mongo = require('mongoskin');
+var db = mongo.db('localhost:27017/test?auto_reconnect');
+```
 
 <a name='quickstart-3'></a>
 
@@ -125,21 +131,25 @@ Similar API with node-mongodb-native
 --------
 You can do everything that node-mongodb-native can do.
 
-    db.createCollection(...);
-    db.collection('user').ensureIndex([['username', 1]], true, function(err, replies){});
-    db.collection('posts').hint = 'slug';
-    db.collection('posts').findOne({slug: 'whats-up'}, function(err, post){
-        // do something
-    });
+```js
+db.createCollection(...);
+db.collection('user').ensureIndex([['username', 1]], true, function (err, replies) {});
+db.collection('posts').hint = 'slug';
+db.collection('posts').findOne({slug: 'whats-up'}, function (err, post) {
+  // do something
+});
+```
 
 <a name='quickstart-4'></a>
 
 Cursor easier
 --------
 
-    db.collection('posts').find().toArray(function(err, posts){
-        // do something
-    });
+```js
+db.collection('posts').find().toArray(function (err, posts) {
+  // do something
+});
+```
 
 <a name='quickstart-5'></a>
 
@@ -151,28 +161,30 @@ It is very useful if you want to use MVC patterns with nodejs and mongodb.
 You can also invoke collection by properties after bind,
 it could simplfy your `require`.
 
-    db.bind('posts', {
-       findTop10 : function(fn){
-         this.find({}, {limit:10, sort:[['views', -1]]}).toArray(fn);
-       },
-       removeTagWith : function(tag, fn){
-         this.remove({tags:tag},fn);
-       }
-    });
+```js
+db.bind('posts', {
+  findTop10 : function (fn) {
+   this.find({}, {limit:10, sort:[['views', -1]]}).toArray(fn);
+  },
+  removeTagWith : function (tag, fn) {
+   this.remove({tags:tag},fn);
+  }
+});
 
-    db.bind('comments');
+db.bind('comments');
 
-    db.collection('posts').removeTagWith('delete', function(err, replies){
-      //do something
-    });
+db.collection('posts').removeTagWith('delete', function (err, replies) {
+  //do something
+});
 
-    db.posts.findTop10(function(err, topPosts){
-      //do something
-    });
+db.posts.findTop10(function (err, topPosts) {
+  //do something
+});
 
-    db.comments.find().toArray(function(err, comments){
-      //do something
-    });
+db.comments.find().toArray(function (err, comments) {
+  //do something
+});
+```
 
 [Back to index](#index)
 
@@ -194,47 +206,58 @@ Module
 
 ### MongoSkin Url format
 
-    [*://][username:password@]host[:port][/database][?auto_reconnect[=true|false]]`
+```
+[*://][username:password@]host[:port][/database][?auto_reconnect[=true|false]]`
+```
 
 e.g.
 
-    localhost/blog
-    mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
-    127.0.0.1?auto_reconnect=false
+```
+localhost/blog
+mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
+127.0.0.1?auto_reconnect=false
+```
 
 ### db(databaseUrl, db_options)
 
 Get or create instance of [SkinDb](#skindb).
 
-    var db = mongoskin.db('localhost:27017/testdb?auto_reconnect=true&poolSize=5');
+```js
+var db = mongoskin.db('localhost:27017/testdb?auto_reconnect=true&poolSize=5');
+```
 
 for ReplSet server
 
-    var db = mongoskin.db(['192.168.0.1:27017/?auto_reconnect=true',
-                '192.168.0.2:27017/?auto_reconnect=true',
-                '192.168.0.3:27017/?auto_reconnect=true'],
-                {
-                    database: 'testdb',
-                    retryMiliSeconds: 2000
-                })
+```js
+var db = mongoskin.db([
+  '192.168.0.1:27017/?auto_reconnect=true',
+  '192.168.0.2:27017/?auto_reconnect=true',
+  '192.168.0.3:27017/?auto_reconnect=true'
+], {
+  database: 'testdb',
+  retryMiliSeconds: 2000
+});
+```
 
 ### router(select)
 
-select is function(collectionName) returns a database instance, means router collectionName to that database.
+select is `function(collectionName)` returns a database instance, means router collectionName to that database.
 
-    var db = mongo.router(function(coll_name){
-        switch(coll_name) {
-        case 'user':
-        case 'message':
-          return mongo.db('192.168.1.3/auth_db');
-        default:
-          return mongo.db('192.168.1.2/app_db');
-        }
-    });
-    db.bind('user', require('./shared-user-methods'));
-    var users = db.user; //auth_db.user
-    var messages = db.collection('message'); // auth_db.message
-    var products = db.collection('product'); //app_db.product
+```js
+var db = mongo.router(function (coll_name) {
+  switch(coll_name) {
+    case 'user':
+    case 'message':
+      return mongo.db('192.168.1.3/auth_db');
+    default:
+      return mongo.db('192.168.1.2/app_db');
+  }
+});
+db.bind('user', require('./shared-user-methods'));
+var users = db.user; //auth_db.user
+var messages = db.collection('message'); // auth_db.message
+var products = db.collection('product'); //app_db.product
+```
 
 ### classes extends frome node-mongodb-native
 
@@ -326,12 +349,14 @@ db.collection(name) method.
 
 e.g.
 
-    db.bind('book', {
-        firstBook: function(fn){
-            this.findOne(fn);
-        }
-    });
-    db.book.firstBook(function(err, book){});
+```js
+db.bind('book', {
+  firstBook: function (fn) {
+    this.findOne(fn);
+  }
+});
+db.book.firstBook(function (err, book) {});
+```
 
 ### all the methods from Db.prototype
 
@@ -357,7 +382,9 @@ instance, callback is function(err, collection).
 
 Equivalent to
 
-    db.bson_serializer.ObjectID.createFromHexString(hex);
+```js
+db.bson_serializer.ObjectID.createFromHexString(hex);
+```
 
 See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548)
 
@@ -366,20 +393,24 @@ See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-nati
 
 ### Collection operation
 
-    checkCollectionName(collectionName)
-    options(callback)
-    rename(collectionName, callback)
-    drop(callback)
+```js
+checkCollectionName(collectionName)
+options(callback)
+rename(collectionName, callback)
+drop(callback)
+```
 
 <a name='inherit-indexes'>
 
 ### Indexes
 
-    createIndex (fieldOrSpec, unique, callback)
-    ensureIndex (fieldOrSpec, unique, callback)
-    indexInformation (callback)
-    dropIndex (indexName, callback)
-    dropIndexes (callback)
+```js
+createIndex(fieldOrSpec, unique, callback)
+ensureIndex(fieldOrSpec, unique, callback)
+indexInformation(callback)
+dropIndex(indexName, callback)
+dropIndexes(callback)
+```
     
 See [mongodb-native indexes](https://github.com/christkv/node-mongodb-native/blob/master/docs/indexes.md)
 
@@ -393,9 +424,11 @@ See [mongodb-native queries](https://github.com/christkv/node-mongodb-native/blo
 
 Equivalent to
 
-    collection.find(..., function(err, cursor){
-        cursor.toArray(callback);
-    });
+```js
+collection.find(..., function (err, cursor) {
+  cursor.toArray(callback);
+});
+```
 
 See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
 
@@ -403,9 +436,11 @@ See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/maste
 
 Equivalent to
 
-    collection.find(..., function(err, cursor){
-        cursor.each(callback);
-    });
+```js
+collection.find(..., function (err, cursor) {
+  cursor.each(callback);
+});
+```
 
 See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
 
@@ -413,7 +448,9 @@ See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/maste
 
 Equivalent to
 
-    collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
+```js
+collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
+```
 
 See [Collection.findOne](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417)
 
@@ -425,44 +462,48 @@ method, else it will return a future [SkinCursor](#skincursor).
 
 e.g.
 
-    // callback
-    db.book.find({}, function(err, cursor){/* do something */});
-    // future SkinCursor
-    db.book.find().toArray(function(err, books){/* do something */});
-
-
+```js
+// callback
+db.book.find({}, function (err, cursor) {/* do something */});
+// future SkinCursor
+db.book.find().toArray(function (err, books) {/* do something */});
+```
 
 #### normalizeHintField(hint)
 
 #### find
 
-    /**
-     * Various argument possibilities
-     * 1 callback
-     * 2 selector, callback,
-     * 2 callback, options  // really?!
-     * 3 selector, fields, callback
-     * 3 selector, options, callback
-     * 4,selector, fields, options, callback
-     * 5 selector, fields, skip, limit, callback
-     * 6 selector, fields, skip, limit, timeout, callback
-     *
-     * Available options:
-     * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize
-     */
+```js
+/**
+ * Various argument possibilities
+ * 1 callback
+ * 2 selector, callback,
+ * 2 callback, options  // really?!
+ * 3 selector, fields, callback
+ * 3 selector, options, callback
+ * 4,selector, fields, options, callback
+ * 5 selector, fields, skip, limit, callback
+ * 6 selector, fields, skip, limit, timeout, callback
+ *
+ * Available options:
+ * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize
+ */
+```
 
 #### findAndModify(query, sort, update, options, callback) 
 
-    /**
-      Fetch and update a collection
-      query:        a filter for the query
-      sort:         if multiple docs match, choose the first one in the specified sort order as the object to manipulate
-      update:       an object describing the modifications to the documents selected by the query
-      options:
-        remove:   set to a true to remove the object before returning
-        new:      set to true if you want to return the modified object rather than the original. Ignored for remove.
-        upsert:       true/false (perform upsert operation)
-    **/
+```js
+/**
+  Fetch and update a collection
+  query:        a filter for the query
+  sort:         if multiple docs match, choose the first one in the specified sort order as the object to manipulate
+  update:       an object describing the modifications to the documents selected by the query
+  options:
+    remove:   set to a true to remove the object before returning
+    new:      set to true if you want to return the modified object rather than the original. Ignored for remove.
+    upsert:       true/false (perform upsert operation)
+**/
+```
 
 #### findOne(queryObject, options, callback)
 
@@ -472,30 +513,37 @@ e.g.
 
 #### mapReduce(map, reduce, options, callback)
 
-    e.g.  ```
-      var map = function(){
-          emit(test(this.timestamp.getYear()), 1);
-      }
-      
-      var reduce = function(k, v){
-          count = 0;
-          for(i = 0; i < v.length; i++) {
-              count += v[i];
-          }
-          return count;
-      }
-      collection.mapReduce(map, reduce, {scope:{test:new client.bson_serializer.Code(t.toString())}}, function(err, collection) {
-        collection.find(function(err, cursor) {
-              cursor.toArray(function(err, results) {
-              test.equal(2, results[0].value)
-              finished_test({test_map_reduce_functions_scope:'ok'});            
-          })
-        })
-          ```
+e.g.
+
+```js
+var map = function () {
+  emit(test(this.timestamp.getYear()), 1);
+}
+
+var reduce = function (k, v){
+  count = 0;
+  for (i = 0; i < v.length; i++) {
+    count += v[i];
+  }
+  return count;
+}
+var options = {scope: {test: new client.bson_serializer.Code(t.toString())}};
+collection.mapReduce(map, reduce, options, function (err, collection) {
+  collection.find(function (err, cursor) {
+    cursor.toArray(function (err, results) {
+    test.equal(2, results[0].value)
+    finished_test({test_map_reduce_functions_scope:'ok'});            
+  })
+})
+```
 
 #### group(keys, condition, initial, reduce, command, callback)
 
-    e.g.  `collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {`
+e.g.  
+
+```js
+collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {});
+```
 
 #### count(query, callback)
 #### distinct(key, query, callback)
@@ -512,19 +560,21 @@ e.g.
 
 #### save(doc, options, callback)
 
-    /**
-      Update a single document in this collection.
-        spec - a associcated array containing the fields that need to be present in
-          the document for the update to succeed
+```js
+/**
+  Update a single document in this collection.
+    spec - a associcated array containing the fields that need to be present in
+      the document for the update to succeed
 
-        document - an associated array with the fields to be updated or in the case of
-          a upsert operation the fields to be inserted.
+    document - an associated array with the fields to be updated or in the case of
+      a upsert operation the fields to be inserted.
 
-      Options:
-        upsert - true/false (perform upsert operation)
-        multi - true/false (update all documents matching spec)
-        safe - true/false (perform check if the operation failed, required extra call to db)
-    **/
+  Options:
+    upsert - true/false (perform upsert operation)
+    multi - true/false (update all documents matching spec)
+    safe - true/false (perform check if the operation failed, required extra call to db)
+**/
+```
 
 #### update(spec, document, options, callback)
 
@@ -532,10 +582,11 @@ e.g.
 
 Equivalent to
 
-    collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
+```js
+collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
+```
 
 See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/docs/insert.md)
-
 
 <a name='inherit-removing'>
 
@@ -557,18 +608,19 @@ of node-mongodb-native for more information.
 
 All these methods will return the SkinCursor itself.
 
-    sort(keyOrList, [direction], [callback])
-    limit(limit, [callback])
-    skip(skip, [callback])
-    batchSize(skip, [callback])
+```js
+sort(keyOrList, [direction], [callback])
+limit(limit, [callback])
+skip(skip, [callback])
+batchSize(skip, [callback])
 
-    toArray(callback)
-    each(callback)
-    count(callback)
-    nextObject(callback)
-    getMore(callback)
-    explain(callback)
-
+toArray(callback)
+each(callback)
+count(callback)
+nextObject(callback)
+getMore(callback)
+explain(callback)
+```
 
 [Back to index](#index)
 
@@ -582,17 +634,17 @@ base on [node-validator](https://github.com/chriso/node-validator)
 Below is the output from `git-summary`.
 
  project: node-mongoskin
- commits: 108
- active : 52 days
- files  : 29
+ commits: 109
+ active : 53 days
+ files  : 30
  authors: 
-    49  Lin Gui                 45.4%
-    34  guilin 桂林           31.5%
+    49  Lin Gui                 45.0%
+    34  guilin 桂林           31.2%
+     6  fengmk2                 5.5%
      5  guilin                  4.6%
-     5  fengmk2                 4.6%
-     2  François de Metz       1.9%
-     2  Paul Gebheim            1.9%
-     2  Gui Lin                 1.9%
+     2  François de Metz       1.8%
+     2  Paul Gebheim            1.8%
+     2  Gui Lin                 1.8%
      1  humanchimp              0.9%
      1  Aneil Mallavarapu       0.9%
      1  wmertens                0.9%

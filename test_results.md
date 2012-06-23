@@ -15,7 +15,8 @@
 ## id()
 should convert string id to ObjectID success.
 
-```jsvar id = '4ec4b2b9f44a927223000001';
+```js
+var id = '4ec4b2b9f44a927223000001';
 id = db.testcollection.id(id);
 id.should.be.instanceof(db.testcollection.ObjectID);
 id = db.testcollection.id(id);
@@ -27,7 +28,8 @@ id.should.be.instanceof(db.testcollection.ObjectID);
 
 should return source id when id length !== 24.
 
-```jsvar ids = [123, '4ec4b2b9f44a92722300000', 'abc', '4ec4b2b9f44a927223000f00123123'];
+```js
+var ids = [123, '4ec4b2b9f44a92722300000', 'abc', '4ec4b2b9f44a927223000f00123123'];
 ids.forEach(function (id) {
   db.testcollection.id(id).should.equal(id);
 });
@@ -37,7 +39,8 @@ ids.forEach(function (id) {
 ## find(), findItems(), findEach()
 should find().toArray() return 100 comments.
 
-```jsdb.comment.find().toArray(function (err, rows) {
+```js
+db.comment.find().toArray(function (err, rows) {
   should.not.exist(err);
   rows.should.be.instanceof(Array).with.length(100);
   done();
@@ -46,7 +49,8 @@ should find().toArray() return 100 comments.
 
 should findItems(fn) all comments.
 
-```jsdb.comment.findItems(function (err, comments) {
+```js
+db.comment.findItems(function (err, comments) {
   should.not.exist(err);
   should.exist(comments);
   comments.should.be.instanceof(Array).with.length(100);
@@ -56,7 +60,8 @@ should findItems(fn) all comments.
 
 should findItems({} fn) all comments.
 
-```jsdb.comment.findItems(function (err, comments) {
+```js
+db.comment.findItems(function (err, comments) {
   should.not.exist(err);
   should.exist(comments);
   comments.should.be.instanceof(Array).with.length(100);
@@ -66,7 +71,8 @@ should findItems({} fn) all comments.
 
 should findItems({limit: 10}) query wrong return top 0 comments.
 
-```jsdb.comment.findItems({limit: 10}, function (err, comments) {
+```js
+db.comment.findItems({limit: 10}, function (err, comments) {
   should.not.exist(err);
   comments.should.be.instanceof(Array).with.length(0);
   done();
@@ -75,7 +81,8 @@ should findItems({limit: 10}) query wrong return top 0 comments.
 
 should findItems({}, {limit: 10}) return top 10 comments.
 
-```jsdb.comment.findItems({}, {limit: 10}, function (err, comments) {
+```js
+db.comment.findItems({}, {limit: 10}, function (err, comments) {
   should.not.exist(err);
   comments.should.be.instanceof(Array).with.length(10);
   done();
@@ -84,7 +91,8 @@ should findItems({}, {limit: 10}) return top 10 comments.
 
 should findEach(fn) call fn 100 times.
 
-```jsvar count = 0;
+```js
+var count = 0;
 db.comment.findEach(function (err, comment) {
   should.not.exist(err);
   if (!comment) {
@@ -97,7 +105,8 @@ db.comment.findEach(function (err, comment) {
 
 should findEach({}, {limit: 20}, fn) call fn 20 times.
 
-```jsvar count = 0;
+```js
+var count = 0;
 db.comment.findEach({}, {limit: 20}, function (err, comment) {
   should.not.exist(err);
   if (!comment) {
@@ -112,7 +121,8 @@ db.comment.findEach({}, {limit: 20}, function (err, comment) {
 ### mock find() error
 should findItems() error.
 
-```jsdb.comment.findItems(function (err, docs) {
+```js
+db.comment.findItems(function (err, docs) {
   should.exist(err);
   err.should.be.instanceof(Error).with.have.property('message', 'mock find() error');
   should.not.exist(docs);
@@ -122,7 +132,8 @@ should findItems() error.
 
 should findEach() error.
 
-```jsdb.comment.findEach(function (err, docs) {
+```js
+db.comment.findEach(function (err, docs) {
   should.exist(err);
   err.should.be.instanceof(Error).with.have.property('message', 'mock find() error');
   should.not.exist(docs);
@@ -136,7 +147,8 @@ should findEach() error.
 ### findById()
 should find one object by ObjectID.
 
-```jsdb.article.findById(articleId, function (err, article) {
+```js
+db.article.findById(articleId, function (err, article) {
   should.not.exist(err);
   should.exist(article);
   article.should.have.property('_id').with.instanceof(db.ObjectID);
@@ -149,7 +161,8 @@ should find one object by ObjectID.
 
 should find one object by String id.
 
-```jsdb.article.findById(articleId.toString(), function (err, article) {
+```js
+db.article.findById(articleId.toString(), function (err, article) {
   should.not.exist(err);
   should.exist(article);
   article.should.have.property('_id').with.instanceof(db.ObjectID);
@@ -162,7 +175,8 @@ should find one object by String id.
 
 should not find when id not exists.
 
-```jsdb.article.findById('foo', function (err, article) {
+```js
+db.article.findById('foo', function (err, article) {
   should.not.exist(err);
   should.not.exist(article);
   done();
@@ -173,7 +187,8 @@ should not find when id not exists.
 ### updateById()
 should update obj by id.
 
-```jsvar updatedTime = new Date();
+```js
+var updatedTime = new Date();
 var doc = {
   $set: {
     title: 'new title ' + updatedTime,
@@ -198,7 +213,8 @@ db.article.updateById(articleId.toString(), doc, function (err, article) {
 ### removeById()
 should remove obj by id.
 
-```jsvar id = articleId.toString();
+```js
+var id = articleId.toString();
 db.article.findById(id, function (err, article) {
   should.not.exist(err);
   should.exist(article);
