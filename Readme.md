@@ -643,6 +643,7 @@ base on [node-validator](https://github.com/chriso/node-validator)
 
 Below is the output from `git-summary`.
 
+```
  project: node-mongoskin
  commits: 112
  active : 54 days
@@ -664,6 +665,7 @@ Below is the output from `git-summary`.
      1  Quang Van               0.9%
      1  Rakshit Menpara         0.9%
      1  Wout Mertens            0.9%
+```
 
 ## License 
 
