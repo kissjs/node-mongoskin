@@ -14,6 +14,7 @@
 
 var should = require('should');
 var SkinAdmin = require('../').SkinAdmin;
+var constant = require('../lib/mongoskin/constant');
 
 describe('admin.js', function () {
 
@@ -36,17 +37,22 @@ describe('admin.js', function () {
 
     it('should return admin', function (done) {
       var skinAdmin = new SkinAdmin(skinDb);
+      skinAdmin.state.should.equal(constant.STATE_CLOSE);
       skinAdmin.open(function (err, admin) {
         should.not.exist(err);
         should.exist(admin);
         should.exist(skinAdmin.admin);
+        skinAdmin.state.should.equal(constant.STATE_OPEN);
+      }).open(function (err, admin) {
         skinAdmin.open(function (err, admin) {
           should.not.exist(err);
           should.exist(admin);
           should.exist(skinAdmin.admin);
+          skinAdmin.state.should.equal(constant.STATE_OPEN);
           done();
         });
       });
+      skinAdmin.state.should.equal(constant.STATE_OPENNING);
     });
 
     it('should return mock open() error', function (done) {

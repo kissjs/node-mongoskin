@@ -34,17 +34,22 @@ should return admin.
 
 ```js
 var skinAdmin = new SkinAdmin(skinDb);
+skinAdmin.state.should.equal(constant.STATE_CLOSE);
 skinAdmin.open(function (err, admin) {
   should.not.exist(err);
   should.exist(admin);
   should.exist(skinAdmin.admin);
+  skinAdmin.state.should.equal(constant.STATE_OPEN);
+}).open(function (err, admin) {
   skinAdmin.open(function (err, admin) {
     should.not.exist(err);
     should.exist(admin);
     should.exist(skinAdmin.admin);
+    skinAdmin.state.should.equal(constant.STATE_OPEN);
     done();
   });
 });
+skinAdmin.state.should.equal(constant.STATE_OPENNING);
 ```
 
 should return mock open() error.
