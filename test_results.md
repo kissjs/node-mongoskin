@@ -544,12 +544,32 @@ should open a database connection with user auth fail.
 
 ```js
 var db2 = mongoskin.db('test:test@localhost/mongoskin_test');
+done = pedding(2, done);
+db2.state.should.equal(constant.STATE_CLOSE);
 db2.open(function (err, db) {
   should.exist(err);
   err.should.have.property('message', 'auth fails');
   err.should.have.property('name', 'MongoError');
   should.not.exist(db);
+  db2.state.should.equal(constant.STATE_CLOSE);
+  // open again
+  db2.open(function (err, db) {
+    should.exist(err);
+    err.should.have.property('message', 'auth fails');
+    err.should.have.property('name', 'MongoError');
+    should.not.exist(db);
+    db2.state.should.equal(constant.STATE_CLOSE);
+    db2.open(function (err, db) {
+      should.exist(err);
+      err.should.have.property('message', 'auth fails');
+      err.should.have.property('name', 'MongoError');
+      should.not.exist(db);
+      db2.state.should.equal(constant.STATE_CLOSE);
+      done();
+    });
+  });
 });
+db2.state.should.equal(constant.STATE_OPENNING);
 db2.open(function (err, db) {
   should.exist(err);
   err.should.have.property('message', 'auth fails');
@@ -563,15 +583,12 @@ should open 100 times ok.
 
 ```js
 var db3 = mongoskin.db('localhost/mongoskin_test');
-var counter = 0;
+done = pedding(100, done);
 for (var i = 0; i < 100; i++) {
   db3.open(function (err, db) {
     should.not.exist(err);
     should.exist(db);
-    counter++;
-    if (counter === 100) {
-      done();
-    }
+    done();
   });
 }
 ```
@@ -601,15 +618,12 @@ should close 100 times ok.
 
 ```js
 var db3 = mongoskin.db('localhost/mongoskin_test');
-var counter = 0;
+done = pedding(100, done);
 db.open();
 for (var i = 0; i < 100; i++) {
   db3.close(function (err) {
     should.not.exist(err);
-    counter++;
-    if (counter === 100) {
-      done();
-    }
+    done();
   });
 }
 ```
