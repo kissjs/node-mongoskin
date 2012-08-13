@@ -1,2 +1,16 @@
+# sort by number of commits
+# http://www.commandlinefu.com/commands/view/4519/list-all-authors-of-a-particular-git-project
+# $ git log --format='%aN <%aE>' | awk '{arr[$0]++} END{for (i in arr){print arr[i], i;}}' | sort -rn | cut -d\  -f2-
 Gui Lin <guileen@gmail.com> (https://github.com/guileen)
 fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)
+Paul Gebheim <pgebheim@monkeyinferno.com>
+François de Metz <francois@2metz.fr>
+wmertens <Wout.Mertens@gmail.com>
+humanchimp <morphcham@gmail.com>
+Wout Mertens <Wout.Mertens@gmail.com>
+Rakshit Menpara <deltasquare4@gmail.com>
+Quang Van <quangvvv@gmail.com>
+Matt Perpick <clutchski@gmail.com>
+Joe Faber <joe.faber@mandiant.com>
+Harvey McQueen <hmcqueen@gmail.com>
+Aneil Mallavarapu <aneil@blipboard.com>
