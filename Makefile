@@ -5,8 +5,6 @@ MOCHA_OPTS =
 PROJECT_DIR = $(shell pwd)
 MONGOSKIN_REPLICASET = false
 SUPPORT_VERSIONS := \
-	0.9.8 0.9.8-7 0.9.8-6 \
-	0.9.9 0.9.9-8 0.9.9-7 \
 	1.0.0 1.0.1 1.0.2 \
 	1.1.0-beta 1.1.1 1.1.2 1.1.3 1.1.4
 

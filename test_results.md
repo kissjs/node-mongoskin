@@ -1,25 +1,29 @@
+Already up-to-date.
 # TOC
    - [admin.js](#adminjs)
      - [open()](#adminjs-open)
    - [collection.js](#collectionjs)
-     - [open()](#collectionjs-open)
-     - [id()](#collectionjs-id)
-     - [find(), findItems(), findEach()](#collectionjs-find-finditems-findeach)
-       - [mock find() error](#collectionjs-find-finditems-findeach-mock-find-error)
-     - [findById(), updateById(), removeById()](#collectionjs-findbyid-updatebyid-removebyid)
-       - [findById()](#collectionjs-findbyid-updatebyid-removebyid-findbyid)
-       - [updateById()](#collectionjs-findbyid-updatebyid-removebyid-updatebyid)
-       - [removeById()](#collectionjs-findbyid-updatebyid-removebyid-removebyid)
+     - [normal](#collectionjs-normal)
+       - [open()](#collectionjs-normal-open)
+       - [id()](#collectionjs-normal-id)
+       - [find(), findItems(), findEach()](#collectionjs-normal-find-finditems-findeach)
+         - [mock find() error](#collectionjs-normal-find-finditems-findeach-mock-find-error)
+       - [findById(), updateById(), removeById()](#collectionjs-normal-findbyid-updatebyid-removebyid)
+         - [findById()](#collectionjs-normal-findbyid-updatebyid-removebyid-findbyid)
+         - [updateById()](#collectionjs-normal-findbyid-updatebyid-removebyid-updatebyid)
+         - [removeById()](#collectionjs-normal-findbyid-updatebyid-removebyid-removebyid)
    - [cursor.js](#cursorjs)
-     - [new SkinCursor()](#cursorjs-new-skincursor)
-     - [open()](#cursorjs-open)
-     - [sort(), limit(), skip(), toArray(), count(), explain()](#cursorjs-sort-limit-skip-toarray-count-explain)
+     - [normal](#cursorjs-normal)
+       - [new SkinCursor()](#cursorjs-normal-new-skincursor)
+       - [open()](#cursorjs-normal-open)
+       - [sort(), limit(), skip(), toArray(), count(), explain()](#cursorjs-normal-sort-limit-skip-toarray-count-explain)
    - [db.js](#dbjs)
-     - [bind()](#dbjs-bind)
-     - [gridfs()](#dbjs-gridfs)
-     - [open()](#dbjs-open)
-     - [close()](#dbjs-close)
-     - [ensureIndex()](#dbjs-ensureindex)
+     - [normal](#dbjs-normal)
+       - [bind()](#dbjs-normal-bind)
+       - [gridfs()](#dbjs-normal-gridfs)
+       - [open()](#dbjs-normal-open)
+       - [close()](#dbjs-normal-close)
+       - [ensureIndex()](#dbjs-normal-ensureindex)
    - [gridfs.js](#gridfsjs)
    - [router.js](#routerjs)
    - [server.js](#serverjs)
@@ -72,8 +76,10 @@ skinAdmin.open(function (err, admin) {
 
 <a name="collectionjs" />
 # collection.js
-<a name="collectionjs-open" />
-## open()
+<a name="collectionjs-normal" />
+## normal
+<a name="collectionjs-normal-open" />
+### open()
 should return a collection.
 
 ```js
@@ -123,8 +129,8 @@ collection.open(function (err, coll) {
 });
 ```
 
-<a name="collectionjs-id" />
-## id()
+<a name="collectionjs-normal-id" />
+### id()
 should convert string id to ObjectID success.
 
 ```js
@@ -147,8 +153,8 @@ ids.forEach(function (id) {
 });
 ```
 
-<a name="collectionjs-find-finditems-findeach" />
-## find(), findItems(), findEach()
+<a name="collectionjs-normal-find-finditems-findeach" />
+### find(), findItems(), findEach()
 should find().toArray() return 100 comments.
 
 ```js
@@ -229,8 +235,8 @@ db.comment.findEach({}, {limit: 20}, function (err, comment) {
 });
 ```
 
-<a name="collectionjs-find-finditems-findeach-mock-find-error" />
-### mock find() error
+<a name="collectionjs-normal-find-finditems-findeach-mock-find-error" />
+#### mock find() error
 should findItems() error.
 
 ```js
@@ -253,10 +259,10 @@ db.comment.findEach(function (err, docs) {
 });
 ```
 
-<a name="collectionjs-findbyid-updatebyid-removebyid" />
-## findById(), updateById(), removeById()
-<a name="collectionjs-findbyid-updatebyid-removebyid-findbyid" />
-### findById()
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid" />
+### findById(), updateById(), removeById()
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid-findbyid" />
+#### findById()
 should find one object by ObjectID.
 
 ```js
@@ -295,8 +301,8 @@ db.article.findById('foo', function (err, article) {
 });
 ```
 
-<a name="collectionjs-findbyid-updatebyid-removebyid-updatebyid" />
-### updateById()
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid-updatebyid" />
+#### updateById()
 should update obj by id.
 
 ```js
@@ -321,8 +327,8 @@ db.article.updateById(articleId.toString(), doc, function (err, article) {
 });
 ```
 
-<a name="collectionjs-findbyid-updatebyid-removebyid-removebyid" />
-### removeById()
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid-removebyid" />
+#### removeById()
 should remove obj by id.
 
 ```js
@@ -344,8 +350,10 @@ db.article.findById(id, function (err, article) {
 
 <a name="cursorjs" />
 # cursor.js
-<a name="cursorjs-new-skincursor" />
-## new SkinCursor()
+<a name="cursorjs-normal" />
+## normal
+<a name="cursorjs-normal-new-skincursor" />
+### new SkinCursor()
 should state is open when cursor exists.
 
 ```js
@@ -360,8 +368,8 @@ var cursor = new SkinCursor(null, {});
 cursor.should.have.property('state', constant.STATE_CLOSE);
 ```
 
-<a name="cursorjs-open" />
-## open()
+<a name="cursorjs-normal-open" />
+### open()
 should success when state is close.
 
 ```js
@@ -416,8 +424,8 @@ cursor.open(function (err, mockCursor) {
 });
 ```
 
-<a name="cursorjs-sort-limit-skip-toarray-count-explain" />
-## sort(), limit(), skip(), toArray(), count(), explain()
+<a name="cursorjs-normal-sort-limit-skip-toarray-count-explain" />
+### sort(), limit(), skip(), toArray(), count(), explain()
 should cursor.skip(10).limit(10).toArray() return 10 rows.
 
 ```js
@@ -476,8 +484,10 @@ db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
 
 <a name="dbjs" />
 # db.js
-<a name="dbjs-bind" />
-## bind()
+<a name="dbjs-normal" />
+## normal
+<a name="dbjs-normal-bind" />
+### bind()
 should throw error when collection name wrong.
 
 ```js
@@ -513,8 +523,8 @@ db.testCollection.totalCount(function (err, total) {
 });
 ```
 
-<a name="dbjs-gridfs" />
-## gridfs()
+<a name="dbjs-normal-gridfs" />
+### gridfs()
 should start gridfs store.
 
 ```js
@@ -522,12 +532,12 @@ db.gridfs();
 db.should.have.property('skinGridStore');
 ```
 
-<a name="dbjs-open" />
-## open()
+<a name="dbjs-normal-open" />
+### open()
 should open a database connection.
 
 ```js
-var db1 = mongoskin.db('localhost/mongoskin_test');
+var db1 = mongoskin.db(servers, options);
 db1.state.should.equal(0);
 db1.open(function (err) {
   should.not.exist(err);
@@ -543,7 +553,7 @@ db1.state.should.equal(1);
 should open a database connection with user auth fail.
 
 ```js
-var db2 = mongoskin.db('test:test@localhost/mongoskin_test');
+var db2 = mongoskin.db(authfailServers, authfailOptions);
 done = pedding(2, done);
 db2.state.should.equal(constant.STATE_CLOSE);
 db2.open(function (err, db) {
@@ -582,7 +592,7 @@ db2.open(function (err, db) {
 should open 100 times ok.
 
 ```js
-var db3 = mongoskin.db('localhost/mongoskin_test');
+var db3 = mongoskin.db(servers, options);
 done = pedding(100, done);
 for (var i = 0; i < 100; i++) {
   db3.open(function (err, db) {
@@ -593,12 +603,40 @@ for (var i = 0; i < 100; i++) {
 }
 ```
 
-<a name="dbjs-close" />
-## close()
+should open timeout when connect the blackhole.
+
+```js
+var db;
+if (isReplicaset) {
+  db = mongoskin.db(['127.0.0.1:' + blackholePort, '127.0.0.1:' + blackholePort], 
+    options, {socketOptions: {timeout: 500}});
+} else {
+  var ops = {};
+  for (var k in options) {
+    ops[k] = options[k];
+  }
+  ops.socketOptions = {timeout: 500};
+  db = mongoskin.db('127.0.0.1:' + blackholePort, ops);
+}
+db.open(function (err, db) {
+  should.exist(err);
+  if (isReplicaset) {
+    // replicaset should not timeout error
+    err.should.have.property('message', 'no primary server found in set');
+  } else {
+    err.should.have.property('err', 'connection to [127.0.0.1:24008] timed out');
+  }
+  should.not.exist(db);
+  done();
+});
+```
+
+<a name="dbjs-normal-close" />
+### close()
 should close a database connection.
 
 ```js
-var dbClose = mongoskin.db('localhost/mongoskin_test');
+var dbClose = mongoskin.db(servers, options);
 dbClose.state.should.equal(0);
 dbClose.close(function (err) {
   dbClose.state.should.equal(0);
@@ -617,7 +655,7 @@ dbClose.state.should.equal(1);
 should close 100 times ok.
 
 ```js
-var db3 = mongoskin.db('localhost/mongoskin_test');
+var db3 = mongoskin.db(servers, options);
 done = pedding(100, done);
 db.open();
 for (var i = 0; i < 100; i++) {
@@ -628,12 +666,12 @@ for (var i = 0; i < 100; i++) {
 }
 ```
 
-<a name="dbjs-ensureindex" />
-## ensureIndex()
+<a name="dbjs-normal-ensureindex" />
+### ensureIndex()
 should index infos is empty.
 
 ```js
-var barDb = mongoskin.db('localhost/mongoskin_test');
+var barDb = mongoskin.db(servers, options);
 barDb.indexInformation('not-exists', function (err, result) {
   should.not.exist(err);
   should.exist(result);
@@ -645,7 +683,7 @@ barDb.indexInformation('not-exists', function (err, result) {
 should get index infos error.
 
 ```js
-var barDb = mongoskin.db('test:test@localhost/mongoskin_test');
+var barDb = mongoskin.db(authfailServers, authfailOptions);
 barDb.indexInformation('not-exists', function (err, result) {
   should.exist(err);
   should.not.exist(result);
@@ -690,3 +728,4 @@ db.indexInformation('foo', function (err, result) {
 });
 ```
 
+process exit, stop mongod...

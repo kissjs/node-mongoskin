@@ -12,7 +12,8 @@ The api is same to node-mongodb-native, please see the [document](http://mongodb
 
 ## Test pass [mongodb] versions
 
-* >= 0.9.8
+* <del>>= 0.9.8 < 1.0.0</del>: mongodb have bug, it will throw a `TypeError: object is not a function` 
+  when connection open error.
 * 1.0.x
 * 1.1.x
 

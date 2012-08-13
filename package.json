@@ -21,6 +21,9 @@
     "mocha": "*",
     "should": "*"
   },
+  "scripts": {
+    "test": "make test-version"
+  },
   "directories": {
     "lib": "lib/mongoskin"
   }
