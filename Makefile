@@ -1,17 +1,31 @@
-TESTS = $(shell find test -type f -name "*.js")
-TESTTIMEOUT = 5000
+TESTS = test/
+TESTTIMEOUT = 60000
 REPORTER = spec
+MOCHA_OPTS =
 PROJECT_DIR = $(shell pwd)
+MONGOSKIN_REPLICASET = false
 SUPPORT_VERSIONS := \
 	0.9.8 0.9.8-7 0.9.8-6 \
 	0.9.9 0.9.9-8 0.9.9-7 \
 	1.0.0 1.0.1 1.0.2 \
-	1.1.0-beta
+	1.1.0-beta 1.1.1 1.1.2 1.1.3 1.1.4
 
 test:
 	@npm install
-	@NODE_ENV=test ./node_modules/mocha/bin/mocha \
-		--reporter $(REPORTER) --timeout $(TESTTIMEOUT) $(TESTS)
+	@if ! test -d deps/mongodb; then \
+		git clone git://github.com/mongodb/node-mongodb-native.git deps/mongodb; \
+	fi
+	@cd deps/mongodb && npm install && git pull && cd ../..
+	@NODE_ENV=test MONGOSKIN_REPLICASET=$(MONGOSKIN_REPLICASET) \
+		./node_modules/mocha/bin/mocha --recursive \
+		--reporter $(REPORTER) --timeout $(TESTTIMEOUT) \
+		$(MOCHA_OPTS) $(TESTS)
+
+test-debug:
+	@$(MAKE) test MOCHA_OPTS="--debug-brk"
+
+test-replicaset:
+	@$(MAKE) test MONGOSKIN_REPLICASET=true
 
 lib-cov:
 	@rm -rf ./$@
@@ -29,4 +43,4 @@ test-version:
 		$(MAKE) test REPORTER=progress; \
 	done
 
-.PHONY: test test-cov lib-cov
+.PHONY: test-replicaset test-version test-cov test lib-cov

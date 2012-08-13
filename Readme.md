@@ -14,7 +14,7 @@ The api is same to node-mongodb-native, please see the [document](http://mongodb
 
 * >= 0.9.8
 * 1.0.x
-* (bug)1.1.x
+* 1.1.x
 
 ```bash
 $ make test-version
