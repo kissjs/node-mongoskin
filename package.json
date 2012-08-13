@@ -1,15 +1,21 @@
 {
   "name": "mongoskin",
   "description": "The future layer above node-mongodb-native",
-  "version": "0.4.0",
-  "author": "Gui Lin<guileen@gmail.com>",
+  "version": "0.4.1",
+  "author": "Gui Lin <guileen@gmail.com>",
+  "homepage": "https://github.com/kissjs/node-mongoskin",
   "repository": {
     "type": "git",
     "url": "git://github.com/guileen/node-mongoskin.git"
   },
-  "main": "index",
+  "bugs": {
+    "url": "https://github.com/kissjs/node-mongoskin/issues"
+  },
+  "main": "./index.js",
   "keywords": [
-    "mongodb", "database", "nosql"
+    "mongodb",
+    "database",
+    "nosql"
   ],
   "engines": {
     "node": ">= 0.4.0"
@@ -25,6 +31,8 @@
     "test": "make test-version"
   },
   "directories": {
-    "lib": "lib/mongoskin"
-  }
+    "example": "./examples",
+    "lib": "./lib/mongoskin"
+  },
+  "license": "MIT"
 }
