@@ -86,7 +86,11 @@ describe('collection.js', function () {
             },
             db: {
               name: 'mock db',
-              collection: function (name, callback) {
+              collection: function (name, options, callback) {
+                if (typeof options === 'function') {
+                  callback = options;
+                  options = null;
+                }
                 process.nextTick(function () {
                   callback(null, {
                     name: 'mock collection'
@@ -125,7 +129,11 @@ describe('collection.js', function () {
         });
 
         it('should return mock db.collection() error', function (done) {
-          skinDb.db.collection = function (name, callback) {
+          skinDb.db.collection = function (name, options, callback) {
+            if (typeof options === 'function') {
+              callback = options;
+              options = null;
+            }
             process.nextTick(function () {
               callback(new Error('mock db.collection() error'));
             });

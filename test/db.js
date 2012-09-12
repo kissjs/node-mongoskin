@@ -110,6 +110,16 @@ describe('db.js', function () {
           });
         });
 
+        it('should throw error when bind collection not exists in safe mode', function (done) {
+          db.bind('notExistsCollection', {safe: true});
+          db.notExistsCollection.count(function (err, count) {
+            should.exist(err);
+            err.should.have.property('message', 'Collection notExistsCollection does not exist. Currently in strict mode.');
+            should.not.exist(count);
+            done();
+          });
+        });
+
       });
 
       describe('gridfs()', function () {

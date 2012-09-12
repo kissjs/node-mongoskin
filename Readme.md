@@ -229,7 +229,7 @@ mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
 127.0.0.1?auto_reconnect=false
 ```
 
-### db(databaseUrl, db_options)
+### db(serverURL[s], dbOptions, replicasetOptions)
 
 Get or create instance of [SkinDb](#skindb).
 
@@ -245,8 +245,12 @@ var db = mongoskin.db([
   '192.168.0.2:27017/?auto_reconnect=true',
   '192.168.0.3:27017/?auto_reconnect=true'
 ], {
-  database: 'testdb',
-  retryMiliSeconds: 2000
+  database: 'testdb'
+}, {
+  connectArbiter: false,
+  socketOptions: {
+    timeout: 2000
+  }
 });
 ```
 
