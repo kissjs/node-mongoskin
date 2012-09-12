@@ -114,7 +114,11 @@ collection.open(function (err, coll) {
 should return mock db.collection() error.
 
 ```js
-skinDb.db.collection = function (name, callback) {
+skinDb.db.collection = function (name, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = null;
+  }
   process.nextTick(function () {
     callback(new Error('mock db.collection() error'));
   });
@@ -519,6 +523,18 @@ db.should.have.property('testCollection').with.have.property('totalCount').with.
 db.testCollection.totalCount(function (err, total) {
   should.not.exist(err);
   total.should.equal(0);
+  done();
+});
+```
+
+should throw error when bind collection not exists in safe mode.
+
+```js
+db.bind('notExistsCollection', {safe: true});
+db.notExistsCollection.count(function (err, count) {
+  should.exist(err);
+  err.should.have.property('message', 'Collection notExistsCollection does not exist. Currently in strict mode.');
+  should.not.exist(count);
   done();
 });
 ```
