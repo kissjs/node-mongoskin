@@ -200,9 +200,7 @@ db.bind('settings', {
   	  fn(err, settings);
   	
   	});
-  
-    }
- } 
+  }
 });
 
      
