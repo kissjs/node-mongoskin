@@ -520,6 +520,32 @@ db.testCollection.totalCount(function (err, total) {
 });
 ```
 
+should add options and helper methods to collection.
+
+```js
+db.bind('testExistsCollection', {safe: true}, {
+  totalCount: function (calllback) {
+    this.count(calllback);
+  }
+});
+db.should.have.property('testExistsCollection').with.have.property('totalCount').with.be.a('function');
+db.testExistsCollection.insert({name: 'item2'}, function (err, row) {
+  should.not.exist(err);
+  should.exist(row);
+  db.testExistsCollection.findItems(function (err, rows) {
+    should.not.exist(err);
+    rows.should.length(2);
+    rows[0].name.should.equal('item1');
+    rows[1].name.should.equal('item2');
+    db.testExistsCollection.totalCount(function (err, total) {
+      should.not.exist(err);
+      total.should.equal(2);
+      done();
+    });
+  });
+});
+```
+
 should throw error when bind collection not exists in safe mode.
 
 ```js

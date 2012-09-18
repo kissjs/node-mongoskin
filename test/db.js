@@ -75,7 +75,16 @@ describe('db.js', function () {
 
       describe('bind()', function () {
 
+        before(function (done) {
+          var collection = db.collection('testExistsCollection');
+          collection.insert({name: 'item1'}, {safe: true}, function (err) {
+            done(err);
+          });
+        });
+
         after(function (done) {
+          done = pedding(2, done);
+          db.testExistsCollection.drop(done);
           if (db.testCollection) {
             return db.testCollection.drop(function () {
               done();
@@ -110,6 +119,30 @@ describe('db.js', function () {
             should.not.exist(err);
             total.should.equal(0);
             done();
+          });
+        });
+
+        it('should add options and helper methods to collection', function (done) {
+          db.bind('testExistsCollection', {safe: true}, {
+            totalCount: function (calllback) {
+              this.count(calllback);
+            }
+          });
+          db.should.have.property('testExistsCollection').with.have.property('totalCount').with.be.a('function');
+          db.testExistsCollection.insert({name: 'item2'}, function (err, row) {
+            should.not.exist(err);
+            should.exist(row);
+            db.testExistsCollection.findItems(function (err, rows) {
+              should.not.exist(err);
+              rows.should.length(2);
+              rows[0].name.should.equal('item1');
+              rows[1].name.should.equal('item2');
+              db.testExistsCollection.totalCount(function (err, total) {
+                should.not.exist(err);
+                total.should.equal(2);
+                done();
+              });
+            });
           });
         });
 
