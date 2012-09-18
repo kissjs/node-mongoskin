@@ -471,17 +471,10 @@ should cursor.explain() return 100.
 ```js
 db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
   should.not.exist(err);
-  result.should.eql({ cursor: 'BasicCursor',
-  nscanned: 100,
-  nscannedObjects: 100,
-  n: 49,
-  millis: 0,
-  nYields: 0,
-  nChunkSkips: 0,
-  isMultiKey: false,
-  indexOnly: false,
-  indexBounds: {},
-  allPlans: [ { cursor: 'BasicCursor', indexBounds: {} } ] });
+  result.should.have.property('cursor', 'BasicCursor');
+  result.should.have.property('nscanned', 100);
+  result.should.have.property('nscannedObjects', 100);
+  result.should.have.property('n', 49);
   done();
 });
 ```

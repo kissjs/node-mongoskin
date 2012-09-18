@@ -30,7 +30,7 @@ lib-cov:
 	@jscoverage --encoding=utf-8 ./lib ./$@
 
 test-cov: lib-cov
-	@MONGOSKIN_COV=1 $(MAKE) test REPORTER=progress
+	@MONGOSKIN_COV=1 $(MAKE) test REPORTER=dot
 	@MONGOSKIN_COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
 	@$(MAKE) test REPORTER=markdown > test_results.md
 
@@ -38,7 +38,7 @@ test-version:
 	@for version in $(SUPPORT_VERSIONS); do \
 		echo "test with mongodb@$$version"; \
 		npm install mongodb@$$version --loglevel=warn; \
-		$(MAKE) test REPORTER=progress; \
+		$(MAKE) test REPORTER=dot; \
 	done
 
 .PHONY: test-replicaset test-version test-cov test lib-cov

@@ -75,10 +75,13 @@ describe('db.js', function () {
 
       describe('bind()', function () {
 
-        after(function () {
+        after(function (done) {
           if (db.testCollection) {
-            db.testCollection.drop();
+            return db.testCollection.drop(function () {
+              done();
+            });
           }
+          done();
         });
 
         it('should throw error when collection name wrong', function () {
