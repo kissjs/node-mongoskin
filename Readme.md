@@ -129,7 +129,7 @@ mongo.db('localhost:27017/testdb').collection('blog').find().toArray(function (e
 Server options and BSON options
 --------
 You can also set `auto_reconnect` options querystring.
-And native_parser options will automatically set if native_parser is avariable.
+And native_parser options will automatically set if native_parser is available.
 
 ```js
 var mongo = require('mongoskin');
