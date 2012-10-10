@@ -172,6 +172,10 @@ It is very useful if you want to use MVC patterns with nodejs and mongodb.
 You can also invoke collection by properties after bind,
 it could simplfy your `require`.
 
+To keep your code in line with DRY principles, it's possible to create your own
+data layer by for example, setting up your own validators and/or default values
+inside the MVC methods as shown below in the config example
+
 ```js
 db.bind('posts', {
   findTop10 : function (fn) {
@@ -180,8 +184,26 @@ db.bind('posts', {
   removeTagWith : function (tag, fn) {
    this.remove({tags:tag},fn);
   }
+ } 
 });
 
+db.bind('settings', {
+
+  getAll: function(user, fn) {
+  
+  	this.find({user: user}).toArray(function(err, settings) {
+  	
+  	  // We want to set a default currency from within our app instead of storing it
+  	  // for every user
+  	  settings.currency = (typeof settings.currency !== "undefined") ? settings.currency : 'USD';
+  		
+  	  fn(err, settings);
+  	
+  	});
+  }
+});
+
+     
 db.bind('comments');
 
 db.collection('posts').removeTagWith('delete', function (err, replies) {
