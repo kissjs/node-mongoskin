@@ -146,11 +146,11 @@ describe('db.js', function () {
           });
         });
 
-        it('should throw error when bind collection not exists in strict mode', function (done) {
+        it('should throw error when bind collection not exists in safe mode', function (done) {
           db.bind('notExistsCollection', {strict: true});
           db.notExistsCollection.count(function (err, count) {
             should.exist(err);
-            err.should.have.property('message', 'Collection notExistsCollection does not exist. Currently in strict mode.');
+            err.should.have.property('message', 'Collection notExistsCollection does not exist. Currently in safe mode.');
             should.not.exist(count);
             done();
           });
