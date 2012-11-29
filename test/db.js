@@ -77,7 +77,7 @@ describe('db.js', function () {
 
         before(function (done) {
           var collection = db.collection('testExistsCollection');
-          collection.insert({name: 'item1'}, {safe: true}, function (err) {
+          collection.insert({name: 'item1'}, {strict: true}, function (err) {
             done(err);
           });
         });
@@ -123,7 +123,7 @@ describe('db.js', function () {
         });
 
         it('should add options and helper methods to collection', function (done) {
-          db.bind('testExistsCollection', {safe: true}, {
+          db.bind('testExistsCollection', {strict: true}, {
             totalCount: function (calllback) {
               this.count(calllback);
             }
@@ -146,8 +146,8 @@ describe('db.js', function () {
           });
         });
 
-        it('should throw error when bind collection not exists in safe mode', function (done) {
-          db.bind('notExistsCollection', {safe: true});
+        it('should throw error when bind collection not exists in strict mode', function (done) {
+          db.bind('notExistsCollection', {strict: true});
           db.notExistsCollection.count(function (err, count) {
             should.exist(err);
             err.should.have.property('message', 'Collection notExistsCollection does not exist. Currently in strict mode.');
