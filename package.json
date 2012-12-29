@@ -1,7 +1,7 @@
 {
   "name": "mongoskin",
   "description": "The future layer above node-mongodb-native",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "author": "Gui Lin <guileen@gmail.com>",
   "homepage": "https://github.com/kissjs/node-mongoskin",
   "repository": {
@@ -25,10 +25,11 @@
   },
   "devDependencies": {
     "mocha": "*",
+    "jscover": "*",
     "should": "*"
   },
   "scripts": {
-    "test": "make test-version"
+    "test": "make test"
   },
   "directories": {
     "example": "./examples",

@@ -28,11 +28,11 @@ Already up-to-date.
    - [router.js](#routerjs)
    - [server.js](#serverjs)
    - [utils.js](#utilsjs)
-<a name="" />
+<a name=""></a>
  
-<a name="adminjs" />
+<a name="adminjs"></a>
 # admin.js
-<a name="adminjs-open" />
+<a name="adminjs-open"></a>
 ## open()
 should return admin.
 
@@ -74,11 +74,11 @@ skinAdmin.open(function (err, admin) {
 });
 ```
 
-<a name="collectionjs" />
+<a name="collectionjs"></a>
 # collection.js
-<a name="collectionjs-normal" />
+<a name="collectionjs-normal"></a>
 ## normal
-<a name="collectionjs-normal-open" />
+<a name="collectionjs-normal-open"></a>
 ### open()
 should return a collection.
 
@@ -133,7 +133,7 @@ collection.open(function (err, coll) {
 });
 ```
 
-<a name="collectionjs-normal-id" />
+<a name="collectionjs-normal-id"></a>
 ### id()
 should convert string id to ObjectID success.
 
@@ -157,7 +157,7 @@ ids.forEach(function (id) {
 });
 ```
 
-<a name="collectionjs-normal-find-finditems-findeach" />
+<a name="collectionjs-normal-find-finditems-findeach"></a>
 ### find(), findItems(), findEach()
 should find().toArray() return 100 comments.
 
@@ -239,7 +239,7 @@ db.comment.findEach({}, {limit: 20}, function (err, comment) {
 });
 ```
 
-<a name="collectionjs-normal-find-finditems-findeach-mock-find-error" />
+<a name="collectionjs-normal-find-finditems-findeach-mock-find-error"></a>
 #### mock find() error
 should findItems() error.
 
@@ -263,9 +263,9 @@ db.comment.findEach(function (err, docs) {
 });
 ```
 
-<a name="collectionjs-normal-findbyid-updatebyid-removebyid" />
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid"></a>
 ### findById(), updateById(), removeById()
-<a name="collectionjs-normal-findbyid-updatebyid-removebyid-findbyid" />
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid-findbyid"></a>
 #### findById()
 should find one object by ObjectID.
 
@@ -305,7 +305,7 @@ db.article.findById('foo', function (err, article) {
 });
 ```
 
-<a name="collectionjs-normal-findbyid-updatebyid-removebyid-updatebyid" />
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid-updatebyid"></a>
 #### updateById()
 should update obj by id.
 
@@ -317,9 +317,10 @@ var doc = {
     updated_at: updatedTime
   }
 };
-db.article.updateById(articleId.toString(), doc, function (err, article) {
+db.article.updateById(articleId.toString(), doc, function (err, success, result) {
   should.not.exist(err);
-  should.not.exist(article);
+  success.should.equal(1);
+  result.should.have.property('ok', 1);
   db.article.findById(articleId, function (err, article) {
     should.not.exist(err);
     should.exist(article);
@@ -331,7 +332,7 @@ db.article.updateById(articleId.toString(), doc, function (err, article) {
 });
 ```
 
-<a name="collectionjs-normal-findbyid-updatebyid-removebyid-removebyid" />
+<a name="collectionjs-normal-findbyid-updatebyid-removebyid-removebyid"></a>
 #### removeById()
 should remove obj by id.
 
@@ -340,9 +341,9 @@ var id = articleId.toString();
 db.article.findById(id, function (err, article) {
   should.not.exist(err);
   should.exist(article);
-  db.article.removeById(id, function (err, article) {
+  db.article.removeById(id, function (err, success) {
     should.not.exist(err);
-    should.not.exist(article);
+    success.should.equal(1);
     db.article.findById(id, function (err, article) {
       should.not.exist(err);
       should.not.exist(article);
@@ -352,11 +353,22 @@ db.article.findById(id, function (err, article) {
 });
 ```
 
-<a name="cursorjs" />
+should remove not exists obj.
+
+```js
+var id = articleId.toString();
+db.article.removeById(id, function (err, success) {
+  should.not.exist(err);
+  success.should.equal(0);
+  done();
+});
+```
+
+<a name="cursorjs"></a>
 # cursor.js
-<a name="cursorjs-normal" />
+<a name="cursorjs-normal"></a>
 ## normal
-<a name="cursorjs-normal-new-skincursor" />
+<a name="cursorjs-normal-new-skincursor"></a>
 ### new SkinCursor()
 should state is open when cursor exists.
 
@@ -372,7 +384,7 @@ var cursor = new SkinCursor(null, {});
 cursor.should.have.property('state', constant.STATE_CLOSE);
 ```
 
-<a name="cursorjs-normal-open" />
+<a name="cursorjs-normal-open"></a>
 ### open()
 should success when state is close.
 
@@ -428,7 +440,7 @@ cursor.open(function (err, mockCursor) {
 });
 ```
 
-<a name="cursorjs-normal-sort-limit-skip-toarray-count-explain" />
+<a name="cursorjs-normal-sort-limit-skip-toarray-count-explain"></a>
 ### sort(), limit(), skip(), toArray(), count(), explain()
 should cursor.skip(10).limit(10).toArray() return 10 rows.
 
@@ -479,11 +491,11 @@ db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
 });
 ```
 
-<a name="dbjs" />
+<a name="dbjs"></a>
 # db.js
-<a name="dbjs-normal" />
+<a name="dbjs-normal"></a>
 ## normal
-<a name="dbjs-normal-bind" />
+<a name="dbjs-normal-bind"></a>
 ### bind()
 should throw error when collection name wrong.
 
@@ -558,7 +570,7 @@ db.notExistsCollection.count(function (err, count) {
 });
 ```
 
-<a name="dbjs-normal-gridfs" />
+<a name="dbjs-normal-gridfs"></a>
 ### gridfs()
 should start gridfs store.
 
@@ -567,7 +579,7 @@ db.gridfs();
 db.should.have.property('skinGridStore');
 ```
 
-<a name="dbjs-normal-open" />
+<a name="dbjs-normal-open"></a>
 ### open()
 should open a database connection.
 
@@ -666,7 +678,7 @@ db.open(function (err, db) {
 });
 ```
 
-<a name="dbjs-normal-close" />
+<a name="dbjs-normal-close"></a>
 ### close()
 should close a database connection.
 
@@ -701,7 +713,7 @@ for (var i = 0; i < 100; i++) {
 }
 ```
 
-<a name="dbjs-normal-ensureindex" />
+<a name="dbjs-normal-ensureindex"></a>
 ### ensureIndex()
 should index infos is empty.
 

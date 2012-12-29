@@ -4,6 +4,7 @@ REPORTER = spec
 MOCHA_OPTS =
 PROJECT_DIR = $(shell pwd)
 MONGOSKIN_REPLICASET = false
+JSCOVERAGE = ./node_modules/jscover/bin/jscover
 SUPPORT_VERSIONS := \
 	1.0.0 1.0.1 1.0.2 \
 	1.1.0-beta 1.1.1 1.1.2 1.1.3 1.1.4
@@ -26,8 +27,8 @@ test-replicaset:
 	@$(MAKE) test MONGOSKIN_REPLICASET=true
 
 lib-cov:
-	@rm -rf ./$@
-	@jscoverage --encoding=utf-8 ./lib ./$@
+	@rm -rf $@
+	@$(JSCOVERAGE) lib $@
 
 test-cov: lib-cov
 	@MONGOSKIN_COV=1 $(MAKE) test REPORTER=dot

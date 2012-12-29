@@ -14,12 +14,12 @@ The api is same to node-mongodb-native, please see the [document](http://mongodb
 
 * <del>>= 0.9.8 < 1.0.0</del>: mongodb have bug, it will throw a `TypeError: object is not a function` 
   when connection open error.
-* 1.0.x
-* 1.1.x
+* <del>1.0.x</del>
+* <del>1.1.x</del>
 * 1.2.x
 
 ```bash
-$ make test-version
+$ make test
 ```
 
 <a name='index'>
