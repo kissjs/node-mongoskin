@@ -30,7 +30,7 @@ describe('cursor.js', function () {
   });
   
   var cases = [
-    ['normal', {database: 'mongoskin_test'}],
+    ['normal', {database: 'mongoskin_test', safe: true}],
   ];
   if (servermanager.MONGOSKIN_REPLICASET) {
     cases.push(['replicaset', {database: 'mongoskin_replicaset_test'}]);

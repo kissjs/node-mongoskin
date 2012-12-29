@@ -29,11 +29,12 @@ describe('collection.js', function () {
   });
   
   var cases = [
-    ['normal', {database: 'mongoskin_test'}],
+    ['normal', {database: 'mongoskin_test', safe: true}],
   ];
   if (servermanager.MONGOSKIN_REPLICASET) {
-    cases.push(['replicaset', {database: 'mongoskin_replicaset_test'}]);
+    cases.push(['replicaset', {database: 'mongoskin_replicaset_test', strict: true}]);
   }
+
   cases.forEach(function (caseItem) {
     describe(caseItem[0], function () {
       var isReplicaset = caseItem[0] === 'replicaset';
@@ -41,6 +42,7 @@ describe('collection.js', function () {
       var servers = null;
       var authfailServers = null;
       var options = caseItem[1];
+
       before(function (done) {
         if (isReplicaset) {
           servers = [];
@@ -54,13 +56,14 @@ describe('collection.js', function () {
         }
         db = mongoskin.db(servers, options);
         db.bind('testcollection');
-        db.testcollection.ensureIndex({title: -1});
-        db.testcollection.findItems(function (err, rows) {
-          if (err) {
-            return done(err);
-          }
-          rows.should.be.instanceof(Array).with.length(0);
-          done();
+        db.testcollection.ensureIndex({title: -1}, function (err, index) {
+          should.not.exist(err);
+          index.should.equal('title_-1');
+          db.testcollection.findItems(function (err, rows) {
+            should.not.exist(err);
+            rows.should.be.instanceof(Array).with.length(0);
+            done();
+          });
         });
       });
 
@@ -356,9 +359,10 @@ describe('collection.js', function () {
                 updated_at: updatedTime
               }
             };
-            db.article.updateById(articleId.toString(), doc, function (err, article) {
+            db.article.updateById(articleId.toString(), doc, function (err, success, result) {
               should.not.exist(err);
-              should.not.exist(article);
+              success.should.equal(1);
+              result.should.have.property('ok', 1);
               db.article.findById(articleId, function (err, article) {
                 should.not.exist(err);
                 should.exist(article);
@@ -377,15 +381,24 @@ describe('collection.js', function () {
             db.article.findById(id, function (err, article) {
               should.not.exist(err);
               should.exist(article);
-              db.article.removeById(id, function (err, article) {
+              db.article.removeById(id, function (err, success) {
                 should.not.exist(err);
-                should.not.exist(article);
+                success.should.equal(1);
                 db.article.findById(id, function (err, article) {
                   should.not.exist(err);
                   should.not.exist(article);
                   done();
                 });
               });
+            });
+          });
+
+          it('should remove not exists obj', function (done) {
+            var id = articleId.toString();
+            db.article.removeById(id, function (err, success) {
+              should.not.exist(err);
+              success.should.equal(0);
+              done();
             });
           });
         });

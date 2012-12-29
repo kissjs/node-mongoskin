@@ -1,6 +1,6 @@
-# mongoskin
+# mongoskin [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
 
-[![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
+![logo](https://raw.github.com/kissjs/node-mongoskin/master/logo.png)
 
 This project is a wrapper of [node-mongodb-native](https://github.com/mongodb/node-mongodb-native).
 The api is same to node-mongodb-native, please see the [document](http://mongodb.github.com/node-mongodb-native/) first.
@@ -268,7 +268,8 @@ var db = mongoskin.db([
   '192.168.0.2:27017/?auto_reconnect=true',
   '192.168.0.3:27017/?auto_reconnect=true'
 ], {
-  database: 'testdb'
+  database: 'testdb',
+  safe: true
 }, {
   connectArbiter: false,
   socketOptions: {
@@ -610,6 +611,7 @@ collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", 
   Options:
     upsert - true/false (perform upsert operation)
     multi - true/false (update all documents matching spec)
+    strict - true/false (perform check if the operation failed, required extra call to db)
   Deprecated Options:
     safe - true/false (perform check if the operation failed, required extra call to db)
 **/
