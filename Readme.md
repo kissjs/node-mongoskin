@@ -16,6 +16,7 @@ The api is same to node-mongodb-native, please see the [document](http://mongodb
   when connection open error.
 * 1.0.x
 * 1.1.x
+* 1.2.x
 
 ```bash
 $ make test-version
@@ -609,6 +610,7 @@ collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", 
   Options:
     upsert - true/false (perform upsert operation)
     multi - true/false (update all documents matching spec)
+  Deprecated Options:
     safe - true/false (perform check if the operation failed, required extra call to db)
 **/
 ```
