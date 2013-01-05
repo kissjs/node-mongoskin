@@ -2,39 +2,30 @@
 
 ![logo](https://raw.github.com/kissjs/node-mongoskin/master/logo.png)
 
-This project is a wrapper of [node-mongodb-native](https://github.com/mongodb/node-mongodb-native).
-The api is same to node-mongodb-native, please see the [document](http://mongodb.github.com/node-mongodb-native/) first.
+This project is a wrapper for [node-mongodb-native](https://github.com/mongodb/node-mongodb-native).
+The base API is same at the node-mongodb-native, you may want to familiarise yourself with the [node-mongodb-native documentation](http://mongodb.github.com/node-mongodb-native/) first.
 
-## Test
+## Compatible mongodb versions
 
-* test results: [test_results.md](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md)
-* jscoverage: [**89%**](http://fengmk2.github.com/coverage/mongoskin.html)
+You should use mongodb version 1.2.x. Prior versions are not supported. 
 
-## Test pass [mongodb] versions
+## Automated tests
 
-* <del>>= 0.9.8 < 1.0.0</del>: mongodb have bug, it will throw a `TypeError: object is not a function` 
-  when connection open error.
-* <del>1.0.x</del>
-* <del>1.1.x</del>
-* 1.2.x
-
-```bash
-$ make test
-```
+You can run the automated test by running <strong>make test</strong>. The tests have a coverage of [**89%**](http://fengmk2.github.com/coverage/mongoskin.html) and you can [browse the results](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md).
 
 <a name='index'>
 
-# Mongoskin document
+# Mongoskin documentation
 
-* [Nodejs mongodb drivers comparation](#comparation)
+* [Nodejs mongodb driver comparison](#comparation)
 * [Install](#install)
 * [Quick Start](#quickstart)
-    * [Connect easier](#quickstart-1)
+    * [Easier to connect](#quickstart-1)
     * [Server options and BSON options](#quickstart-2)
-    * [Similar API with node-mongodb-native](#quickstart-3)
-    * [Cursor easier](#quickstart-4)
-    * [MVC helper](#quickstart-5)
-* [Documentation](#documentation)
+    * [Similar API to node-mongodb-native](#quickstart-3)
+    * [Easier cursor](#quickstart-4)
+    * [MVC helpers](#quickstart-5)
+* [API documentation](#documentation)
     * [Module](#module)
     * [SkinServer](#skinserver)
     * [SkinDb](#skindb)
@@ -51,7 +42,7 @@ $ make test
 
 <a name='comparation'>
 
-Nodejs Mongodb Driver Comparison
+Nodejs mongodb driver comparison
 ========
 
 node-mongodb-native
@@ -59,34 +50,32 @@ node-mongodb-native
 
 One of the most powerful Mongo drivers is node-mongodb-native. Most other drivers build
 on top of it, including mongoskin. Unfortunately, it has an awkward interface with too many 
-callbacks. Also, mongoskin needs a way to hold a Collection instance as an MVC model.
+callbacks. Also, mongoskin provides helper method bindings on Collection instances.
   
 See [mongodb-native](https://github.com/christkv/node-mongodb-native/tree/master/docs)
 
 mongoose
 --------
 
-Mongoose provides an ORM way to hold Collection instance as Model,
-  you should define schema first. But why mongodb need schema?
-  Some guys like me, want to write code from application layer but not database layer,
-  and we can use any fields without define it before.
+Mongoose provides a full blown ORM view of Collections and Models,
+  and you are required to define a schema first. But why does mongodb need a schema?
+  If you're like me, then you prefer to drive your schema from the application layer,
+  and use fields without having had to define them beforehand.
 
-  Mongoose provide a DAL that you can do validation, and write your middlewares.
-  But some guys like me would like to validate manually, I think it is the tao of mongodb.
-
-  If you don't thinks so, [Mongoose-ORM](https://github.com/LearnBoost/mongoose) is probably your choice.
+  Mongoose also provides a data abstraction layer with validation support. Again, if you're like me, then
+  you would prefer a lighter weight solution and to craft your own validation. I think this is the tao of mongodb.
 
 mongoskin
 --------
 
 Mongoskin is an easy to use driver of mongodb for nodejs,
   it is similar with mongo shell, powerful like node-mongodb-native,
-  and support additional javascript method binding, which make it can act as a Model(in document way).
+  and supports binding helper methods to Collections.
 
-It will provide full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
-  and make it [future](http://en.wikipedia.org/wiki/Future_%28programming%29).
+It provides the full features of [node-mongodb-native](https://github.com/christkv/node-mongodb-native),
+  and makes good use of [futures](http://en.wikipedia.org/wiki/Future_%28programming%29).
 
-If you need validation, you can use [node-iform](https://github.com/guileen/node-iform).
+For validation you can use [node-iform](https://github.com/guileen/node-iform).
 
 [Back to index](#index)
 
@@ -104,7 +93,7 @@ $ npm install mongoskin
 
 <a name='quickstart'></a>
 
-Quick Start
+Quick start
 ========
 
  **Is mongoskin synchronized?**
@@ -114,7 +103,7 @@ Nope! It is asynchronized, it use the [future pattern](http://en.wikipedia.org/w
 
 <a name='quickstart-1'></a>
 
-Connect easier
+Easier to connect
 --------
 You can connect to mongodb easier now.
 
@@ -139,7 +128,7 @@ var db = mongo.db('localhost:27017/test?auto_reconnect');
 
 <a name='quickstart-3'></a>
 
-Similar API with node-mongodb-native
+Similar API to node-mongodb-native
 --------
 You can do everything that node-mongodb-native can do.
 
@@ -154,7 +143,7 @@ db.collection('posts').findOne({slug: 'whats-up'}, function (err, post) {
 
 <a name='quickstart-4'></a>
 
-Cursor easier
+Easier cursor
 --------
 
 ```js
@@ -165,7 +154,7 @@ db.collection('posts').find().toArray(function (err, posts) {
 
 <a name='quickstart-5'></a>
 
-MVC helper
+MVC helpers
 --------
 
 You can bind **additional methods** for collection.
@@ -225,7 +214,7 @@ db.comments.find().toArray(function (err, comments) {
 
 <a name='documentation'>
 
-Documentation
+API documentation
 ========
 
 for more information, see the source.
