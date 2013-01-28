@@ -6,7 +6,7 @@
   "homepage": "https://github.com/kissjs/node-mongoskin",
   "repository": {
     "type": "git",
-    "url": "git://github.com/guileen/node-mongoskin.git"
+    "url": "git://github.com/kissjs/node-mongoskin.git"
   },
   "bugs": {
     "url": "https://github.com/kissjs/node-mongoskin/issues"
