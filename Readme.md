@@ -1,4 +1,4 @@
-# mongoskin [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
+# mongoskin [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin) [![Dependencies](http://david-dm.org/kissjs/node-mongoskin.png)](http://david-dm.org/kissjs/node-mongoskin)
 
 ![logo](https://raw.github.com/kissjs/node-mongoskin/master/logo.png)
 
