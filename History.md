@@ -1,4 +1,15 @@
 
+0.6.0 / 2013-07-16 
+==================
+
+  * changed version in package.json to 1.3.x for mongodb
+  * Upgraded the mongo db version to 1.3.x. Mixing mongodb 1.2.x which mongoskin 0.5.0 depends on and latest mongodb 1.3.x causes Mongodb connection timeout problems in replication environment.
+  * Use HTTPS so GitHub doesn't cache dependency badge
+  * add Dependencies status image
+  * Corrected repository URL in package.json
+  * Documentation improvements
+  * add 0.9 version test
+
 0.5.0 / 2012-12-29 
 ==================
 
