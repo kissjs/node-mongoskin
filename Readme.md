@@ -7,7 +7,7 @@ The base API is same at the node-mongodb-native, you may want to familiarise you
 
 ## Compatible mongodb versions
 
-You should use mongodb version 1.2.x. Prior versions are not supported. 
+You should use mongodb version 1.3.3. Prior mongodb versions might not work.
 
 ## Automated tests
 
