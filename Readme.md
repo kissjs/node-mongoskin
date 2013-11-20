@@ -227,26 +227,28 @@ for more information, see the source.
 Module
 --------
 
-### MongoSkin Url format
-
-```
-[*://][username:password@]host[:port][/database][?auto_reconnect[=true|false]]`
-```
-
-e.g.
-
-```
-localhost/blog
-mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
-127.0.0.1?auto_reconnect=false
-```
-
 ### db(serverURL[s], dbOptions, replicasetOptions)
 
-Get or create instance of [SkinDb](#skindb).
+Get or create instance of [SkinDb](#skindb). 
+
+Parameters:
+* ```serverURLs``` can be a single mongoskin url, or an array of urls, each with the following format:
+```[*://][username:password@]host[:port][/database][?auto_reconnect[=true|false]]```
+
+* ```dbOptions``` is an object that can have following options in it:
+    * ```database``` - the database to connect to. This overrides the database name passed in the url.
+    * ```socketOptions``` - mongo socket options (see http://mongodb.github.com/node-mongodb-native/markdown-docs/database.html)
+    * ```username``` - overrides the value set in the serverURl[s]
+    * ```password``` - overrides the value set in the serverURl[s]
+    * other parameters - see http://mongodb.github.io/node-mongodb-native/api-generated/db.html
+* ```replicasetOptions``` - mongodb ReplSet options (see http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html). This is only useful if an array of urls is passed.
+
+Examples:
 
 ```js
-var db = mongoskin.db('localhost:27017/testdb?auto_reconnect=true&poolSize=5');
+var a = mongoskin.db('localhost:27017/testdb?auto_reconnect=true&poolSize=5');
+var b = mongoskin.db('mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect');
+var c = mongoskin.db('127.0.0.1?auto_reconnect=false');
 ```
 
 for ReplSet server
