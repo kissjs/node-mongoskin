@@ -1,4 +1,14 @@
 
+0.6.1 / 2013-11-24 
+==================
+
+  * Merge pull request #122 from Philmod/older-mongodb
+  * older version of mongodb
+  * Merge pull request #108 from fresheneesz/patch-1
+  * Merge pull request #114 from nemtsov/patch-1
+  * fix typo: this.hit -> this.hint
+  * Vastly improving the documentation around the mongoskin.db method
+
 0.6.0 / 2013-07-16 
 ==================
 

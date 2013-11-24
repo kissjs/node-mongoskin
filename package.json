@@ -1,7 +1,7 @@
 {
   "name": "mongoskin",
   "description": "The future layer above node-mongodb-native",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Gui Lin <guileen@gmail.com>",
   "homepage": "https://github.com/kissjs/node-mongoskin",
   "repository": {
