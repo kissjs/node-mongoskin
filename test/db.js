@@ -25,15 +25,17 @@ describe('db.js', function () {
   });
 
   var RS, RS_primary;
-  before(function (done) {
-    done = pedding(2, done);
-    servermanager.ensureUp(function (err, rs, primary) {
-      RS = rs;
-      RS_primary = primary;
-      done(err);
+  if(servermanager.MONGOSKIN_REPLICASET) {
+    before(function (done) {
+      done = pedding(2, done);
+      servermanager.ensureUp(function (err, rs, primary) {
+        RS = rs;
+        RS_primary = primary;
+        done(err);
+      });
+      blackhole.listen(blackholePort, done);
     });
-    blackhole.listen(blackholePort, done);
-  });
+}
   
   var cases = [
     ['normal', {database: 'mongoskin_test', safe: true}],

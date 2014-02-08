@@ -21,13 +21,15 @@ var servermanager = require('./utils/server_manager');
 describe('cursor.js', function () {
 
   var RS, RS_primary;
-  before(function (done) {
-    servermanager.ensureUp(function (err, rs, primary) {
-      RS = rs;
-      RS_primary = primary;
-      done(err);
+  if(servermanager.MONGOSKIN_REPLICASET) {
+    before(function (done) {
+      servermanager.ensureUp(function (err, rs, primary) {
+        RS = rs;
+        RS_primary = primary;
+        done(err);
+      });
     });
-  });
+  }
   
   var cases = [
     ['normal', {database: 'mongoskin_test', safe: true}],
