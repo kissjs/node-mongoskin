@@ -116,7 +116,7 @@ describe('db.js', function () {
               this.count(calllback);
             }
           });
-          db.should.have.property('testCollection').with.have.property('totalCount').with.be.type('function');
+          db.should.have.property('testCollection').with.have.property('totalCount').with.be.a('function');
           db.testCollection.totalCount(function (err, total) {
             should.not.exist(err);
             total.should.equal(0);
@@ -130,7 +130,7 @@ describe('db.js', function () {
               this.count(calllback);
             }
           });
-          db.should.have.property('testExistsCollection').with.have.property('totalCount').with.be.type('function');
+          db.should.have.property('testExistsCollection').with.have.property('totalCount').with.be.a('function');
           db.testExistsCollection.insert({name: 'item2'}, function (err, row) {
             should.not.exist(err);
             should.exist(row);
