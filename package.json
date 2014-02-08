@@ -26,7 +26,7 @@
   "devDependencies": {
     "mocha": "1.8.1",
     "jscover": "*",
-    "should": "2.1.1"
+    "should": "1.2.2"
   },
   "scripts": {
     "test": "make test"
