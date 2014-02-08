@@ -20,7 +20,7 @@ var servermanager = require('./utils/server_manager');
 
 describe('cursor.js', function () {
 
-  var RS, RS_primary;
+  var RS, RS_primary = '127.0.0.1';
   if(servermanager.MONGOSKIN_REPLICASET) {
     before(function (done) {
       servermanager.ensureUp(function (err, rs, primary) {

@@ -24,7 +24,7 @@ describe('db.js', function () {
     // no reply, just for timeout
   });
 
-  var RS, RS_primary;
+  var RS, RS_primary = '127.0.0.1';
   if(servermanager.MONGOSKIN_REPLICASET) {
     before(function (done) {
       done = pedding(2, done);
