@@ -3,3 +3,4 @@ data/
 deps/
 coverage.html
 lib-cov
+out
