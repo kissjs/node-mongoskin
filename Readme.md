@@ -5,15 +5,70 @@
 This project is a wrapper for [node-mongodb-native](https://github.com/mongodb/node-mongodb-native).
 The base API is same at the node-mongodb-native, you may want to familiarise yourself with the [node-mongodb-native documentation](http://mongodb.github.com/node-mongodb-native/) first.
 
-## Compatible mongodb versions
+## NOTE!! mongoskin API change from 1.3.20
 
-You should use mongodb version 1.3.3. Prior mongodb versions might not work.
+Since node-mongodb-native has change a lot of API, mongoskin redesign from 1.3.20. The version number keep same with node-mongodb-native. And the API appearence is also keep same with node-mongodb-native
+
+### Removed API from mongoskin 1.3.20
+module.db
+module.bind
+module.Skin*
+module.router
+skinDb.toId
+skinDb.toObjectId
+skinDb.admin
+skinDb.gridfs
+skinDb.bind
+skinCollection.bind
+
+### Add API from mongoskin 1.3.20
+module.MongoClient
+module.Db
+module.util.toObjectID
+
+```js
+var mongo = require('mongoskin');
+var MongoClient = mongo.MongoClient;
+
+var db = MongoClient.connect("mongodb://localhost:27017/integration_tests", {native_parser:true});
+db.collection('mycollection').find().toArray(function(err, items) {
+        db.close();
+});
+```
+
+Use ReplSet
+
+```js
+var mongo = require('mongoskin');
+var Server = mongo.Server;
+var Db = mongo.Db;
+
+var replSet = new ReplSetServers([
+        new Server('localhost', 30000),
+        new Server('localhost', 30001),
+        new Server('localhost', 30002),
+]);
+
+var db = new Db('integration_test_', replSet, {w:0, native_parser: (process.env['TEST_NATIVE'] != null)});
+// no need open and on('fullsetup', ...)
+db.collection('myconnection').find().setReadPreference(ReadPreference.SECONDARY).toArray(function(err, items) {
+        db.close();
+});
+```
+
+## Basic API document
+For detail API reference see [node mongodb API](http://mongodb.github.io/node-mongodb-native/). Mongoskin is just change the API call chain.
+
+## Additional API by Mongoskin
+
+collection.findById
+collection.updateById
+collection.removeById
 
 ## Automated tests
 
 You can run the automated test by running <strong>make test</strong>. The tests have a coverage of [**89%**](http://fengmk2.github.com/coverage/mongoskin.html) and you can [browse the results](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md).
 
-<a name='index'>
 
 # Mongoskin documentation
 
@@ -40,7 +95,6 @@ You can run the automated test by running <strong>make test</strong>. The tests 
       * [Removing](#inherit-removing)
     * [SkinCursor](#skincursor)
 
-<a name='comparation'>
 
 Nodejs mongodb driver comparison
 ========
@@ -77,22 +131,12 @@ It provides the full features of [node-mongodb-native](https://github.com/christ
 
 For validation you can use [node-iform](https://github.com/guileen/node-iform).
 
-[Back to index](#index)
-
-<a name='install'></a>
-
 Install
 ========
 
 ```bash
 $ npm install mongoskin
 ```
-
-[Back to index](#index)
-
-
-<a name='quickstart'></a>
-
 Quick start
 ========
 
@@ -100,8 +144,6 @@ Quick start
 
 Nope! It is asynchronized, it use the [future pattern](http://en.wikipedia.org/wiki/Future_%28programming%29).
 **Mongoskin** is the future layer above [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
-
-<a name='quickstart-1'></a>
 
 Easier to connect
 --------
@@ -114,7 +156,6 @@ mongo.db('localhost:27017/testdb').collection('blog').find().toArray(function (e
 })
 ```
 
-<a name='quickstart-2'></a>
 
 Server options and BSON options
 --------
@@ -126,7 +167,6 @@ var mongo = require('mongoskin');
 var db = mongo.db('localhost:27017/test?auto_reconnect');
 ```
 
-<a name='quickstart-3'></a>
 
 Similar API to node-mongodb-native
 --------
@@ -141,7 +181,6 @@ db.collection('posts').findOne({slug: 'whats-up'}, function (err, post) {
 });
 ```
 
-<a name='quickstart-4'></a>
 
 Easier cursor
 --------
@@ -152,7 +191,6 @@ db.collection('posts').find().toArray(function (err, posts) {
 });
 ```
 
-<a name='quickstart-5'></a>
 
 MVC helpers
 --------
@@ -209,20 +247,16 @@ db.comments.find().toArray(function (err, comments) {
 });
 ```
 
-[Back to index](#index)
 
 
-<a name='documentation'>
 
 API documentation
 ========
 
 for more information, see the source.
 
-[Back to index](#index)
 
 
-<a name='module'>
 
 Module
 --------
@@ -328,9 +362,7 @@ var products = db.collection('product'); //app_db.product
 * pure
 
 
-[Back to index](#index)
 
-<a name='skinserver'>
 
 SkinServer
 --------
@@ -343,9 +375,7 @@ Construct SkinServer from native Server instance.
 
 Construct [SkinDb](#skindb) from SkinServer.
 
-[Back to index](#index)
 
-<a name='skindb'>
 
 SkinDb
 --------
@@ -364,7 +394,6 @@ instance, callback is function(err, db).
 
 Retrieval [SkinCollection](#skincollection) instance of specified collection name.
 
-<a name='skindb-bind'>
 
 ### bind(collectionName)
 
@@ -392,16 +421,13 @@ db.book.firstBook(function (err, book) {});
 
 See [Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17) of node-mongodb-native for more information.
 
-[Back to index](#index)
 
-<a name='skincollection'>
 
 SkinCollection
 --------
 
 See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45) of node-mongodb-native for more information.
 
-<a name='additional-collection-op'>
 ### open(callback)
 
 Retrieval native
@@ -419,7 +445,6 @@ db.bson_serializer.ObjectID.createFromHexString(hex);
 See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548)
 
 
-<a name='inherit-collection-op'>
 
 ### Collection operation
 
@@ -430,7 +455,6 @@ rename(collectionName, callback)
 drop(callback)
 ```
 
-<a name='inherit-indexes'>
 
 ### Indexes
 
@@ -444,7 +468,6 @@ dropIndexes(callback)
     
 See [mongodb-native indexes](https://github.com/christkv/node-mongodb-native/blob/master/docs/indexes.md)
 
-<a name='inherit-query'>
 
 ### Queries
 
@@ -537,7 +560,6 @@ db.book.find().toArray(function (err, books) {/* do something */});
 
 #### findOne(queryObject, options, callback)
 
-<a name='inherit-aggregation'>
 
 ### Aggregation
 
@@ -578,13 +600,11 @@ collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", 
 #### count(query, callback)
 #### distinct(key, query, callback)
 
-<a name='inherit-inserting'>
 
 ### Inserting
 
 #### insert(docs, options, callback)
 
-<a name='inherit-updating'>
 
 ### Updating
 
@@ -620,7 +640,6 @@ collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
 
 See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/docs/insert.md)
 
-<a name='inherit-removing'>
 
 ### Removing
 
@@ -628,9 +647,7 @@ See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/mas
 
 #### removeById(_id, options, callback)
 
-[Back to index](#index)
 
-<a name='skincursor'>
 
 SkinCursor
 ---------
@@ -654,7 +671,6 @@ getMore(callback)
 explain(callback)
 ```
 
-[Back to index](#index)
 
 ## How to validate input?
 
