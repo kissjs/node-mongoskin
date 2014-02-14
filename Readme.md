@@ -10,7 +10,6 @@ The base API is same at the node-mongodb-native, you may want to familiarise you
 Since node-mongodb-native has change a lot of API, mongoskin redesign from 1.3.20. The version number keep same with node-mongodb-native. And the API appearence is also keep same with node-mongodb-native
 
 ### Removed API from mongoskin 1.3.20
-module.db
 module.bind
 module.Skin*
 module.router
@@ -18,13 +17,18 @@ skinDb.toId
 skinDb.toObjectId
 skinDb.admin
 skinDb.gridfs
-skinDb.bind
 skinCollection.bind
 
-### Add API from mongoskin 1.3.20
+### Modified API from mongoskin 1.3.20
+module.db
+skinDb.bind
+
+
+### Additional API from mongoskin 1.3.20
 module.MongoClient
-module.Db
-module.util.toObjectID
+module.Grid
+module.GridStore
+module.helper.toObjectID
 
 ```js
 var mongo = require('mongoskin');
@@ -68,32 +72,6 @@ collection.removeById
 ## Automated tests
 
 You can run the automated test by running <strong>make test</strong>. The tests have a coverage of [**89%**](http://fengmk2.github.com/coverage/mongoskin.html) and you can [browse the results](https://github.com/kissjs/node-mongoskin/blob/master/test_results.md).
-
-
-# Mongoskin documentation
-
-* [Nodejs mongodb driver comparison](#comparation)
-* [Install](#install)
-* [Quick Start](#quickstart)
-    * [Easier to connect](#quickstart-1)
-    * [Server options and BSON options](#quickstart-2)
-    * [Similar API to node-mongodb-native](#quickstart-3)
-    * [Easier cursor](#quickstart-4)
-    * [MVC helpers](#quickstart-5)
-* [API documentation](#documentation)
-    * [Module](#module)
-    * [SkinServer](#skinserver)
-    * [SkinDb](#skindb)
-    * [SkinCollection](#skincollection)
-      * [Additional methods](#additional-collection-op)
-      * [Collection operation](#inherit-collection-op)
-      * [Indexes](#inherit-indexes)
-      * [Querying](#inherit-query)
-      * [Aggregation](#inherit-aggregation)
-      * [Inserting](#inherit-inserting)
-      * [Updating](#inherit-updating)
-      * [Removing](#inherit-removing)
-    * [SkinCursor](#skincursor)
 
 
 Nodejs mongodb driver comparison
@@ -303,406 +281,42 @@ var db = mongoskin.db([
 });
 ```
 
-### router(select)
-
-select is `function(collectionName)` returns a database instance, means router collectionName to that database.
-
-```js
-var db = mongo.router(function (coll_name) {
-  switch(coll_name) {
-    case 'user':
-    case 'message':
-      return mongo.db('192.168.1.3/auth_db');
-    default:
-      return mongo.db('192.168.1.2/app_db');
-  }
-});
-db.bind('user', require('./shared-user-methods'));
-var users = db.user; //auth_db.user
-var messages = db.collection('message'); // auth_db.message
-var products = db.collection('product'); //app_db.product
-```
-
-### classes extends frome node-mongodb-native
-
-* BSONPure
-* BSONNative
-* BinaryParser
-* Binary
-* Code
-* DBRef
-* Double
-* MaxKey
-* MinKey
-* ObjectID
-* Symbol
-* Timestamp
-* Long
-* BaseCommand
-* DbCommand
-* DeleteCommand
-* GetMoreCommand
-* InsertCommand
-* KillCursorCommand
-* QueryCommand
-* UpdateCommand
-* MongoReply
-* Admin
-* Collection
-* Connection
-* Server
-* ReplSetServers
-* Cursor
-* Db
-* connect
-* Grid
-* Chunk
-* GridStore
-* native
-* pure
-
-
-
-
-SkinServer
---------
-
-### SkinServer(server)
-
-Construct SkinServer from native Server instance.
-
-### db(dbname, username=null, password=null)
-
-Construct [SkinDb](#skindb) from SkinServer.
-
-
-
-SkinDb
---------
-
-### SkinDb(db, username=null, password=null)
-
-Construct SkinDb.
-
-### open(callback)
-
-Connect to database, retrieval native
-[Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17)
-instance, callback is function(err, db).
-
-### collection(collectionName)
-
-Retrieval [SkinCollection](#skincollection) instance of specified collection name.
-
-
-### bind(collectionName)
-
-### bind(collectionName, SkinCollection)
-
-### bind(collectionName, extendObject1, extendObject2 ...)
-
-Bind [SkinCollection](#skincollection) to db properties as a shortcut to db.collection(name).
-You can also bind additional methods to the SkinCollection, it is useful when
-you want to reuse a complex operation. This will also affect
-db.collection(name) method.
-
-e.g.
-
-```js
-db.bind('book', {
-  firstBook: function (fn) {
-    this.findOne(fn);
-  }
-});
-db.book.firstBook(function (err, book) {});
-```
-
-### all the methods from Db.prototype
-
-See [Db](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17) of node-mongodb-native for more information.
-
-
-
-SkinCollection
---------
-
-See [Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45) of node-mongodb-native for more information.
-
-### open(callback)
-
-Retrieval native
-[Collection](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45)
-instance, callback is function(err, collection).
-
-### id(hex)
-
-Equivalent to
-
-```js
-db.bson_serializer.ObjectID.createFromHexString(hex);
-```
-
-See [ObjectID.createFromHexString](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548)
-
-
-
-### Collection operation
-
-```js
-checkCollectionName(collectionName)
-options(callback)
-rename(collectionName, callback)
-drop(callback)
-```
-
-
-### Indexes
-
-```js
-createIndex(fieldOrSpec, unique, callback)
-ensureIndex(fieldOrSpec, unique, callback)
-indexInformation(callback)
-dropIndex(indexName, callback)
-dropIndexes(callback)
-```
-    
-See [mongodb-native indexes](https://github.com/christkv/node-mongodb-native/blob/master/docs/indexes.md)
-
-
-### Queries
-
-See [mongodb-native queries](https://github.com/christkv/node-mongodb-native/blob/master/docs/queries.md)
-
-#### findItems(..., callback)
-
-Equivalent to
-
-```js
-collection.find(..., function (err, cursor) {
-  cursor.toArray(callback);
-});
-```
-
-See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
-
-#### findEach(..., callback)
-
-Equivalent to
-
-```js
-collection.find(..., function (err, cursor) {
-  cursor.each(callback);
-});
-```
-
-See [Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
-
-#### findById(id, ..., callback)
-
-Equivalent to
-
-```js
-collection.findOne({_id, ObjectID.createFromHexString(id)}, ..., callback);
-```
-
-See [Collection.findOne](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417)
-
-#### find(...)
-
-If the last parameter is function, it is equivalent to native
-[Collection.find](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348)
-method, else it will return a future [SkinCursor](#skincursor).
-
-e.g.
-
-```js
-// callback
-db.book.find({}, function (err, cursor) {/* do something */});
-// future SkinCursor
-db.book.find().toArray(function (err, books) {/* do something */});
-```
-
-#### normalizeHintField(hint)
-
-#### find
-
-```js
-/**
- * Various argument possibilities
- * 1 callback
- * 2 selector, callback,
- * 2 callback, options  // really?!
- * 3 selector, fields, callback
- * 3 selector, options, callback
- * 4,selector, fields, options, callback
- * 5 selector, fields, skip, limit, callback
- * 6 selector, fields, skip, limit, timeout, callback
- *
- * Available options:
- * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize
- */
-```
-
-#### findAndModify(query, sort, update, options, callback) 
-
-```js
-/**
-  Fetch and update a collection
-  query:        a filter for the query
-  sort:         if multiple docs match, choose the first one in the specified sort order as the object to manipulate
-  update:       an object describing the modifications to the documents selected by the query
-  options:
-    remove:   set to a true to remove the object before returning
-    new:      set to true if you want to return the modified object rather than the original. Ignored for remove.
-    upsert:       true/false (perform upsert operation)
-**/
-```
-
-#### findOne(queryObject, options, callback)
-
-
-### Aggregation
-
-#### mapReduce(map, reduce, options, callback)
-
-e.g.
-
-```js
-var map = function () {
-  emit(test(this.timestamp.getYear()), 1);
-}
-
-var reduce = function (k, v){
-  count = 0;
-  for (i = 0; i < v.length; i++) {
-    count += v[i];
-  }
-  return count;
-}
-var options = {scope: {test: new client.bson_serializer.Code(t.toString())}};
-collection.mapReduce(map, reduce, options, function (err, collection) {
-  collection.find(function (err, cursor) {
-    cursor.toArray(function (err, results) {
-    test.equal(2, results[0].value)
-    finished_test({test_map_reduce_functions_scope:'ok'});            
-  })
-})
-```
-
-#### group(keys, condition, initial, reduce, command, callback)
-
-e.g.  
-
-```js
-collection.group([], {}, {"count":0}, "function (obj, prev) { prev.count++; }", true, function(err, results) {});
-```
-
-#### count(query, callback)
-#### distinct(key, query, callback)
-
-
-### Inserting
-
-#### insert(docs, options, callback)
-
-
-### Updating
-
-#### save(doc, options, callback)
-
-```js
-/**
-  Update a single document in this collection.
-    spec - a associcated array containing the fields that need to be present in
-      the document for the update to succeed
-
-    document - an associated array with the fields to be updated or in the case of
-      a upsert operation the fields to be inserted.
-
-  Options:
-    upsert - true/false (perform upsert operation)
-    multi - true/false (update all documents matching spec)
-    strict - true/false (perform check if the operation failed, required extra call to db)
-  Deprecated Options:
-    safe - true/false (perform check if the operation failed, required extra call to db)
-**/
-```
-
-#### update(spec, document, options, callback)
-
-#### updateById(_id, ..., callback)
-
-Equivalent to
-
-```js
-collection.update({_id, ObjectID.createFromHexString(id)}, ..., callback);
-```
-
-See [Collection.update](https://github.com/christkv/node-mongodb-native/blob/master/docs/insert.md)
-
-
-### Removing
-
-#### remove(selector, options, callback)
-
-#### removeById(_id, options, callback)
-
-
-
-SkinCursor
----------
-
-See [Cursor](https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/cursor.js#L1)
-of node-mongodb-native for more information.
-
-All these methods will return the SkinCursor itself.
-
-```js
-sort(keyOrList, [direction], [callback])
-limit(limit, [callback])
-skip(skip, [callback])
-batchSize(skip, [callback])
-
-toArray(callback)
-each(callback)
-count(callback)
-nextObject(callback)
-getMore(callback)
-explain(callback)
-```
-
-
-## How to validate input?
-
-I wrote a middleware to validate post data, [node-iform](https://github.com/guileen/node-iform) 
-base on [node-validator](https://github.com/chriso/node-validator)
-
 ## Authors
 
 Below is the output from `git-summary`.
 
 ```
- project: node-mongoskin
- commits: 112
- active : 54 days
- files  : 39
- authors: 
-    49  Lin Gui                 43.8%
-    34  guilin 桂林           30.4%
-     9  fengmk2                 8.0%
-     5  guilin                  4.5%
-     2  François de Metz       1.8%
-     2  Paul Gebheim            1.8%
-     2  Gui Lin                 1.8%
-     1  humanchimp              0.9%
-     1  Aneil Mallavarapu       0.9%
-     1  wmertens                0.9%
-     1  Harvey McQueen          0.9%
-     1  Joe Faber               0.9%
-     1  Matt Perpick            0.9%
-     1  Quang Van               0.9%
-     1  Rakshit Menpara         0.9%
-     1  Wout Mertens            0.9%
+ project  : node-mongoskin
+ repo age : 2 years, 10 months
+ active   : 84 days
+ commits  : 180
+ files    : 44
+ authors  :
+    49	Lin Gui                 27.2%
+    44	fengmk2                 24.4%
+    34	guilin 桂林           18.9%
+    23	Gui Lin                 12.8%
+     5	guilin                  2.8%
+     2	Raghu Katti             1.1%
+     2	Merlyn Albery-Speyer    1.1%
+     2	Paul Gebheim            1.1%
+     2	Joakim B                1.1%
+     2	François de Metz       1.1%
+     1	Wout Mertens            0.6%
+     1	Yuriy Nemtsov           0.6%
+     1	fresheneesz             0.6%
+     1	humanchimp              0.6%
+     1	Alan Shaw               0.6%
+     1	wmertens                0.6%
+     1	Aneil Mallavarapu       0.6%
+     1	Gustav                  0.6%
+     1	Harvey McQueen          0.6%
+     1	Joe Faber               0.6%
+     1	Matt Perpick            0.6%
+     1	Philmod                 0.6%
+     1	Quang Van               0.6%
+     1	Rakshit Menpara         0.6%
+     1	Shawn Jonnet            0.6%
 ```
 
 ## License 
