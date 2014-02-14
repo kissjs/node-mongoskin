@@ -13,6 +13,9 @@
  */
 
 var mongoskin = require('../');
+var mongodb = require('mongodb');
+var ObjectID = mongodb.ObjectID;
+var Collection = mongodb.Collection;
 var SkinCollection = mongoskin.SkinCollection;
 var constant = require('../lib/mongoskin/constant');
 var should = require('should');
@@ -36,7 +39,6 @@ exports.describe = function(caseName, db) {
           should.not.exist(err);
           index.should.equal('title_-1');
           testcollection.findItems(function (err, rows) {
-              console.trace('=====',err,rows);
             should.not.exist(err);
             rows.should.be.instanceof(Array).with.length(0);
             done();
@@ -204,7 +206,7 @@ exports.describe = function(caseName, db) {
             db.article.findById(articleId, function (err, article) {
               should.not.exist(err);
               should.exist(article);
-              article.should.have.property('_id').with.instanceof(db.ObjectID);
+              article.should.have.property('_id').with.instanceof(ObjectID);
               article.should.have.property('created_at').with.instanceof(Date);
               article.should.have.property('title').with.include(now.toString());
               article.created_at.toString().should.equal(now.toString());
@@ -215,7 +217,7 @@ exports.describe = function(caseName, db) {
             db.article.findById(articleId.toString(), function (err, article) {
               should.not.exist(err);
               should.exist(article);
-              article.should.have.property('_id').with.instanceof(db.ObjectID);
+              article.should.have.property('_id').with.instanceof(ObjectID);
               article.should.have.property('created_at').with.instanceof(Date);
               article.should.have.property('title').with.include(now.toString());
               article.created_at.toString().should.equal(now.toString());
