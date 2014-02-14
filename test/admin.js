@@ -14,7 +14,7 @@
 
 var should = require('should');
 var SkinAdmin = require('../').SkinAdmin;
-var constant = require('../lib/mongoskin/constant');
+var constant = require('../lib/constant');
 
 exports.describe = function(db) {
   describe('admin.js', function() {

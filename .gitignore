@@ -4,3 +4,4 @@ deps/
 coverage.html
 lib-cov
 out
+test_results.md
