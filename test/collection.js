@@ -17,7 +17,6 @@ var mongodb = require('mongodb');
 var ObjectID = mongodb.ObjectID;
 var Collection = mongodb.Collection;
 var SkinCollection = mongoskin.SkinCollection;
-var constant = require('../lib/mongoskin/constant');
 var should = require('should');
 var servermanager = require('./utils/server_manager');
 

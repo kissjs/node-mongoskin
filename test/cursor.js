@@ -14,7 +14,6 @@
 
 var should = require('should');
 var mongoskin = require('../');
-var constant = require('../lib/mongoskin/constant');
 var SkinCursor = mongoskin.SkinCursor;
 var servermanager = require('./utils/server_manager');
 
@@ -33,7 +32,6 @@ exports.describe = function(db) {
           for (var i = 0; i < 100; i++) {
             docs.push({name: 'name ' + i, index: i});
           }
-          console.log(docs);
           db.testCursor.insert(docs, {safe:true}, function (err) {
             done(err);
           });

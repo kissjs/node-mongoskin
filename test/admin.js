@@ -16,61 +16,8 @@ var should = require('should');
 var SkinAdmin = require('../').SkinAdmin;
 var constant = require('../lib/mongoskin/constant');
 
-describe('admin.js', function () {
-
-  var skinDb;
-  beforeEach(function () {
-    skinDb = {
-      open: function (callback) {
-        var that = this;
-        process.nextTick(function () {
-          callback(null, that.db);
-        });
-      },
-      db: {
-        name: 'mock db'
-      }
-    };
-  });
-
-  describe('open()', function () {
-
-    it('should return admin', function (done) {
-      var skinAdmin = new SkinAdmin(skinDb);
-      skinAdmin.state.should.equal(constant.STATE_CLOSE);
-      skinAdmin.open(function (err, admin) {
-        should.not.exist(err);
-        should.exist(admin);
-        should.exist(skinAdmin.admin);
-        skinAdmin.state.should.equal(constant.STATE_OPEN);
-      }).open(function (err, admin) {
-        skinAdmin.open(function (err, admin) {
-          should.not.exist(err);
-          should.exist(admin);
-          should.exist(skinAdmin.admin);
-          skinAdmin.state.should.equal(constant.STATE_OPEN);
-          done();
-        });
-      });
-      skinAdmin.state.should.equal(constant.STATE_OPENNING);
-    });
-
-    it('should return mock open() error', function (done) {
-      skinDb.open = function (callback) {
-        process.nextTick(function () {
-          callback(new Error('mock open() error'));
-        });
-      };
-      var skinAdmin = new SkinAdmin(skinDb);
-      skinAdmin.open(function (err, admin) {
-        should.exist(err);
-        err.should.have.property('message', 'mock open() error');
-        should.not.exist(admin);
-        should.not.exist(skinAdmin.admin);
-        done();
-      });
-    });
+exports.describe = function(db) {
+  describe('admin.js', function() {
 
   });
-
-});
+}
