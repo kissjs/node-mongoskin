@@ -18,125 +18,12 @@ var constant = require('../lib/mongoskin/constant');
 var SkinCursor = mongoskin.SkinCursor;
 var servermanager = require('./utils/server_manager');
 
-describe('cursor.js', function () {
+exports.describe = function(db) {
 
-  var RS, RS_primary = '127.0.0.1';
-  if(servermanager.MONGOSKIN_REPLICASET) {
-    before(function (done) {
-      servermanager.ensureUp(function (err, rs, primary) {
-        RS = rs;
-        RS_primary = primary;
-        done(err);
-      });
-    });
-  }
-  
-  var cases = [
-    ['normal', {database: 'mongoskin_test', safe: true}],
-  ];
-  if (servermanager.MONGOSKIN_REPLICASET) {
-    cases.push(['replicaset', {database: 'mongoskin_replicaset_test'}]);
-  }
-  cases.forEach(function (caseItem) {
-    describe(caseItem[0], function () {
-      var isReplicaset = caseItem[0] === 'replicaset';
-      var db = null;
+  describe('cursor.js', function () {
+
       var servers = null;
       var authfailServers = null;
-      var options = caseItem[1];
-      before(function () {
-        if (isReplicaset) {
-          servers = [];
-          authfailServers = [];
-          for (var i = 0; i < RS.ports.length; i++) {
-            servers.push(RS.host + ':' + RS.ports[i] + '/?auto_reconnect=true');
-          }
-          authfailServers = servers;
-        } else {
-          servers = RS_primary;
-        }
-        db = mongoskin.db(servers, options);
-      });
-      after(function (done) {
-        db.close(done);
-      });
-
-      describe('new SkinCursor()', function () {
-        it('should state is open when cursor exists', function () {
-          var cursor = new SkinCursor({}, {});
-          cursor.should.have.property('state', constant.STATE_OPEN);
-        });
-        it('should state is close when cursor not exists', function () {
-          var cursor = new SkinCursor(null, {});
-          cursor.should.have.property('state', constant.STATE_CLOSE);
-        });
-      });
-
-      describe('open()', function () {
-        var collection;
-        beforeEach(function () {
-          collection = {
-            open: function (callback) {
-              var that = this;
-              process.nextTick(function () {
-                callback(null, that);
-              });
-            },
-            find: function () {
-              var callback = arguments[arguments.length - 1];
-              process.nextTick(function () {
-                callback(null, {name: 'mock cursor'});
-              });
-            }
-          };
-        });
-
-        it('should success when state is close', function (done) {
-          var cursor = new SkinCursor(null, collection);
-          cursor.open(function (err, mockCursor) {
-            should.not.exist(err);
-            mockCursor.should.have.property('name', 'mock cursor');
-            done();
-          });
-        });
-
-        it('should success when state is openning', function (done) {
-          var cursor = new SkinCursor(null, collection);
-          cursor.open(function (err, mockCursor) {
-            should.not.exist(err);
-            mockCursor.should.have.property('name', 'mock cursor');
-          });
-          cursor.open(function (err, mockCursor) {
-            should.not.exist(err);
-            mockCursor.should.have.property('name', 'mock cursor');
-            done();
-          });
-        });
-
-        it('should success when state is open', function (done) {
-          var cursor = new SkinCursor({name: 'mock cursor 2'}, collection);
-          cursor.open(function (err, mockCursor) {
-            should.not.exist(err);
-            mockCursor.should.have.property('name', 'mock cursor 2');
-            done();
-          });
-        });
-
-        it('should return mock error', function (done) {
-          collection.open = function (callback) {
-            process.nextTick(function () {
-              callback(new Error('mock collection.open() error'));
-            });
-          };
-          var cursor = new SkinCursor(null, collection);
-          cursor.open(function (err, mockCursor) {
-            should.exist(err);
-            err.should.have.property('message', 'mock collection.open() error');
-            should.not.exist(mockCursor);
-            done();
-          });
-        });
-      });
 
       describe('sort(), limit(), skip(), toArray(), count(), explain()', function () {
 
@@ -146,7 +33,8 @@ describe('cursor.js', function () {
           for (var i = 0; i < 100; i++) {
             docs.push({name: 'name ' + i, index: i});
           }
-          db.testCursor.insert(docs, function (err) {
+          console.log(docs);
+          db.testCursor.insert(docs, {safe:true}, function (err) {
             done(err);
           });
         });
@@ -196,6 +84,5 @@ describe('cursor.js', function () {
         });
 
       });
-    });
   });
-});
+}

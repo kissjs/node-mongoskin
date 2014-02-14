@@ -22,15 +22,13 @@ var should = require('should');
 var servermanager = require('./utils/server_manager');
 
 
-exports.describe = function(caseName, db) {
+exports.describe = function(db) {
 
-  var testcollection = db.collection(caseName + '_test_collection');
+  var testcollection = db.collection('test_collection');
   var commentcollection = db.collection('comment');
 
-  describe(caseName, function () {
-    describe('collection.js', function () {
+  describe('collection.js', function () {
 
-      var isReplicaset = caseName === 'replicaset';
       var servers = null;
       var authfailServers = null;
 
@@ -48,11 +46,8 @@ exports.describe = function(caseName, db) {
 
       after(function (done) {
         testcollection.drop(function (err, result) {
-          if (err) {
-            return done(err);
-          }
           should.ok(result);
-          db.close(done);
+          done(err);
         });
       });
 
@@ -287,6 +282,5 @@ exports.describe = function(caseName, db) {
         });
 
       });
-    });
   });
 }
