@@ -22,7 +22,7 @@ var should = require('should');
 var servermanager = require('./utils/server_manager');
 
 
-exports.describe = function(db) {
+exports.testWithDb = function(db) {
 
   describe('collection.js', function () {
 

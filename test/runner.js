@@ -12,20 +12,24 @@ var repl_db = new Db('repl_db', new ReplSetServers([
       new Server('127.0.0.1', 27017)
 ]), {w:0, native_parser: true});
 
+function testDb(caseName, db) {
+  describe(caseName, function() {
+      ;[
+        require('./db'),
+        require('./collection'),
+        require('./cursor'),
+        require('./admin'),
+        require('./grid'),
+        require('./grid_store')
+      ].forEach(function(mod) {
+          mod.testWithDb(db);
+      })
 
-;[['connect_db', connect_db],['new_db', new_db]].forEach(function(dbdesc) {
-    var db = dbdesc[1];
-    describe(dbdesc[0], function() {
-        ;[
-          require('./collection'),
-          require('./cursor'),
-          require('./admin')
-        ].forEach(function(mod) {
-            mod.describe(db);
-        })
+      after(function (done) {
+          db.close(done);
+      });
+  })
+}
 
-        after(function (done) {
-            db.close(done);
-        });
-    })
-})
+testDb('connect_db', connect_db);
+testDb('new_db', new_db);

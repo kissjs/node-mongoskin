@@ -16,8 +16,21 @@ var mongoskin = require('../');
 var pedding = require('./utils/pedding');
 var servermanager = require('./utils/server_manager');
 
-exports.describe = function(db) {
+exports.testWithDb = function(db) {
   describe('db.js', function () {
+
+      it('skinDb.collection() should retrive native collection with callback', function(done) {
+          var skinColl = db.collection('testRetriveCollection', function(err, coll) {
+              should.not.exist(err);
+              skinColl._native.should.eql(coll);
+              done();
+          });
+          should.exist(skinColl);
+      })
+
+      // old test
+
+      /*
       describe('bind()', function () {
 
         before(function (done) {
@@ -280,6 +293,7 @@ exports.describe = function(db) {
           });
         });
       });
+      */
 
   });
 }

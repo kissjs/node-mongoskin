@@ -17,7 +17,7 @@ var mongoskin = require('../');
 var SkinCursor = mongoskin.SkinCursor;
 var servermanager = require('./utils/server_manager');
 
-exports.describe = function(db) {
+exports.testWithDb = function(db) {
 
   describe('cursor.js', function () {
       // DO NOT use db.bind('testCursor') here, will not create SkinCursor if collection already open.

@@ -1,7 +1,7 @@
-Already up-to-date.
 # TOC
    - [helper.id()](#helperid)
    - [connect_db](#connect_db)
+     - [db.js](#connect_db-dbjs)
      - [collection.js](#connect_db-collectionjs)
        - [find(), findItems(), findEach()](#connect_db-collectionjs-find-finditems-findeach)
          - [mock find() error](#connect_db-collectionjs-find-finditems-findeach-mock-find-error)
@@ -10,8 +10,13 @@ Already up-to-date.
          - [updateById()](#connect_db-collectionjs-findbyid-updatebyid-removebyid-updatebyid)
          - [removeById()](#connect_db-collectionjs-findbyid-updatebyid-removebyid-removebyid)
      - [cursor.js](#connect_db-cursorjs)
-       - [sort(), limit(), skip(), toArray(), count(), explain()](#connect_db-cursorjs-sort-limit-skip-toarray-count-explain)
+     - [db.admin()](#connect_db-dbadmin)
+     - [new Admin(db)](#connect_db-new-admindb)
+     - [db.grid()](#connect_db-dbgrid)
+     - [new Grid(db, fsName)](#connect_db-new-griddb-fsname)
+     - [grid_store.js](#connect_db-grid_storejs)
    - [new_db](#new_db)
+     - [db.js](#new_db-dbjs)
      - [collection.js](#new_db-collectionjs)
        - [find(), findItems(), findEach()](#new_db-collectionjs-find-finditems-findeach)
          - [mock find() error](#new_db-collectionjs-find-finditems-findeach-mock-find-error)
@@ -20,8 +25,13 @@ Already up-to-date.
          - [updateById()](#new_db-collectionjs-findbyid-updatebyid-removebyid-updatebyid)
          - [removeById()](#new_db-collectionjs-findbyid-updatebyid-removebyid-removebyid)
      - [cursor.js](#new_db-cursorjs)
-       - [sort(), limit(), skip(), toArray(), count(), explain()](#new_db-cursorjs-sort-limit-skip-toarray-count-explain)
-   - [utils.js](#utilsjs)
+     - [db.admin()](#new_db-dbadmin)
+     - [new Admin(db)](#new_db-new-admindb)
+     - [db.grid()](#new_db-dbgrid)
+     - [new Grid(db, fsName)](#new_db-new-griddb-fsname)
+     - [grid_store.js](#new_db-grid_storejs)
+   - [makeSkinClass](#makeskinclass)
+     - [SkinClass](#makeskinclass-skinclass)
 <a name=""></a>
  
 <a name="helperid"></a>
@@ -50,8 +60,32 @@ ids.forEach(function (id) {
 
 <a name="connect_db"></a>
 # connect_db
+<a name="connect_db-dbjs"></a>
+## db.js
+skinDb.collection() should retrive native collection with callback.
+
+```js
+var skinColl = db.collection('testRetriveCollection', function(err, coll) {
+    should.not.exist(err);
+    skinColl._native.should.eql(coll);
+    done();
+});
+should.exist(skinColl);
+```
+
 <a name="connect_db-collectionjs"></a>
 ## collection.js
+should retrive native cursor.
+
+```js
+db.collection('test_collection').find(function(err, cursor) {
+    should.not.exists(err);
+    cursor.toArray.should.be.instanceof(Function);
+    should.not.exists(cursor.open);
+    done();
+});
+```
+
 <a name="connect_db-collectionjs-find-finditems-findeach"></a>
 ### find(), findItems(), findEach()
 should find().toArray() return 100 comments.
@@ -261,12 +295,20 @@ db.article.removeById(id, function (err, success) {
 
 <a name="connect_db-cursorjs"></a>
 ## cursor.js
-<a name="connect_db-cursorjs-sort-limit-skip-toarray-count-explain"></a>
-### sort(), limit(), skip(), toArray(), count(), explain()
+should call toArray().
+
+```js
+db.collection('testCursor').find().toArray(function(err, items) {
+    should.not.exist(err);
+    items.should.be.instanceof(Array).with.length(100);
+    done();
+});
+```
+
 should cursor.skip(10).limit(10).toArray() return 10 rows.
 
 ```js
-db.testCursor.find().skip(10).limit(10).toArray(function (err, rows) {
+db.collection('testCursor').find().skip(10).limit(10).toArray(function (err, rows) {
   should.not.exist(err);
   should.exist(rows);
   rows.should.be.instanceof(Array).with.length(10);
@@ -279,7 +321,7 @@ db.testCursor.find().skip(10).limit(10).toArray(function (err, rows) {
 should cursor.sort({index: -1}).skip(20).limit(10).toArray() return 10 rows.
 
 ```js
-db.testCursor.find().sort({index: -1}).skip(20).limit(10).toArray(function (err, rows) {
+db.collection('testCursor').find().sort({index: -1}).skip(20).limit(10).toArray(function (err, rows) {
   should.not.exist(err);
   should.exist(rows);
   rows.should.be.instanceof(Array).with.length(10);
@@ -292,7 +334,7 @@ db.testCursor.find().sort({index: -1}).skip(20).limit(10).toArray(function (err,
 should cursor.count() return 100.
 
 ```js
-db.testCursor.find().count(function (err, count) {
+db.collection('testCursor').find().count(function (err, count) {
   should.not.exist(err);
   count.should.equal(100);
   done();
@@ -302,7 +344,7 @@ db.testCursor.find().count(function (err, count) {
 should cursor.explain() return 100.
 
 ```js
-db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
+db.collection('testCursor').find({index: {$gt: 50}}).explain(function (err, result) {
   should.not.exist(err);
   result.should.have.property('cursor', 'BasicCursor');
   result.should.have.property('nscanned', 100);
@@ -312,10 +354,156 @@ db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
 });
 ```
 
+<a name="connect_db-dbadmin"></a>
+## db.admin()
+should add the new user to the admin database.
+
+```js
+adminDb.addUser('admin3', 'admin3', done);
+```
+
+should authenticate using the newly added user.
+
+```js
+adminDb.authenticate('admin3', 'admin3', done);
+```
+
+should retrive the build information for the mongodb instance.
+
+```js
+adminDb.buildInfo(done);
+```
+
+should remove user just added.
+
+```js
+adminDb.removeUser('admin3', done);
+```
+
+<a name="connect_db-new-admindb"></a>
+## new Admin(db)
+should add the new user to the admin database.
+
+```js
+adminDb.addUser('admin3', 'admin3', done);
+```
+
+should authenticate using the newly added user.
+
+```js
+adminDb.authenticate('admin3', 'admin3', done);
+```
+
+should retrive the build information for the mongodb instance.
+
+```js
+adminDb.buildInfo(done);
+```
+
+should remove user just added.
+
+```js
+adminDb.removeUser('admin3', done);
+```
+
+<a name="connect_db-dbgrid"></a>
+## db.grid()
+should write data to grid.
+
+```js
+grid.put(originalData, {}, function(err, result) {
+    should.not.exist(err);
+    result._id.should.not.eql(id);
+    done();
+});
+```
+
+should get data just put to grid.
+
+```js
+grid.get(id, function(err, data) {
+    assert.deepEqual(originalData.toString('base64'), data.toString('base64'));
+    done(err);
+});
+```
+
+<a name="connect_db-new-griddb-fsname"></a>
+## new Grid(db, fsName)
+should write data to grid.
+
+```js
+grid.put(originalData, {}, function(err, result) {
+    should.not.exist(err);
+    result._id.should.not.eql(id);
+    done();
+});
+```
+
+should get data just put to grid.
+
+```js
+grid.get(id, function(err, data) {
+    assert.deepEqual(originalData.toString('base64'), data.toString('base64'));
+    done(err);
+});
+```
+
+<a name="connect_db-grid_storejs"></a>
+## grid_store.js
+should write data to file.
+
+```js
+// Write a text string
+gridStore.write(originData, function(err) {
+    gridStore.close(done);
+});
+```
+
+should read file.
+
+```js
+// use mongoskin style to create gridStore
+db.gridStore(fileId, 'r').read(function(err, data) {
+    should.not.exist(err);
+    data.toString().should.equal(originData);
+    done();
+})
+```
+
+should execute GridStore static methods.
+
+```js
+GridStore.exist(db, fileId, done)
+```
+
 <a name="new_db"></a>
 # new_db
+<a name="new_db-dbjs"></a>
+## db.js
+skinDb.collection() should retrive native collection with callback.
+
+```js
+var skinColl = db.collection('testRetriveCollection', function(err, coll) {
+    should.not.exist(err);
+    skinColl._native.should.eql(coll);
+    done();
+});
+should.exist(skinColl);
+```
+
 <a name="new_db-collectionjs"></a>
 ## collection.js
+should retrive native cursor.
+
+```js
+db.collection('test_collection').find(function(err, cursor) {
+    should.not.exists(err);
+    cursor.toArray.should.be.instanceof(Function);
+    should.not.exists(cursor.open);
+    done();
+});
+```
+
 <a name="new_db-collectionjs-find-finditems-findeach"></a>
 ### find(), findItems(), findEach()
 should find().toArray() return 100 comments.
@@ -525,12 +713,20 @@ db.article.removeById(id, function (err, success) {
 
 <a name="new_db-cursorjs"></a>
 ## cursor.js
-<a name="new_db-cursorjs-sort-limit-skip-toarray-count-explain"></a>
-### sort(), limit(), skip(), toArray(), count(), explain()
+should call toArray().
+
+```js
+db.collection('testCursor').find().toArray(function(err, items) {
+    should.not.exist(err);
+    items.should.be.instanceof(Array).with.length(100);
+    done();
+});
+```
+
 should cursor.skip(10).limit(10).toArray() return 10 rows.
 
 ```js
-db.testCursor.find().skip(10).limit(10).toArray(function (err, rows) {
+db.collection('testCursor').find().skip(10).limit(10).toArray(function (err, rows) {
   should.not.exist(err);
   should.exist(rows);
   rows.should.be.instanceof(Array).with.length(10);
@@ -543,7 +739,7 @@ db.testCursor.find().skip(10).limit(10).toArray(function (err, rows) {
 should cursor.sort({index: -1}).skip(20).limit(10).toArray() return 10 rows.
 
 ```js
-db.testCursor.find().sort({index: -1}).skip(20).limit(10).toArray(function (err, rows) {
+db.collection('testCursor').find().sort({index: -1}).skip(20).limit(10).toArray(function (err, rows) {
   should.not.exist(err);
   should.exist(rows);
   rows.should.be.instanceof(Array).with.length(10);
@@ -556,7 +752,7 @@ db.testCursor.find().sort({index: -1}).skip(20).limit(10).toArray(function (err,
 should cursor.count() return 100.
 
 ```js
-db.testCursor.find().count(function (err, count) {
+db.collection('testCursor').find().count(function (err, count) {
   should.not.exist(err);
   count.should.equal(100);
   done();
@@ -566,7 +762,7 @@ db.testCursor.find().count(function (err, count) {
 should cursor.explain() return 100.
 
 ```js
-db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
+db.collection('testCursor').find({index: {$gt: 50}}).explain(function (err, result) {
   should.not.exist(err);
   result.should.have.property('cursor', 'BasicCursor');
   result.should.have.property('nscanned', 100);
@@ -574,5 +770,209 @@ db.testCursor.find({index: {$gt: 50}}).explain(function (err, result) {
   result.should.have.property('n', 49);
   done();
 });
+```
+
+<a name="new_db-dbadmin"></a>
+## db.admin()
+should add the new user to the admin database.
+
+```js
+adminDb.addUser('admin3', 'admin3', done);
+```
+
+should authenticate using the newly added user.
+
+```js
+adminDb.authenticate('admin3', 'admin3', done);
+```
+
+should retrive the build information for the mongodb instance.
+
+```js
+adminDb.buildInfo(done);
+```
+
+should remove user just added.
+
+```js
+adminDb.removeUser('admin3', done);
+```
+
+<a name="new_db-new-admindb"></a>
+## new Admin(db)
+should add the new user to the admin database.
+
+```js
+adminDb.addUser('admin3', 'admin3', done);
+```
+
+should authenticate using the newly added user.
+
+```js
+adminDb.authenticate('admin3', 'admin3', done);
+```
+
+should retrive the build information for the mongodb instance.
+
+```js
+adminDb.buildInfo(done);
+```
+
+should remove user just added.
+
+```js
+adminDb.removeUser('admin3', done);
+```
+
+<a name="new_db-dbgrid"></a>
+## db.grid()
+should write data to grid.
+
+```js
+grid.put(originalData, {}, function(err, result) {
+    should.not.exist(err);
+    result._id.should.not.eql(id);
+    done();
+});
+```
+
+should get data just put to grid.
+
+```js
+grid.get(id, function(err, data) {
+    assert.deepEqual(originalData.toString('base64'), data.toString('base64'));
+    done(err);
+});
+```
+
+<a name="new_db-new-griddb-fsname"></a>
+## new Grid(db, fsName)
+should write data to grid.
+
+```js
+grid.put(originalData, {}, function(err, result) {
+    should.not.exist(err);
+    result._id.should.not.eql(id);
+    done();
+});
+```
+
+should get data just put to grid.
+
+```js
+grid.get(id, function(err, data) {
+    assert.deepEqual(originalData.toString('base64'), data.toString('base64'));
+    done(err);
+});
+```
+
+<a name="new_db-grid_storejs"></a>
+## grid_store.js
+should write data to file.
+
+```js
+// Write a text string
+gridStore.write(originData, function(err) {
+    gridStore.close(done);
+});
+```
+
+should read file.
+
+```js
+// use mongoskin style to create gridStore
+db.gridStore(fileId, 'r').read(function(err, data) {
+    should.not.exist(err);
+    data.toString().should.equal(originData);
+    done();
+})
+```
+
+should execute GridStore static methods.
+
+```js
+GridStore.exist(db, fileId, done)
+```
+
+<a name="makeskinclass"></a>
+# makeSkinClass
+<a name="makeskinclass-skinclass"></a>
+## SkinClass
+should call native method.
+
+```js
+skinFoo.get('echo', function(err, echo) {
+    should.not.exists(err);
+    echo.should.eql('echo');
+    done();
+});
+```
+
+should callback error if error occused.
+
+```js
+skinFoo.makeError('123', function(err) {
+    err.code.should.eql('123');
+    done();
+})
+```
+
+should chain operations.
+
+```js
+skinFoo.chain().chain().chain().get('echo', done);
+```
+
+should log open error if no callback.
+
+```js
+var errFoo = new SkinFoo();
+errFoo.willOpenError = true;
+errFoo.chain();
+setTimeout(done, 15);
+```
+
+should callback open error in chain callback.
+
+```js
+var errFoo = new SkinFoo();
+errFoo.willOpenError = true;
+errFoo.chain().chain().chain().get(function(err) {
+    err.code.should.eql('ERROPEN');
+    done();
+});
+```
+
+should get native property after open.
+
+```js
+skinFoo.isOpen.should.be.true;
+done();
+```
+
+should set native property before open.
+
+```js
+var foo = new SkinFoo();
+foo.isOpen = 'abc';
+foo.open(function(err, p_foo) {
+    should.not.exists(err);
+    p_foo.isOpen.should.eql('abc');
+    done();
+})
+```
+
+should close just while openning.
+
+```js
+var foo = new SkinFoo();
+foo.chain().close(done);
+```
+
+should call close even closing or closed.
+
+```js
+var foo = new SkinFoo();
+foo.chain().close().close(done);
 ```
 
