@@ -1,4 +1,8 @@
-# mongoskin [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin) [![Dependencies](https://david-dm.org/kissjs/node-mongoskin.png)](https://david-dm.org/kissjs/node-mongoskin)
+# mongoskin
+
+[![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
+[![Dependencies](https://david-dm.org/kissjs/node-mongoskin.png)](https://david-dm.org/kissjs/node-mongoskin)
+[![Coverage Status](https://coveralls.io/repos/kissjs/node-mongoskin/badge.png?branch=1.3.20)](https://coveralls.io/r/kissjs/node-mongoskin?branch=1.3.20)
 
 ![logo](https://raw.github.com/kissjs/node-mongoskin/master/logo.png)
 
