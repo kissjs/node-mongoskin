@@ -17,21 +17,20 @@ var mongodb = require('mongodb');
 var ObjectID = mongodb.ObjectID;
 var Collection = mongodb.Collection;
 var SkinCollection = mongoskin.SkinCollection;
+var Cursor = mongodb.Cursor;
 var should = require('should');
 var servermanager = require('./utils/server_manager');
 
 
 exports.describe = function(db) {
 
-  var testcollection = db.collection('test_collection');
-  var commentcollection = db.collection('comment');
-
   describe('collection.js', function () {
 
-      var servers = null;
-      var authfailServers = null;
-
+      var testcollection, commentcollection;
       before(function (done) {
+        testcollection = db.collection('test_collection');
+        commentcollection = db.collection('comment');
+
         testcollection.ensureIndex({title: -1}, function (err, index) {
           should.not.exist(err);
           index.should.equal('title_-1');
@@ -49,6 +48,15 @@ exports.describe = function(db) {
           done(err);
         });
       });
+
+      it('should retrive native cursor', function(done) {
+          db.collection('test_collection').find(function(err, cursor) {
+              should.not.exists(err);
+              cursor.toArray.should.be.instanceof(Function);
+              should.not.exists(cursor.open);
+              done();
+          });
+      })
 
       describe('find(), findItems(), findEach()', function () {
         var objectIds = [], stringIds = [];
