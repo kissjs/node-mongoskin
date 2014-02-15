@@ -8,13 +8,14 @@ JSCOVERAGE = ./node_modules/jscover/bin/jscover
 SUPPORT_VERSIONS := \
 	1.0.0 1.0.1 1.0.2 \
 	1.1.0-beta 1.1.1 1.1.2 1.1.3 1.1.4
-
-test:
+node_modules:
 	@npm install
-	@if ! test -d deps/mongodb; then \
-		git clone git://github.com/mongodb/node-mongodb-native.git deps/mongodb; \
-	fi
-	@cd deps/mongodb && npm install && git pull && cd ../..
+
+deps/mongodb:
+	git clone git://github.com/mongodb/node-mongodb-native.git deps/mongodb; \
+	@cd deps/mongodb && npm install && git pull
+
+test: node_modules deps/mongodb
 	@NODE_ENV=test MONGOSKIN_REPLICASET=$(MONGOSKIN_REPLICASET) \
 		./node_modules/mocha/bin/mocha --recursive \
 		--reporter $(REPORTER) --timeout $(TESTTIMEOUT) \
