@@ -1,76 +1,30 @@
-/*!
- * mongoskin - test/admin.js
- *
- * Copyright(c) 2011 - 2012 kissjs.org
- * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
- * MIT Licensed
- */
-
 "use strict";
 
-/**
- * Module dependencies.
- */
-
 var should = require('should');
-var SkinAdmin = require('../').SkinAdmin;
-var constant = require('../lib/mongoskin/constant');
+var Admin = require('../').Admin; // SkinAdmin
+var Db = require('../').Db; // SkinDb
 
-describe('admin.js', function () {
-
-  var skinDb;
-  beforeEach(function () {
-    skinDb = {
-      open: function (callback) {
-        var that = this;
-        process.nextTick(function () {
-          callback(null, that.db);
+exports.testWithDb = function(db) {
+  function testAdmin(descName, adminDb) {
+    describe(descName, function() {
+        it('should add the new user to the admin database', function(done) {
+            adminDb.addUser('admin3', 'admin3', done);
         });
-      },
-      db: {
-        name: 'mock db'
-      }
-    };
-  });
 
-  describe('open()', function () {
+        it('should authenticate using the newly added user', function(done) {
+            adminDb.authenticate('admin3', 'admin3', done);
+        })
 
-    it('should return admin', function (done) {
-      var skinAdmin = new SkinAdmin(skinDb);
-      skinAdmin.state.should.equal(constant.STATE_CLOSE);
-      skinAdmin.open(function (err, admin) {
-        should.not.exist(err);
-        should.exist(admin);
-        should.exist(skinAdmin.admin);
-        skinAdmin.state.should.equal(constant.STATE_OPEN);
-      }).open(function (err, admin) {
-        skinAdmin.open(function (err, admin) {
-          should.not.exist(err);
-          should.exist(admin);
-          should.exist(skinAdmin.admin);
-          skinAdmin.state.should.equal(constant.STATE_OPEN);
-          done();
-        });
-      });
-      skinAdmin.state.should.equal(constant.STATE_OPENNING);
+        it('should retrive the build information for the mongodb instance', function(done) {
+            adminDb.buildInfo(done);
+        })
+
+        it('should remove user just added', function(done) {
+            adminDb.removeUser('admin3', done);
+        })
     });
+  }
 
-    it('should return mock open() error', function (done) {
-      skinDb.open = function (callback) {
-        process.nextTick(function () {
-          callback(new Error('mock open() error'));
-        });
-      };
-      var skinAdmin = new SkinAdmin(skinDb);
-      skinAdmin.open(function (err, admin) {
-        should.exist(err);
-        err.should.have.property('message', 'mock open() error');
-        should.not.exist(admin);
-        should.not.exist(skinAdmin.admin);
-        done();
-      });
-    });
-
-  });
-
-});
+  testAdmin('db.admin()', db.admin());
+  testAdmin('new Admin(db)', new Admin(db));
+}

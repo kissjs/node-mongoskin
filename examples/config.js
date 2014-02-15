@@ -1,5 +1,3 @@
-var mongoskin = require('../lib/mongoskin/');
+var mongo = require('../');
 
-exports.db = mongoskin.db('localhost/test');
-
-mongoskin.db('localhost', { database: 'test' });
+exports.db = mongo.db('mongodb://localhost/test');

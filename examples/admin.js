@@ -1,6 +1,6 @@
 var db = require('./config').db;
 
-db.admin.listDatabases(function(err, result){
+db.admin().listDatabases(function(err, result){
     if(err) {
       console.traceError(err);
     }

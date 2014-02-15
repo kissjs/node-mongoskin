@@ -14,67 +14,23 @@
 var should = require('should');
 var mongoskin = require('../');
 var pedding = require('./utils/pedding');
-var constant = require('../lib/mongoskin/constant');
 var servermanager = require('./utils/server_manager');
 
-describe('db.js', function () {
+exports.testWithDb = function(db) {
+  describe('db.js', function () {
 
-  var blackholePort = 24008;
-  var blackhole = require('net').createServer(function (c) {
-    // no reply, just for timeout
-  });
+      it('skinDb.collection() should retrive native collection with callback', function(done) {
+          var skinColl = db.collection('testRetriveCollection', function(err, coll) {
+              should.not.exist(err);
+              skinColl._native.should.eql(coll);
+              done();
+          });
+          should.exist(skinColl);
+      })
 
-  var RS, RS_primary = '127.0.0.1';
-  if(servermanager.MONGOSKIN_REPLICASET) {
-    before(function (done) {
-      done = pedding(2, done);
-      servermanager.ensureUp(function (err, rs, primary) {
-        RS = rs;
-        RS_primary = primary;
-        done(err);
-      });
-      blackhole.listen(blackholePort, done);
-    });
-}
-  
-  var cases = [
-    ['normal', {database: 'mongoskin_test', safe: true}],
-  ];
-  if (servermanager.MONGOSKIN_REPLICASET) {
-    cases.push(['replicaset', {database: 'mongoskin_replicaset_test'}]);
-  }
-  cases.forEach(function (caseItem) {
-    describe(caseItem[0], function () {
-      var isReplicaset = caseItem[0] === 'replicaset';
-      var db = null;
-      var servers = null;
-      var authfailServers = null;
-      var options = caseItem[1];
-      var authfailOptions = {};
-      for (var k in options) {
-        authfailOptions[k] = options[k];
-      }
-      before(function () {
-        if (isReplicaset) {
-          servers = [];
-          authfailServers = [];
-          for (var i = 0; i < RS.ports.length; i++) {
-            servers.push(RS.host + ':' + RS.ports[i] + '/?auto_reconnect=true');
-          }
-          authfailServers = servers;
-          authfailOptions.username = 'test';
-          authfailOptions.password = 'test';
-        } else {
-          servers = RS_primary;
-          authfailServers = 'test:test@' + servers;
-        }
-        db = mongoskin.db(servers, options);
-      });
+      // old test
 
-      after(function () {
-        db.close();
-      });
-
+      /*
       describe('bind()', function () {
 
         before(function (done) {
@@ -337,7 +293,7 @@ describe('db.js', function () {
           });
         });
       });
+      */
 
-    });
   });
-});
+}

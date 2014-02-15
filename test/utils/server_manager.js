@@ -11,13 +11,12 @@
  */
 
 var MONGOSKIN_REPLICASET = process.env.MONGOSKIN_REPLICASET === 'true';
-var ReplicaSetManager = require('../../deps/mongodb/test/tools/replica_set_manager').ReplicaSetManager;
-var ServerManager = require('../../deps/mongodb/test/tools/server_manager').ServerManager;
-
 var RS = null;
 var RS_primary = null;
 
 exports.ensureUp = function (callback) {
+  var ReplicaSetManager = require('../../deps/mongodb/test/tools/replica_set_manager').ReplicaSetManager;
+  var ServerManager = require('../../deps/mongodb/test/tools/server_manager').ServerManager;
   // Create instance of replicaset manager but only for the first call
   if (!RS) {
     if (!MONGOSKIN_REPLICASET) {

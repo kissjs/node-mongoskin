@@ -1,7 +1,7 @@
 {
   "name": "mongoskin",
   "description": "The future layer above node-mongodb-native",
-  "version": "0.6.1",
+  "version": "1.3.20-alpha",
   "author": "Gui Lin <guileen@gmail.com>",
   "homepage": "https://github.com/kissjs/node-mongoskin",
   "repository": {
@@ -21,15 +21,26 @@
     "node": ">= 0.4.0"
   },
   "dependencies": {
-    "mongodb": "1.3.19"
+    "mongodb": "1.3.20"
   },
   "devDependencies": {
-    "mocha": "1.8.1",
-    "jscover": "*",
-    "should": "1.2.2"
+    "mocha": "~1.17.1",
+    "blanket": "~1.1.6",
+    "coveralls": "~2.8.0",
+    "mocha-lcov-reporter": "0.0.1",
+    "travis-cov": "~0.2.5",
+    "should": "~3.1.2"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "mongoskin/lib"
+    },
+    "travis-cov": {
+      "threshold": 95
+    }
   },
   "scripts": {
-    "test": "make test"
+    "test": "./node_modules/.bin/mocha -R travis-cov"
   },
   "directories": {
     "example": "./examples",

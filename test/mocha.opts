@@ -1,2 +1,4 @@
+-R spec
+--require blanket
 --require should
---growl
+--timeout 500
