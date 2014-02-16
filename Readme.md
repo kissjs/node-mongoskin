@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
 [![Dependencies](https://david-dm.org/kissjs/node-mongoskin.png)](https://david-dm.org/kissjs/node-mongoskin)
-[![Coverage Status](https://coveralls.io/repos/kissjs/node-mongoskin/badge.png?branch=1.3.20)](https://coveralls.io/r/kissjs/node-mongoskin?branch=1.3.20)
+[![Coverage Status](https://coveralls.io/repos/kissjs/node-mongoskin/badge.png?branch=master)](https://coveralls.io/r/kissjs/node-mongoskin?branch=master)
 [![NPM version](https://badge.fury.io/js/mongoskin.png)](http://badge.fury.io/js/mongoskin)
 
 [![NPM](https://nodei.co/npm/mongoskin.png?downloads=true&stars=true)](https://nodei.co/npm/mongoskin/)
