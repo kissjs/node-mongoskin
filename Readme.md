@@ -63,6 +63,8 @@ For detail API reference see [node mongodb API](http://mongodb.github.io/node-mo
 
 We make some common use functioin in promise mode, we call it SkinClass of a normal Class. And the API is almost same with official API.
 
+### module
+
 origin:
 ```js
 var mongo = require('mongodb');
@@ -84,6 +86,12 @@ var ReplSetServers = mongo.ReplSetServers;
 ...
 ```
 
+### MongoClient.connect(...)
+
+returns a `Db` instance
+
+alias origin `MongoClient.connect(..., function(err, db) { .... })`
+
 origin:
 
 ```js
@@ -96,6 +104,12 @@ mongoskin:
 ```js
 var db = MongoClient.connect(...)
 ```
+
+### db.collection(..., [callback])
+
+returns a `Collection` instance
+
+alias origin `db.collection(..., function(err, collection) {....})`
 
 origin:
 
@@ -115,22 +129,12 @@ var db = new Db(...);
 var myCollection = db.collection('myCollection', {strict: true});
 ```
 
-## Promised methods
-
-### MongoClient.connect(...)
-returns a `Db` instance
-alias origin `MongoClient.connect(..., function(err, db) { .... })`
-### db.collection
-returns a `Collection` instance
-alias origin `db.collection(..., function(err, collection) {....})`
-### collection.find
-returns a `Cursor` instance
-alias origin `collection.find(..., function(err, cursor) {....})`
-
 ## MongoSkin API part
 
 ### module.db(...)
 alias `MongoClient.connect(...)`
+### module.helper.toObjectId(hexStr)
+convert `String` to `ObjectID` instance.
 ### db.admin(...)
 alias `new Admin(db, ...)`
 ### db.grid(...)
@@ -143,7 +147,6 @@ alias `collection.find({_id: toObjectID(id)}, ...)`
 alias `collection.update({_id: toObjectID(id)}, ...)`
 ### collection.removeById(id, ...)
 alias `collection.remove({_id: toObjectID(id)}, ...)`
-
 
 ### Removed API from mongoskin 1.3.20
 
