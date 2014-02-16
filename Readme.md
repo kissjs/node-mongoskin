@@ -4,16 +4,8 @@
 [![Dependencies](https://david-dm.org/kissjs/node-mongoskin.png)](https://david-dm.org/kissjs/node-mongoskin)
 [![Coverage Status](https://coveralls.io/repos/kissjs/node-mongoskin/badge.png?branch=1.3.20)](https://coveralls.io/r/kissjs/node-mongoskin?branch=1.3.20)
 [![NPM version](https://badge.fury.io/js/mongoskin.png)](http://badge.fury.io/js/mongoskin)
-![logo](https://raw.github.com/kissjs/node-mongoskin/master/logo.png)
 
 [![NPM](https://nodei.co/npm/mongoskin.png?downloads=true&stars=true)](https://nodei.co/npm/mongoskin/)
-
-This project is a wrapper for [node-mongodb-native](https://github.com/mongodb/node-mongodb-native).
-The base API is same at the node-mongodb-native, you may want to familiarise yourself with the [node-mongodb-native documentation](http://mongodb.github.com/node-mongodb-native/) first.
-
-## NOTE!! mongoskin API change from 1.3.20
-
-Since node-mongodb-native has change a lot of API, mongoskin redesign from 1.3.20. The version number keep same with node-mongodb-native. And the API appearence is also keep same with node-mongodb-native
 
 Install
 ========
@@ -29,9 +21,7 @@ Use dburl
 
 ```js
 var mongo = require('mongoskin');
-var MongoClient = mongo.MongoClient;
-
-var db = MongoClient.connect("mongodb://localhost:27017/integration_tests", {native_parser:true});
+var db = mongo.db("mongodb://localhost:27017/integration_tests", {native_parser:true});
 db.bind('article');
 db.article.find().toArray(function(err, items) {
         db.close();
@@ -63,6 +53,8 @@ For detail API reference see [node mongodb API](http://mongodb.github.io/node-mo
 
 We make some common use functioin in promise mode, we call it SkinClass of a normal Class. And the API is almost same with official API.
 
+### module
+
 origin:
 ```js
 var mongo = require('mongodb');
@@ -84,6 +76,12 @@ var ReplSetServers = mongo.ReplSetServers;
 ...
 ```
 
+### MongoClient.connect(...)
+
+returns a `Db` instance
+
+alias origin `MongoClient.connect(..., function(err, db) { .... })`
+
 origin:
 
 ```js
@@ -96,6 +94,12 @@ mongoskin:
 ```js
 var db = MongoClient.connect(...)
 ```
+
+### db.collection(..., [callback])
+
+returns a `Collection` instance
+
+alias origin `db.collection(..., function(err, collection) {....})`
 
 origin:
 
@@ -115,22 +119,22 @@ var db = new Db(...);
 var myCollection = db.collection('myCollection', {strict: true});
 ```
 
-## Promised methods
-
-### MongoClient.connect(...)
-returns a `Db` instance
-alias origin `MongoClient.connect(..., function(err, db) { .... })`
-### db.collection
-returns a `Collection` instance
-alias origin `db.collection(..., function(err, collection) {....})`
-### collection.find
-returns a `Cursor` instance
-alias origin `collection.find(..., function(err, cursor) {....})`
-
 ## MongoSkin API part
 
 ### module.db(...)
 alias `MongoClient.connect(...)`
+### module.helper.toObjectId(hexStr)
+convert `String` to `ObjectID` instance.
+### db.bind(name, options)
+alias `db[name] = db.collection(name, options)`
+
+```js
+db.bind('article')
+db.article.find().toArray(function(err, items) {
+  assert.ok(err == null);
+});
+```
+
 ### db.admin(...)
 alias `new Admin(db, ...)`
 ### db.grid(...)
@@ -144,6 +148,9 @@ alias `collection.update({_id: toObjectID(id)}, ...)`
 ### collection.removeById(id, ...)
 alias `collection.remove({_id: toObjectID(id)}, ...)`
 
+## NOTE!! mongoskin API change from 1.3.20
+
+Since node-mongodb-native has change a lot of API, mongoskin redesign from 1.3.20. The version number keep same with node-mongodb-native. And the API appearence is also keep same with node-mongodb-native
 
 ### Removed API from mongoskin 1.3.20
 
