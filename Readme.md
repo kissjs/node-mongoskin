@@ -106,7 +106,7 @@ origin:
 ```js
 var db = new Db(...);
 db.open(functioin(err, db) {
-    db.collection('myCollection', {strict: true}, functioin(err, myCollection) {
+    db.collection('myCollection', {strict: true}, function(err, myCollection) {
         // myCollection.find() ...
     });
 });
