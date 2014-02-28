@@ -85,7 +85,7 @@ alias origin `MongoClient.connect(..., function(err, db) { .... })`
 origin:
 
 ```js
-MongoClient.connect(..., functioin(err, db) {
+MongoClient.connect(..., function(err, db) {
 })
 ```
 
