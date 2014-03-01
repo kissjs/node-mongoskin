@@ -51,7 +51,7 @@ db.collection('myconnection').find().setReadPreference(ReadPreference.SECONDARY)
 ## Origin API part
 For detail API reference see [node mongodb API](http://mongodb.github.io/node-mongodb-native/). Mongoskin is just change the API call chain.
 
-We make some common use functioin in promise mode, we call it SkinClass of a normal Class. And the API is almost same with official API.
+We make some common use functions in promise mode, we call it SkinClass of a normal Class. And the API is almost same with official API.
 
 ### module
 
@@ -85,7 +85,7 @@ alias origin `MongoClient.connect(..., function(err, db) { .... })`
 origin:
 
 ```js
-MongoClient.connect(..., functioin(err, db) {
+MongoClient.connect(..., function(err, db) {
 })
 ```
 
@@ -105,7 +105,7 @@ origin:
 
 ```js
 var db = new Db(...);
-db.open(functioin(err, db) {
+db.open(function(err, db) {
     db.collection('myCollection', {strict: true}, function(err, myCollection) {
         // myCollection.find() ...
     });
