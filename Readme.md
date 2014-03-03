@@ -48,6 +48,21 @@ db.collection('myconnection').find().setReadPreference(ReadPreference.SECONDARY)
 });
 ```
 
+Model helper:
+
+```js
+var mongo = require('mongoskin');
+var db = mongo.db("mongodb://localhost:27017/integration_tests", {native_parser:true});
+db.bind('article').bind({
+    getByAuthor: function(author_id, callback) {
+        this.findOne({author_id: author_id}, callback);
+    }
+});
+db.article.getByAuthor(author_id, function(err, article) {
+        console.log(article);
+});
+```
+
 ## Origin API part
 For detail API reference see [node mongodb API](http://mongodb.github.io/node-mongodb-native/). Mongoskin is just change the API call chain.
 
@@ -141,6 +156,8 @@ alias `new Admin(db, ...)`
 alias `new Grid(db, ...)`
 ### db.gridStore(...)
 alias `new GridStore(db, ...)`
+### collection.bind(extendObject)
+each method of extendObject will be bind to collection.
 ### collection.findById(id, ...)
 alias `collection.find({_id: toObjectID(id)}, ...)`
 ### collection.updateById(id, ...)

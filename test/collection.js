@@ -203,6 +203,15 @@ exports.testWithDb = function(db) {
           db.article.drop(done);
         });
 
+        it('should bind functions', function(done) {
+            db.article.bind({
+                get: function(id, callback) {
+                  this.findById(id, callback);
+                }
+            });
+            db.article.get(articleId, done)
+        });
+
         describe('findById()', function () {
           it('should find one object by ObjectID', function (done) {
             db.article.findById(articleId, function (err, article) {
