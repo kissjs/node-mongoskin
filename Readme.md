@@ -138,7 +138,7 @@ var myCollection = db.collection('myCollection', {strict: true});
 
 ### module.db(...)
 alias `MongoClient.connect(...)`
-### module.helper.toObjectId(hexStr)
+### module.helper.toObjectID(hexStr)
 convert `String` to `ObjectID` instance.
 ### db.bind(name, options)
 alias `db[name] = db.collection(name, options)`
