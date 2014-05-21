@@ -7,6 +7,8 @@
 
 [![NPM](https://nodei.co/npm/mongoskin.png?downloads=true&stars=true)](https://nodei.co/npm/mongoskin/)
 
+[![NPM](https://nodei.co/npm-dl/mongoskin.png?months=6)](https://nodei.co/npm/mongoskin/)
+
 Install
 ========
 
