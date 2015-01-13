@@ -1,3 +1,5 @@
+##  NOT maintained and LOOKING FOR A MAINTAINER
+
 # mongoskin
 
 [![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
