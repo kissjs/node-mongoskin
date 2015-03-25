@@ -25,10 +25,9 @@ describe('helper.isObjectID()', function () {
     it('should return false when ID is not valid hex', function () {
         var id = '54da050b878fd5d462672bea';
         var isID = helper.isObjectID(id);
-        isID.should.be.typeof(boolean);
         isID.should.equal(true);
         id = 'h4da050b878fd5d462672bea';
-        isID.should.be.typeof(boolean);
+        isID = helper.isObjectID(id);
         isID.should.equal(false);
     });
 });
