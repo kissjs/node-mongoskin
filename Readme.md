@@ -2,10 +2,10 @@
 
 # mongoskin
 
-[![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.png)](http://travis-ci.org/kissjs/node-mongoskin)
-[![Dependencies](https://david-dm.org/kissjs/node-mongoskin.png)](https://david-dm.org/kissjs/node-mongoskin)
-[![Coverage Status](https://coveralls.io/repos/kissjs/node-mongoskin/badge.png?branch=master)](https://coveralls.io/r/kissjs/node-mongoskin?branch=master)
-[![NPM version](https://badge.fury.io/js/mongoskin.png)](http://badge.fury.io/js/mongoskin)
+[![Build Status](https://secure.travis-ci.org/kissjs/node-mongoskin.svg)](http://travis-ci.org/kissjs/node-mongoskin)
+[![Dependencies](https://david-dm.org/kissjs/node-mongoskin.svg)](https://david-dm.org/kissjs/node-mongoskin)
+[![Coverage Status](https://coveralls.io/repos/kissjs/node-mongoskin/badge.svg?branch=master)](https://coveralls.io/r/kissjs/node-mongoskin?branch=master)
+[![NPM version](https://badge.fury.io/js/mongoskin.svg)](http://badge.fury.io/js/mongoskin)
 
 [![NPM](https://nodei.co/npm/mongoskin.png?downloads=true&stars=true)](https://nodei.co/npm/mongoskin/)
 
