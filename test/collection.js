@@ -252,9 +252,8 @@ exports.testWithDb = function(db) {
                 updated_at: updatedTime
               }
             };
-            db.article.updateById(articleId.toString(), doc, function (err, success, result) {
+            db.article.updateById(articleId.toString(), doc, function (err, result) {
               should.not.exist(err);
-              success.should.equal(1);
               result.should.have.property('ok', 1);
               db.article.findById(articleId, function (err, article) {
                 should.not.exist(err);
@@ -290,7 +289,7 @@ exports.testWithDb = function(db) {
             var id = articleId.toString();
             db.article.removeById(id, function (err, res) {
               should.not.exist(err);
-              success.should.equal(0);
+              res.should.equal(0);
               done();
             });
           });
