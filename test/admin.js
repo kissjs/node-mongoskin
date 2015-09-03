@@ -15,16 +15,12 @@ exports.testWithDb = function(db) {
             adminDb.authenticate('admin3', 'admin3', done);
         })
 
-        it('should retrive the build information for the mongodb instance', function(done) {
-            adminDb.buildInfo(done);
-        })
-
         it('should remove user just added', function(done) {
             adminDb.removeUser('admin3', done);
         })
     });
   }
 
-  testAdmin('db.admin()', db.admin());
+  testAdmin('db.db("admin")', db.db('admin'));
   testAdmin('new Admin(db)', new Admin(db));
 }

@@ -1,6 +1,6 @@
 /*!
  * mongoskin - test/collection.js
- * 
+ *
  * Copyright(c) 2011 - 2012 kissjs.org
  * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
  * MIT Licensed
@@ -192,10 +192,9 @@ exports.testWithDb = function(db) {
         var articleId;
         before(function (done) {
           db.bind('article');
-          db.article.insert({title: 'test article title ' + now, created_at: now}, function (err, article) {
-            if (article) {
-              articleId = article[0]._id;
-            }
+          var doc = { title: 'test article title ' + now, created_at: now };
+          db.article.insert(doc, function (err, res) {
+            articleId = res.insertedIds[0];
             done(err);
           });
         });
@@ -289,7 +288,7 @@ exports.testWithDb = function(db) {
 
           it('should remove not exists obj', function (done) {
             var id = articleId.toString();
-            db.article.removeById(id, function (err, success) {
+            db.article.removeById(id, function (err, res) {
               should.not.exist(err);
               success.should.equal(0);
               done();
