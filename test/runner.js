@@ -19,7 +19,6 @@ function testDb(caseName, db) {
         require('./collection'),
         require('./cursor'),
         require('./admin'),
-        require('./grid'),
         require('./grid_store')
       ].forEach(function(mod) {
           mod.testWithDb(db);
