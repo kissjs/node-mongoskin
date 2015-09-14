@@ -24,24 +24,17 @@
     "mongodb": "~2.0"
   },
   "devDependencies": {
+    "istanbul": "0.3.17",
     "mocha": "~1.17.1",
-    "blanket": "~1.1.6",
     "coveralls": "~2.10.0",
     "mocha-lcov-reporter": "0.0.1",
     "travis-cov": "~0.2.5",
     "mongodb": "~2.0",
     "should": "~3.1.2"
   },
-  "config": {
-    "blanket": {
-      "pattern": "mongoskin/lib"
-    },
-    "travis-cov": {
-      "threshold": 95
-    }
-  },
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "istanbul cover _mocha"
   },
   "directories": {
     "example": "./examples",
