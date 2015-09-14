@@ -21,6 +21,6 @@ exports.testWithDb = function(db) {
     });
   }
 
-  testAdmin('db.db("admin")', db.db('admin'));
+  testAdmin('db.db("admin")', db.admin());
   testAdmin('new Admin(db)', new Admin(db));
 }

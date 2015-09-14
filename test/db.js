@@ -18,6 +18,5 @@ var servermanager = require('./utils/server_manager');
 
 exports.testWithDb = function(db) {
   describe('db.js', function () {
-
   });
 }

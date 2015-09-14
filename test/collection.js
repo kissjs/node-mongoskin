@@ -265,6 +265,21 @@ exports.testWithDb = function(db) {
               });
             });
           });
+
+          it('with no callback', function(done) {
+            var updatedTime = new Date();
+            var doc = {
+              $set: {
+                title: 'new title ' + updatedTime,
+                updated_at: updatedTime
+              }
+            };
+            db.article.updateById(articleId.toString(), doc);
+
+            setTimeout(function() {
+              done();
+            }, 0);
+          });
         });
 
         describe('removeById()', function () {
@@ -292,6 +307,14 @@ exports.testWithDb = function(db) {
               res.should.equal(0);
               done();
             });
+          });
+
+          it('no callback', function(done) {
+            var id = articleId.toString();
+            db.article.removeById(id);
+            setTimeout(function() {
+              done();
+            }, 0);
           });
         });
 
