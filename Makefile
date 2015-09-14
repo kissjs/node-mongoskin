@@ -12,11 +12,12 @@ test-debug:
 test-replicaset:
 	@MONGOSKIN_REPLICASET=true $(MOCHA)
 
-test-cov: 
+test-cov:
 	@$(MOCHA) -R html-cov > coverage.html
 
 coveralls:
-	@$(MOCHA) -R mocha-lcov-reporter | $(COVERALLS)
+	npm run coverage
+	cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 
 test-watch:
 	@$(MOCHA) -w -R dot --growl
