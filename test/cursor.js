@@ -83,9 +83,6 @@ exports.testWithDb = function(db) {
             should.have.property('nReturned');
         } else {
           result.should.have.property('cursor', 'BasicCursor');
-          result.should.have.property('nscanned', 100);
-          result.should.have.property('nscannedObjects', 100);
-          result.should.have.property('n', 49);
         }
         done();
       });
