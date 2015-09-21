@@ -1,6 +1,6 @@
 /*!
  * mongoskin - test/collection.js
- * 
+ *
  * Copyright(c) 2011 - 2012 kissjs.org
  * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
  * MIT Licensed
@@ -192,10 +192,9 @@ exports.testWithDb = function(db) {
         var articleId;
         before(function (done) {
           db.bind('article');
-          db.article.insert({title: 'test article title ' + now, created_at: now}, function (err, article) {
-            if (article) {
-              articleId = article[0]._id;
-            }
+          var doc = { title: 'test article title ' + now, created_at: now };
+          db.article.insert(doc, function (err, res) {
+            articleId = res.insertedIds[0];
             done(err);
           });
         });
@@ -253,9 +252,8 @@ exports.testWithDb = function(db) {
                 updated_at: updatedTime
               }
             };
-            db.article.updateById(articleId.toString(), doc, function (err, success, result) {
+            db.article.updateById(articleId.toString(), doc, function (err, result) {
               should.not.exist(err);
-              success.should.equal(1);
               result.should.have.property('ok', 1);
               db.article.findById(articleId, function (err, article) {
                 should.not.exist(err);
@@ -266,6 +264,21 @@ exports.testWithDb = function(db) {
                 done();
               });
             });
+          });
+
+          it('with no callback', function(done) {
+            var updatedTime = new Date();
+            var doc = {
+              $set: {
+                title: 'new title ' + updatedTime,
+                updated_at: updatedTime
+              }
+            };
+            db.article.updateById(articleId.toString(), doc);
+
+            setTimeout(function() {
+              done();
+            }, 0);
           });
         });
 
@@ -289,11 +302,19 @@ exports.testWithDb = function(db) {
 
           it('should remove not exists obj', function (done) {
             var id = articleId.toString();
-            db.article.removeById(id, function (err, success) {
+            db.article.removeById(id, function (err, res) {
               should.not.exist(err);
-              success.should.equal(0);
+              res.should.equal(0);
               done();
             });
+          });
+
+          it('no callback', function(done) {
+            var id = articleId.toString();
+            db.article.removeById(id);
+            setTimeout(function() {
+              done();
+            }, 0);
           });
         });
 
