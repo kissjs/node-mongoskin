@@ -2,8 +2,8 @@
 ==================
  * Support for mongodb driver v2.x
  * The `Grid` class [was removed in mongodb driver 2.0](https://github.com/mongodb/node-mongodb-native/blob/2.0/HISTORY.md#200-alpha1-2014-09-08) and so `mongoskin.Grid` is gone as well.
-* `utils.makeSkinClass()`'s optional third parameter `isSingle` is removed.
-* `db.collection()` no longer accepts a callback. Use `var collection = db.collection('collname');` instead.
+ * `utils.makeSkinClass()`'s optional third parameter `isSingle` is removed.
+ * `db.collection()` no longer accepts a callback. Use `var collection = db.collection('collname');` instead.
 
 0.6.1 / 2013-11-24 
 ==================
