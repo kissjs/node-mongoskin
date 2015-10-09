@@ -1,3 +1,7 @@
+2.0.1 / 2015-10-09
+==================
+ * Return full admin class rather than just admin collection when calling `.admin()` #177
+
 2.0.0 / 2015-09-21
 ==================
  * Support for mongodb driver v2.x
