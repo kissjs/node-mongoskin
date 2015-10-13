@@ -18,6 +18,12 @@ exports.testWithDb = function(db) {
         it('should remove user just added', function(done) {
             adminDb.removeUser('admin3', done);
         })
+
+        it('should ping', function(done) {
+          adminDb.ping(function(error, res) {
+            done(error && !!res);
+          });
+        });
     });
   }
 
