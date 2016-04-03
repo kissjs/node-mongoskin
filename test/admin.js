@@ -12,7 +12,9 @@ exports.testWithDb = function(db) {
         });
 
         it('should authenticate using the newly added user', function(done) {
+          adminDb.logout(function(err, result) {
             adminDb.authenticate('admin3', 'admin3', done);
+          });
         })
 
         it('should remove user just added', function(done) {
