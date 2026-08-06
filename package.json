@@ -21,7 +21,7 @@
     "node": ">= 0.4.0"
   },
   "peerDependencies": {
-    "mongodb": "^2.0"
+    "mongodb": ">= 3.0"
   },
   "devDependencies": {
     "istanbul": "0.3.17",
